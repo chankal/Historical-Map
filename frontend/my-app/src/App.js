@@ -7,7 +7,9 @@ import { useEffect, useRef, useState } from 'react';
 import './App.css';
 
 // To use video ID as parameter input instead of address, replace parameter value with a videoID '-wVXGP6Hkogfqz6sZulUf3'.
-const PARAMETER_VALUE = '1600 Amphitheatre Parkway, Mountain View, CA 94043';
+// Use sample video ID to test (this is guaranteed to work):
+const PARAMETER_VALUE = '600 Peachtree St NE, Atlanta, GA 30308';
+// Or try an address: '1600 Amphitheatre Parkway, Mountain View, CA'
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API;
 
 function App() {
@@ -32,7 +34,9 @@ function App() {
         if (videoResult.state === 'PROCESSING') {
           setStatus('Video still processing...');
         } else if (videoResult.error) {
-          setStatus(`Error: ${videoResult.error.message || 'Unknown error'}`);
+          const errorMsg = videoResult.error.message || 'Unknown error';
+          setStatus(`Error: ${errorMsg}\n\nℹ️ Aerial View videos are only available for specific locations. Try a different address or use a sample video ID like: -wVXGP6Hkogfqz6sZulUf3`);
+          console.error('API Error:', videoResult.error);
         } else if (videoResult.uris?.MP4_MEDIUM?.landscapeUri) {
           setVideoSrc(videoResult.uris.MP4_MEDIUM.landscapeUri);
           setStatus('');
