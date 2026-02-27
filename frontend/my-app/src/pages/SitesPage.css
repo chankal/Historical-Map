@@ -1,0 +1,23 @@
+.sitesPage {
+  min-height: 100vh;
+  background: #f3f3f3;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.sitesContent {
+  width: min(1100px, 92vw);
+  margin: 0 auto 40px;
+}
+
+.tourSpacer {
+  height: 18px;
+}
+
+.tourTitleLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tourTitleLink:hover {
+  text-decoration: underline;
+}

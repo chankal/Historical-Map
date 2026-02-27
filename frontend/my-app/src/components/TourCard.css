@@ -1,0 +1,66 @@
+.tourCard {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) 1fr;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: #fdfdfd;
+  overflow: hidden;
+}
+
+.tourLeft {
+  padding: 22px 16px;
+}
+
+.tourName {
+  margin: 0 0 12px;
+  font-size: clamp(1.4rem, 1.8vw, 2rem);
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 500;
+  line-height: 1.15;
+  color: #2a2a2a;
+  text-transform: uppercase;
+}
+
+.tourDesc {
+  margin: 0;
+  max-width: 27ch;
+  font-size: 1.05rem;
+  line-height: 1.45;
+  color: #303030;
+}
+
+.tourRight {
+  min-height: 430px;
+  background: #e8e8e8;
+}
+
+.tourImage {
+  width: 100%;
+  height: 100%;
+  min-height: 430px;
+  object-fit: cover;
+  display: block;
+}
+
+.tourPlaceholder {
+  width: 100%;
+  height: 100%;
+  min-height: 430px;
+  display: grid;
+  place-items: center;
+  color: rgba(0, 0, 0, 0.65);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 900px) {
+  .tourCard {
+    grid-template-columns: 1fr;
+  }
+
+  .tourRight,
+  .tourImage,
+  .tourPlaceholder {
+    min-height: 260px;
+  }
+}

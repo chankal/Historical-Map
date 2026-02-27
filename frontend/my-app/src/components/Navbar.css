@@ -1,0 +1,107 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.nav a {
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: #2a2a2a;
+  padding: 10px 4px;
+}
+
+.nav a:hover {
+  color: #000;
+}
+
+.nav a.active {
+  color: #d14b6a;
+}
+
+.contactBtn {
+  background: #d14b6a;
+  color: #fff !important;
+  padding: 10px 14px !important;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.toursHeaderBlock {
+  width: min(1100px, 92vw);
+  margin: 28px auto 0;
+}
+
+.toursTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+
+.toursTitle {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 500;
+}
+
+.toursRule {
+  height: 1px;
+  background: #d8ba7a;
+  margin: 10px 0 28px;
+}
+
+.downloadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 4px;
+  background: #111;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+
+.downloadDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+@media (max-width: 820px) {
+  .toursTop {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

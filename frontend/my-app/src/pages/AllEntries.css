@@ -1,0 +1,137 @@
+.allEntriesPage {
+  min-height: 100vh;
+  background: #f3f3f3;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.allEntriesContent {
+  width: min(1200px, 96vw);
+  margin: 0 auto 36px;
+}
+
+.allEntriesCard {
+  grid-template-columns: minmax(320px, 430px) 1fr;
+}
+
+.allEntriesLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 620px;
+}
+
+.returnToTours {
+  color: #666;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.tourInfoBox {
+  border: 1px solid #dfdfdf;
+  background: #fff;
+  border-radius: 6px;
+  padding: 14px;
+}
+
+.tourInfoTitle {
+  margin: 0;
+  font-size: 2rem;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 500;
+}
+
+.tourInfoTime {
+  margin: 8px 0 12px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.tourStartButton {
+  display: inline-block;
+  border: 1px solid #d14b6a;
+  background: #fff;
+  color: #111;
+  text-decoration: none;
+  border-radius: 999px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  padding: 10px 22px;
+  cursor: pointer;
+  float: right;
+}
+
+.tourStops {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.tourStops img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.entryList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.allEntriesEntryBox {
+  border: 1px solid #dfdfdf;
+  background: #fff;
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.allEntriesEntryThumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid #cfcfcf;
+  background: #dadada;
+  flex: 0 0 auto;
+}
+
+.allEntriesEntryText {
+  min-width: 0;
+}
+
+.allEntriesEntryName {
+  margin: 0 0 4px;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.9rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.allEntriesEntryBlurb {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #424242;
+}
+
+.allEntriesRightEmpty {
+  width: 100%;
+  min-height: 620px;
+  background: #efefef;
+}
+
+@media (max-width: 900px) {
+  .allEntriesCard {
+    grid-template-columns: 1fr;
+  }
+
+  .allEntriesRightEmpty {
+    min-height: 280px;
+  }
+}

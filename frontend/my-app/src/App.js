@@ -5,6 +5,11 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import SitesPage from "./pages/SitesPage";
+import EntryCard from "./components/EntryCard";
+import AllEntries from "./pages/AllEntries";
+
 
 // To use video ID as parameter input instead of address, replace parameter value with a videoID '-wVXGP6Hkogfqz6sZulUf3'.
 // Use sample video ID to test (this is guaranteed to work):
@@ -101,92 +106,110 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Google Aerial View</h1>
-        {status && <p>{status}</p>}
-        {videoSrc && (
-          <video
-            ref={videoRef}
-            src={videoSrc}
-            onClick={handleVideoClick}
-            controls
-            style={{ maxWidth: '100%', cursor: 'pointer' }}
-          />
-        )}
-        
-        {/* Database Section */}
-        <div style={{ marginTop: '40px', width: '80%' }}>
-          <h2>Historical Database</h2>
-          
-          <button 
-            onClick={fetchAllEntries}
-            style={{ 
-              padding: '10px 20px', 
-              fontSize: '16px', 
-              cursor: 'pointer',
-              margin: '10px'
-            }}
-          >
-            Load All Entries
-          </button>
-          
-          <p style={{ color: '#61dafb' }}>{dbStatus}</p>
-          
-          {/* Display all entries */}
-          {entries.length > 0 && (
-            <div style={{ marginTop: '20px' }}>
-              <h3>Entries:</h3>
-              {entries.map(entry => (
-                <div key={entry.id} style={{ 
-                  border: '1px solid #61dafb', 
-                  padding: '15px', 
-                  margin: '10px 0',
-                  borderRadius: '5px',
-                  textAlign: 'left'
-                }}>
-                  <h4>{entry.name}</h4>
-                  <button 
-                    onClick={() => fetchEntry(entry.id)}
-                    style={{ 
-                      padding: '5px 15px', 
-                      cursor: 'pointer',
-                      marginTop: '5px'
-                    }}
-                  >
-                    View Details
-                  </button>
-                </div>
-              ))}
-            </div>
+    <Router>
+    <Routes>
+
+      {/* ===== HOME PAGE ===== */}
+      <Route path="/" element={
+
+      <div className="App">
+        <header className="App-header">
+          <h1>Google Aerial View</h1>
+          {status && <p>{status}</p>}
+          {videoSrc && (
+            <video
+              ref={videoRef}
+              src={videoSrc}
+              onClick={handleVideoClick}
+              controls
+              style={{ maxWidth: '100%', cursor: 'pointer' }}
+            />
           )}
           
-          {/* Display selected entry details */}
-          {selectedEntry && (
-            <div style={{ 
-              marginTop: '20px', 
-              padding: '20px', 
-              backgroundColor: '#1a1a1a',
-              borderRadius: '10px',
-              textAlign: 'left'
-            }}>
-              <h3>Entry Details:</h3>
-              <p><strong>ID:</strong> {selectedEntry.id}</p>
-              <p><strong>Name:</strong> {selectedEntry.name}</p>
-              <p><strong>Details:</strong></p>
-              <pre style={{ 
-                backgroundColor: '#0a0a0a', 
-                padding: '10px', 
-                borderRadius: '5px',
-                overflow: 'auto'
+          {/* Database Section */}
+          <div style={{ marginTop: '40px', width: '80%' }}>
+            <h2>Historical Database</h2>
+            
+            <button 
+              onClick={fetchAllEntries}
+              style={{ 
+                padding: '10px 20px', 
+                fontSize: '16px', 
+                cursor: 'pointer',
+                margin: '10px'
+              }}
+            >
+              Load All Entries
+            </button>
+            
+            <p style={{ color: '#61dafb' }}>{dbStatus}</p>
+            
+            {/* Display all entries */}
+            {entries.length > 0 && (
+              <div style={{ marginTop: '20px' }}>
+                <h3>Entries:</h3>
+                {entries.map(entry => (
+                  <div key={entry.id} style={{ 
+                    border: '1px solid #61dafb', 
+                    padding: '15px', 
+                    margin: '10px 0',
+                    borderRadius: '5px',
+                    textAlign: 'left'
+                  }}>
+                    <h4>{entry.name}</h4>
+                    <button 
+                      onClick={() => fetchEntry(entry.id)}
+                      style={{ 
+                        padding: '5px 15px', 
+                        cursor: 'pointer',
+                        marginTop: '5px'
+                      }}
+                    >
+                      View Details
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {/* Display selected entry details */}
+            {selectedEntry && (
+              <div style={{ 
+                marginTop: '20px', 
+                padding: '20px', 
+                backgroundColor: '#1a1a1a',
+                borderRadius: '10px',
+                textAlign: 'left'
               }}>
-                {JSON.stringify(selectedEntry.details, null, 2)}
-              </pre>
-            </div>
-          )}
-        </div>
-      </header>
-    </div>
+                <h3>Entry Details:</h3>
+                <p><strong>ID:</strong> {selectedEntry.id}</p>
+                <p><strong>Name:</strong> {selectedEntry.name}</p>
+                <p><strong>Details:</strong></p>
+                <pre style={{ 
+                  backgroundColor: '#0a0a0a', 
+                  padding: '10px', 
+                  borderRadius: '5px',
+                  overflow: 'auto'
+                }}>
+                  {JSON.stringify(selectedEntry.details, null, 2)}
+                </pre>
+              </div>
+            )}
+          </div>
+
+          
+             
+        
+        </header>
+      </div>
+      } />
+
+      {/* ===== routing to different pages ===== */}
+      <Route path="/tours" element={<SitesPage />} />
+      <Route path="/entry" element={<EntryCard />} />
+      <Route path="/all-entries" element={<AllEntries />} />
+      </Routes>
+      </Router>
   );
 }
 
