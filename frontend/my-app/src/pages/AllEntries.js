@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import TourCard from "../components/TourCard";
+import MapWithPins from "../components/MapWithPins";
 import busStopIcon from "../images/bus-stop.png";
 import "./AllEntries.css";
 
@@ -11,6 +12,7 @@ export default function AllEntries() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedEntryIndex, setSelectedEntryIndex] = useState(null);
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -28,6 +30,7 @@ export default function AllEntries() {
             e.details?.short_blurb ||
             e.details?.blurb ||
             "No blurb yet.",
+          address: e.details?.address || null,
         }));
 
         setEntries(mapped);
@@ -60,7 +63,10 @@ export default function AllEntries() {
                   <span>{entries.length} stops</span>
                 </div>
                 <p className="tourInfoTime">20-25 minutes</p>
-                <Link className="tourStartButton" to="/entry">
+                <Link
+                  className="tourStartButton"
+                  to={entries.length > 0 ? `/entry/${entries[0].id}` : "/entry"}
+                >
                   Get Started
                 </Link>
               </section>
@@ -70,19 +76,35 @@ export default function AllEntries() {
                 {error && <p>{error}</p>}
                 {!loading &&
                   !error &&
-                  entries.map((entry) => (
-                    <article className="allEntriesEntryBox" key={entry.id}>
-                      <div className="allEntriesEntryThumb" aria-hidden="true" />
-                      <div className="allEntriesEntryText">
-                        <h3 className="allEntriesEntryName">{entry.name}</h3>
-                        <p className="allEntriesEntryBlurb">{entry.blurb}</p>
-                      </div>
-                    </article>
+                  entries.map((entry, index) => (
+                    <Link
+                      to={`/entry/${entry.id}`}
+                      key={entry.id}
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <article
+                        className="allEntriesEntryBox"
+                        onMouseEnter={() => setSelectedEntryIndex(index)}
+                        onMouseLeave={() => setSelectedEntryIndex(null)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <div className="allEntriesEntryThumb" aria-hidden="true" />
+                        <div className="allEntriesEntryText">
+                          <h3 className="allEntriesEntryName">{entry.name}</h3>
+                          <p className="allEntriesEntryBlurb">{entry.blurb}</p>
+                        </div>
+                      </article>
+                    </Link>
                   ))}
               </section>
             </div>
           }
-          right={<div className="allEntriesRightEmpty" aria-hidden="true" />}
+          right={
+            <MapWithPins
+              entries={entries}
+              selectedIndex={selectedEntryIndex}
+            />
+          }
         />
       </main>
     </div>
