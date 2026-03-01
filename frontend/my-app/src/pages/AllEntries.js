@@ -63,7 +63,10 @@ export default function AllEntries() {
                   <span>{entries.length} stops</span>
                 </div>
                 <p className="tourInfoTime">20-25 minutes</p>
-                <Link className="tourStartButton" to="/entry">
+                <Link
+                  className="tourStartButton"
+                  to={entries.length > 0 ? `/entry/${entries[0].id}` : "/entry"}
+                >
                   Get Started
                 </Link>
               </section>
@@ -74,20 +77,26 @@ export default function AllEntries() {
                 {!loading &&
                   !error &&
                   entries.map((entry, index) => (
-                    <article
-                      className="allEntriesEntryBox"
+                    <Link
+                      to={`/entry/${entry.id}`}
                       key={entry.id}
-                      onClick={() => setSelectedEntryIndex(index)}
-                      style={{ cursor: "pointer" }}
+                      style={{ textDecoration: "none", color: "inherit" }}
                     >
-                      <div className="allEntriesEntryThumb" aria-hidden="true" />
-                    <div className="allEntriesEntryText">
-                      <h3 className="allEntriesEntryName">{entry.name}</h3>
-                      <p className="allEntriesEntryBlurb">{entry.blurb}</p>
-                    </div>
-                  </article>
-                ))}
-            </section>
+                      <article
+                        className="allEntriesEntryBox"
+                        onMouseEnter={() => setSelectedEntryIndex(index)}
+                        onMouseLeave={() => setSelectedEntryIndex(null)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <div className="allEntriesEntryThumb" aria-hidden="true" />
+                        <div className="allEntriesEntryText">
+                          <h3 className="allEntriesEntryName">{entry.name}</h3>
+                          <p className="allEntriesEntryBlurb">{entry.blurb}</p>
+                        </div>
+                      </article>
+                    </Link>
+                  ))}
+              </section>
             </div>
           }
           right={

@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import SitesPage from "./pages/SitesPage";
-import EntryCard from "./components/EntryCard";
+import EntryPage from "./pages/EntryPage";
 import AllEntries from "./pages/AllEntries";
 
 
@@ -206,7 +206,7 @@ function App() {
 
       {/* ===== routing to different pages ===== */}
       <Route path="/tours" element={<SitesPage />} />
-      <Route path="/entry" element={<EntryCard />} />
+      <Route path="/entry/:id" element={<EntryPage />} />
       <Route path="/all-entries" element={<AllEntries />} />
       </Routes>
       </Router>
