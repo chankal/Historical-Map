@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import TourCard from "../components/TourCard";
+import MapWithPins from "../components/MapWithPins";
 import busStopIcon from "../images/bus-stop.png";
 import "./AllEntries.css";
 
@@ -82,7 +83,7 @@ export default function AllEntries() {
               </section>
             </div>
           }
-          right={<div className="allEntriesRightEmpty" aria-hidden="true" />}
+          right={<MapWithPins />}
         />
       </main>
     </div>
