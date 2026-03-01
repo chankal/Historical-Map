@@ -198,20 +198,38 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
     });
   }, [geocodedStops, navigate]);
 
-  // Handle zoom when entry is selected
+  // Handle zoom when entry is selected or deselected
   useEffect(() => {
-    if (
-      !mapRef.current ||
-      selectedIndex === null ||
-      !geocodedStops[selectedIndex]
-    )
-      return;
+    if (!mapRef.current || geocodedStops.length === 0) return;
 
-    const stop = geocodedStops[selectedIndex];
-    mapRef.current.flyTo([stop.lat, stop.lng], 17, {
-      duration: 0.8,
-      easeLinearity: 0.5,
-    });
+    if (selectedIndex === null) {
+      // Zoom out to show all markers
+      if (geocodedStops.length === 1) {
+        // If only one marker, center on it with default zoom
+        mapRef.current.flyTo([geocodedStops[0].lat, geocodedStops[0].lng], 12, {
+          duration: 0.8,
+          easeLinearity: 0.5,
+        });
+      } else {
+        // If multiple markers, fit bounds to show all
+        const L = window.L;
+        const bounds = L.latLngBounds(
+          geocodedStops.map((stop) => [stop.lat, stop.lng])
+        );
+        mapRef.current.flyToBounds(bounds, {
+          padding: [50, 50],
+          duration: 0.8,
+          easeLinearity: 0.5,
+        });
+      }
+    } else if (geocodedStops[selectedIndex]) {
+      // Zoom in to selected marker
+      const stop = geocodedStops[selectedIndex];
+      mapRef.current.flyTo([stop.lat, stop.lng], 17, {
+        duration: 0.8,
+        easeLinearity: 0.5,
+      });
+    }
   }, [selectedIndex, geocodedStops]);
 
   return (
