@@ -9,7 +9,7 @@ import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import SitesPage from "./pages/SitesPage";
 import EntryPage from "./pages/EntryPage";
 import AllEntries from "./pages/AllEntries";
-import EntryCard from './components/EntryCard';
+
 
 
 // To use video ID as parameter input instead of address, replace parameter value with a videoID '-wVXGP6Hkogfqz6sZulUf3'.
@@ -207,7 +207,6 @@ function App() {
 
       {/* ===== routing to different pages ===== */}
       <Route path="/tours" element={<SitesPage />} />
-       {/* <Route path="/enter" elemment={<EntryCard/>} /> */}
       <Route path="/entry/:id" element={<EntryPage />} />
       <Route path="/all-entries" element={<AllEntries />} />
       </Routes>
