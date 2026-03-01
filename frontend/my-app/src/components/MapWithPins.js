@@ -1,20 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./MapWithPins.css";
 
-// Sample stops data - replace with actual data from props if needed
-const DEFAULT_STOPS = [
-  { name: "Stop 1", lat: 33.756, lng: -84.376 },
-  { name: "Stop 2", lat: 33.749, lng: -84.388 },
-  { name: "Stop 3", lat: 33.757, lng: -84.383 },
-  { name: "Stop 4", lat: 33.758, lng: -84.39 },
-  { name: "Stop 5", lat: 33.688, lng: -84.392 },
-  { name: "Stop 6", lat: 33.762, lng: -84.37 },
-  { name: "Stop 7", lat: 33.748, lng: -84.411 },
-  { name: "Stop 8", lat: 33.751, lng: -84.374 },
-  { name: "Stop 9", lat: 33.754, lng: -84.394 },
-  { name: "Stop 10", lat: 33.754, lng: -84.422 },
-];
-
 function loadScript(src) {
   return new Promise((resolve, reject) => {
     if (document.querySelector(`script[src="${src}"]`)) {
