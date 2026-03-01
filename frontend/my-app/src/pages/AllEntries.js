@@ -86,7 +86,11 @@ export default function AllEntries() {
                         className="allEntriesEntryBox"
                         onMouseEnter={() => setSelectedEntryIndex(index)}
                         onMouseLeave={() => setSelectedEntryIndex(null)}
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          borderColor: selectedEntryIndex === index ? "#D43C67" : "#dfdfdf",
+                          transition: "border-color 0.2s",
+                        }}
                       >
                         <div className="allEntriesEntryThumb" aria-hidden="true" />
                         <div className="allEntriesEntryText">
