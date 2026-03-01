@@ -1,0 +1,3 @@
+Frontend dependencies:
+- React
+Npm install react-router-dom

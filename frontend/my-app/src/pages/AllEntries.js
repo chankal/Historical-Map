@@ -1,22 +1,49 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import TourCard from "../components/TourCard";
 import busStopIcon from "../images/bus-stop.png";
 import "./AllEntries.css";
 
-const entries = [
-  { id: 1, name: "Name", blurb: "Short blurb" },
-  { id: 2, name: "Name", blurb: "Short blurb" },
-  { id: 3, name: "Name", blurb: "Short blurb" },
-  { id: 4, name: "Name", blurb: "Short blurb" },
-  { id: 5, name: "Name", blurb: "Short blurb" },
-];
+const API_BASE = "http://127.0.0.1:8000/api";
 
 export default function AllEntries() {
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchEntries = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`${API_BASE}/all/`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        const mapped = data.map((e) => ({
+          id: e.id,
+          name: e.name,
+          blurb:
+            e.details?.description ||
+            e.details?.short_blurb ||
+            e.details?.blurb ||
+            "No blurb yet.",
+        }));
+
+        setEntries(mapped);
+      } catch (err) {
+        setError(`Failed to load entries: ${err.message}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEntries();
+  }, []);
+
   return (
     <div className="allEntriesPage">
       <Navbar showToursHeader />
-
       <main className="allEntriesContent">
         <TourCard
           className="allEntriesCard"
@@ -28,11 +55,9 @@ export default function AllEntries() {
 
               <section className="tourInfoBox">
                 <h2 className="tourInfoTitle">Atlanta History Tour</h2>
-                
-
                 <div className="tourStops">
                   <img src={busStopIcon} alt="Bus stop icon" />
-                  <span>10 stops</span>
+                  <span>{entries.length} stops</span>
                 </div>
                 <p className="tourInfoTime">20-25 minutes</p>
                 <Link className="tourStartButton" to="/entry">
@@ -41,15 +66,19 @@ export default function AllEntries() {
               </section>
 
               <section className="entryList">
-                {entries.map((entry) => (
-                  <article className="allEntriesEntryBox" key={entry.id}>
-                    <div className="allEntriesEntryThumb" aria-hidden="true" />
-                    <div className="allEntriesEntryText">
-                      <h3 className="allEntriesEntryName">{entry.name}</h3>
-                      <p className="allEntriesEntryBlurb">{entry.blurb}</p>
-                    </div>
-                  </article>
-                ))}
+                {loading && <p>Loading entries...</p>}
+                {error && <p>{error}</p>}
+                {!loading &&
+                  !error &&
+                  entries.map((entry) => (
+                    <article className="allEntriesEntryBox" key={entry.id}>
+                      <div className="allEntriesEntryThumb" aria-hidden="true" />
+                      <div className="allEntriesEntryText">
+                        <h3 className="allEntriesEntryName">{entry.name}</h3>
+                        <p className="allEntriesEntryBlurb">{entry.blurb}</p>
+                      </div>
+                    </article>
+                  ))}
               </section>
             </div>
           }
