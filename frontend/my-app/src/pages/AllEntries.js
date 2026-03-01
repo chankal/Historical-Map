@@ -12,6 +12,7 @@ export default function AllEntries() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedEntryIndex, setSelectedEntryIndex] = useState(null);
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -29,6 +30,7 @@ export default function AllEntries() {
             e.details?.short_blurb ||
             e.details?.blurb ||
             "No blurb yet.",
+          address: e.details?.address || null,
         }));
 
         setEntries(mapped);
@@ -71,19 +73,29 @@ export default function AllEntries() {
                 {error && <p>{error}</p>}
                 {!loading &&
                   !error &&
-                  entries.map((entry) => (
-                    <article className="allEntriesEntryBox" key={entry.id}>
+                  entries.map((entry, index) => (
+                    <article
+                      className="allEntriesEntryBox"
+                      key={entry.id}
+                      onClick={() => setSelectedEntryIndex(index)}
+                      style={{ cursor: "pointer" }}
+                    >
                       <div className="allEntriesEntryThumb" aria-hidden="true" />
-                      <div className="allEntriesEntryText">
-                        <h3 className="allEntriesEntryName">{entry.name}</h3>
-                        <p className="allEntriesEntryBlurb">{entry.blurb}</p>
-                      </div>
-                    </article>
-                  ))}
-              </section>
+                    <div className="allEntriesEntryText">
+                      <h3 className="allEntriesEntryName">{entry.name}</h3>
+                      <p className="allEntriesEntryBlurb">{entry.blurb}</p>
+                    </div>
+                  </article>
+                ))}
+            </section>
             </div>
           }
-          right={<MapWithPins />}
+          right={
+            <MapWithPins
+              entries={entries}
+              selectedIndex={selectedEntryIndex}
+            />
+          }
         />
       </main>
     </div>
