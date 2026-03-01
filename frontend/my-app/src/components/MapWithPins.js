@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./MapWithPins.css";
 
 function loadScript(src) {
@@ -29,6 +30,7 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
   const mapDivRef = useRef(null);
   const mapRef = useRef(null);
   const markersRef = useRef([]);
+  const navigate = useNavigate();
 
   // Geocode addresses to get coordinates
   useEffect(() => {
@@ -71,6 +73,7 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
             name: entry.name,
             lat: parseFloat(lat),
             lng: parseFloat(lng),
+            entryId: entry.id,
             index: i,
           });
         } else {
@@ -97,6 +100,7 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
                   name: entry.name,
                   lat: parseFloat(data[0].lat),
                   lng: parseFloat(data[0].lon),
+                  entryId: entry.id,
                   index: i,
                 });
               } else {
@@ -169,8 +173,8 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
     // Create markers for each stop
     geocodedStops.forEach((stop, i) => {
       const icon = L.divIcon({
-        className: "",
-        html: `<div class="map-pin-wrap">
+        html: 
+        `<div style="cursor: pointer;">
           <div class="map-pin-body">
             <span class="map-pin-num">${i + 1}</span>
           </div>
@@ -182,9 +186,17 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
       const marker = L.marker([stop.lat, stop.lng], { icon }).addTo(
         mapRef.current
       );
+
+      // Add click handler to navigate to entry page
+      if (stop.entryId) {
+        marker.on("click", () => {
+          navigate(`/entry/${stop.entryId}`);
+        });
+      }
+
       markersRef.current.push(marker);
     });
-  }, [geocodedStops]);
+  }, [geocodedStops, navigate]);
 
   // Handle zoom when entry is selected
   useEffect(() => {
