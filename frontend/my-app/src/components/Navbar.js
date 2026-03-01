@@ -5,6 +5,7 @@ import logo from "../images/svclogo.png";
 export default function Navbar({
   showToursHeader = false,
   toursHeaderClassName = "",
+  toursHeaderTitle = "3D Tours",
 }) {
   return (
     <>
@@ -29,18 +30,14 @@ export default function Navbar({
       </header>
 
       {showToursHeader ? (
-        <div className={`toursHeaderBlock ${toursHeaderClassName}`.trim()}>
-          <div className="toursTop">
-            <h1 className="toursTitle">3D Tours</h1>
-
-            <button className="downloadBtn">
-              <span className="downloadDot" aria-hidden="true" />
-              DOWNLOAD OUR MOBILE APP
-            </button>
+        <section className="toursHeaderShell">
+          <div className={`toursHeaderBlock ${toursHeaderClassName}`.trim()}>
+            <div className="toursTop">
+              <h1 className="toursTitle">{toursHeaderTitle}</h1>
+            </div>
+            <div className="toursRule" />
           </div>
-
-          <div className="toursRule" />
-        </div>
+        </section>
       ) : null}
     </>
   );

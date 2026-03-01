@@ -5,12 +5,14 @@
 }
 
 .entryContent {
-  width: min(1200px, 96vw);
+  width: min(1200px, 96vw); 
+  /* width: 90vw; */
   margin: 0 auto 40px;
 }
 
 .entryToursHeaderBlock {
-  width: min(1200px, 96vw);
+  width: min(1200px, 96vw); 
+  /* width: 90vw; */
 }
 
 .entryTourCard {
