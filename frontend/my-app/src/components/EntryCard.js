@@ -39,8 +39,8 @@ export default function EntryCard({
                 &lt; Return to Stops
               </Link>
 
-              <section className="entryBox entryIdentity">
-                {image && (
+              {image && (
+                <div className="entryBox" style={{ padding: 0, overflow: 'hidden' }}>
                   <img 
                     src={image} 
                     alt={name}
@@ -49,11 +49,13 @@ export default function EntryCard({
                       width: '100%', 
                       maxHeight: '300px', 
                       objectFit: 'cover',
-                      borderRadius: '8px',
-                      marginBottom: '16px'
+                      display: 'block'
                     }}
                   />
-                )}
+                </div>
+              )}
+
+              <section className="entryBox entryIdentity">
                 <div className="entryAvatar" aria-hidden="true" />
                 <div>
                   <h2 className="entryName">{name}</h2>

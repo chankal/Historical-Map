@@ -31,6 +31,7 @@ export default function AllEntries() {
             e.details?.blurb ||
             "No blurb yet.",
           address: e.details?.address || null,
+          image: e.image || null,
         }));
 
         setEntries(mapped);
@@ -110,7 +111,15 @@ export default function AllEntries() {
                           transition: "border-color 0.2s",
                         }}
                       >
-                        <div className="allEntriesEntryThumb" aria-hidden="true" />
+                        <div 
+                          className="allEntriesEntryThumb" 
+                          style={{
+                            backgroundImage: entry.image ? `url(${entry.image})` : 'none',
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                          }}
+                          aria-hidden="true" 
+                        />
                         <div className="allEntriesEntryText">
                           <h3 className="allEntriesEntryName">{entry.name}</h3>
                           <p className="allEntriesEntryBlurb">{entry.blurb}</p>
