@@ -26,13 +26,10 @@ export default function EntryPage() {
           id: data.id,
           name: data.name,
           blurb:
-            data.details?.short_blurb ||
             data.details?.blurb ||
-            data.details?.description ||
             "No blurb available.",
           longDescription:
             data.details?.description ||
-            data.details?.long_description ||
             "No description available.",
           address: data.details?.address || null,
           image: data.image || null,

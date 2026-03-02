@@ -9,6 +9,7 @@ export default function UploadEntry() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
+    blurb: "",
     description: "",
     address: "",
     year: "",
@@ -50,6 +51,7 @@ export default function UploadEntry() {
       uploadData.append("name", formData.name);
 
       const details = {
+        blurb: formData.blurb,
         description: formData.description,
         address: formData.address,
         year: formData.year,
@@ -100,19 +102,31 @@ export default function UploadEntry() {
                 value={formData.name}
                 onChange={handleInputChange}
                 required
-                placeholder="e.g., Battle of Waterloo"
+                placeholder="e.g., John Wesley Dobbs"
               />
             </div>
 
             <div className="formGroup">
-              <label htmlFor="description">Description</label>
+              <label htmlFor="blurb">Blurb (Short Subtitle)</label>
+              <input
+                type="text"
+                id="blurb"
+                name="blurb"
+                value={formData.blurb}
+                onChange={handleInputChange}
+                placeholder="e.g., Voting Rights Advocate & Grandfather of Maynard Jackson"
+              />
+            </div>
+
+            <div className="formGroup">
+              <label htmlFor="description">Description (Full Biography)</label>
               <textarea
                 id="description"
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
-                rows="4"
-                placeholder="Brief description of the historical event or location"
+                rows="6"
+                placeholder="Full detailed description of the historical figure or location..."
               />
             </div>
 
