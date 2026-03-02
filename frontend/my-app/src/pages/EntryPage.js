@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import EntryCard from "../components/EntryCard";
+import { useGoogleMapsAPI } from "../contexts/GoogleMapsAPIContext";
 
 const API_BASE = "http://127.0.0.1:8000/api";
-const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API;
 
 export default function EntryPage() {
   const { id } = useParams();
+  const { requestAPIKey } = useGoogleMapsAPI();
   const [entry, setEntry] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [latLng, setLatLng] = useState(null);
+  const [googleAPIKey, setGoogleAPIKey] = useState(null);
 
   useEffect(() => {
     const fetchEntry = async () => {
@@ -50,9 +52,17 @@ export default function EntryPage() {
   // Geocode the address to get lat/lng
   useEffect(() => {
     const geocodeAddress = async (address) => {
+      const apiKey = await requestAPIKey();
+      if (!apiKey) {
+        setLatLng(null);
+        return;
+      }
+      
+      setGoogleAPIKey(apiKey);
+      
       try {
         const res = await fetch(
-          `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_API_KEY}`
+          `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`
         );
         const data = await res.json();
         if (data.status === "OK" && data.results.length > 0) {
@@ -69,7 +79,7 @@ export default function EntryPage() {
     if (entry?.address) {
       geocodeAddress(entry.address);
     }
-  }, [entry]);
+  }, [entry, requestAPIKey]);
 
   if (loading) {
     return (
@@ -104,7 +114,7 @@ export default function EntryPage() {
       image={entry.image}
       returnTo="/all-entries"
       right={
-        latLng ? (
+        latLng && googleAPIKey ? (
           <iframe
             title="Street View"
             width="100%"
@@ -112,11 +122,11 @@ export default function EntryPage() {
             style={{ border: 0 }}
             loading="lazy"
             allowFullScreen
-            src={`https://www.google.com/maps/embed/v1/streetview?key=${GOOGLE_API_KEY}&location=${latLng.lat},${latLng.lng}&heading=210&pitch=10`}
+            src={`https://www.google.com/maps/embed/v1/streetview?key=${googleAPIKey}&location=${latLng.lat},${latLng.lng}&heading=210&pitch=10`}
           />
         ) : entry.address ? (
           <div className="entryRightEmpty">
-            <p>Street View not available for this address</p>
+            <p>Click to load Street View (requires API key)</p>
           </div>
         ) : null
       }
