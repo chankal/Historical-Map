@@ -4,4 +4,4 @@ from .models import HistoricalEntry
 class HistoricalEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalEntry
-        fields = ['id', 'name', 'details']
+        fields = ['id', 'name', 'details', 'image']

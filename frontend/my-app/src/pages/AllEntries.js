@@ -56,6 +56,24 @@ export default function AllEntries() {
                 &lt; Return to Tours
               </Link>
 
+              <Link 
+                to="/upload" 
+                className="uploadEntryLink"
+                style={{
+                  display: 'block',
+                  padding: '10px 20px',
+                  marginBottom: '20px',
+                  backgroundColor: '#61dafb',
+                  color: '#0a0a0a',
+                  textDecoration: 'none',
+                  borderRadius: '6px',
+                  textAlign: 'center',
+                  fontWeight: '600'
+                }}
+              >
+                + Upload New Entry
+              </Link>
+
               <section className="tourInfoBox">
                 <h2 className="tourInfoTitle">Atlanta History Tour</h2>
                 <div className="tourStops">

@@ -9,6 +9,7 @@ export default function EntryCard({
   longDescription = "Long description",
   returnTo = "/tours",
   address = null,
+  image = null,
   right,
 }) {
   const handleGetDirections = () => {
@@ -39,6 +40,20 @@ export default function EntryCard({
               </Link>
 
               <section className="entryBox entryIdentity">
+                {image && (
+                  <img 
+                    src={image} 
+                    alt={name}
+                    className="entryImage"
+                    style={{ 
+                      width: '100%', 
+                      maxHeight: '300px', 
+                      objectFit: 'cover',
+                      borderRadius: '8px',
+                      marginBottom: '16px'
+                    }}
+                  />
+                )}
                 <div className="entryAvatar" aria-hidden="true" />
                 <div>
                   <h2 className="entryName">{name}</h2>

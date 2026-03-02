@@ -1,0 +1,144 @@
+.uploadEntryPage {
+  min-height: 100vh;
+  background-color: #0a0a0a;
+  color: #ffffff;
+}
+
+.uploadContent {
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.uploadContainer {
+  max-width: 600px;
+  width: 100%;
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.uploadContainer h1 {
+  margin: 0 0 30px 0;
+  font-size: 28px;
+  text-align: center;
+  color: #61dafb;
+}
+
+.uploadForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGroup label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #61dafb;
+}
+
+.formGroup input,
+.formGroup textarea {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background-color: #0a0a0a;
+  color: #ffffff;
+  font-family: inherit;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #61dafb;
+  box-shadow: 0 0 0 2px rgba(97, 218, 251, 0.2);
+}
+
+.formGroup input[type="file"] {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.imagePreviewContainer {
+  margin-top: 12px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+.imagePreview {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  display: block;
+}
+
+.errorMessage {
+  padding: 12px;
+  background-color: #ff4444;
+  color: white;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.successMessage {
+  padding: 12px;
+  background-color: #44ff44;
+  color: #0a0a0a;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.formActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.cancelButton,
+.submitButton {
+  flex: 1;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelButton {
+  background-color: #333;
+  color: #ffffff;
+}
+
+.cancelButton:hover:not(:disabled) {
+  background-color: #444;
+}
+
+.submitButton {
+  background-color: #61dafb;
+  color: #0a0a0a;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: #4fc3e8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(97, 218, 251, 0.3);
+}
+
+.cancelButton:disabled,
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

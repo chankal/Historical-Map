@@ -14,7 +14,7 @@ class HistoricalEntryViewSet(viewsets.ModelViewSet):
 @api_view(['GET'])
 def get_all_entries(request):
     entries = HistoricalEntry.objects.all()
-    serializer = HistoricalEntrySerializer(entries, many=True)
+    serializer = HistoricalEntrySerializer(entries, many=True, context={'request': request})
     return Response(serializer.data)
 
 # Get a single entry by ID
@@ -22,7 +22,7 @@ def get_all_entries(request):
 def get_entry(request, pk):
     try:
         entry = HistoricalEntry.objects.get(pk=pk)
-        serializer = HistoricalEntrySerializer(entry)
+        serializer = HistoricalEntrySerializer(entry, context={'request': request})
         return Response(serializer.data)
     except HistoricalEntry.DoesNotExist:
         return Response({'error': 'Entry not found'}, status=404)

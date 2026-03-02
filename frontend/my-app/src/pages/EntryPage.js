@@ -31,6 +31,7 @@ export default function EntryPage() {
             data.details?.long_description ||
             "No description available.",
           address: data.details?.address || null,
+          image: data.image || null,
         });
       } catch (err) {
         setError(`Failed to load entry: ${err.message}`);
@@ -74,6 +75,7 @@ export default function EntryPage() {
       blurb={entry.blurb}
       longDescription={entry.longDescription}
       address={entry.address}
+      image={entry.image}
       returnTo="/all-entries"
       right={
         // add the street view stuff here

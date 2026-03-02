@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import SitesPage from "./pages/SitesPage";
 import EntryPage from "./pages/EntryPage";
 import AllEntries from "./pages/AllEntries";
+import UploadEntry from "./pages/UploadEntry";
 
 
 // To use video ID as parameter input instead of address, replace parameter value with a videoID '-wVXGP6Hkogfqz6sZulUf3'.
@@ -208,6 +209,7 @@ function App() {
       <Route path="/tours" element={<SitesPage />} />
       <Route path="/entry/:id" element={<EntryPage />} />
       <Route path="/all-entries" element={<AllEntries />} />
+      <Route path="/upload" element={<UploadEntry />} />
       </Routes>
       </Router>
   );
