@@ -1,11 +1,11 @@
 import Navbar from "../components/Navbar";
 import TourCard from "../components/TourCard";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import { useGoogleMapsAPI } from "../contexts/GoogleMapsAPIContext";
 import "./SitesPage.css";
 
 const PARAMETER_VALUE = '600 Peachtree St NE, Atlanta, GA 30308';
-const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API;
 
 function videoIdOrAddress(value) {
   const videoIdRegex = /[0-9a-zA-Z-_]{22}/;
@@ -13,43 +13,55 @@ function videoIdOrAddress(value) {
 }
 
 export default function SitesPage() {
+  const navigate = useNavigate();
+  const { requestAPIKey } = useGoogleMapsAPI();
   const videoRef = useRef(null);
   const [videoSrc, setVideoSrc] = useState("");
-  const [status, setStatus] = useState("Loading...");
+  const [status, setStatus] = useState("Click to load Aerial View");
+  const [loadTriggered, setLoadTriggered] = useState(false);
 
-  useEffect(() => {
-    async function initAerialView() {
-      const parameterKey = videoIdOrAddress(PARAMETER_VALUE);
-      const urlParameter = new URLSearchParams();
-      urlParameter.set(parameterKey, PARAMETER_VALUE);
-      urlParameter.set("key", API_KEY);
-
-      try {
-        const response = await fetch(
-          `https://aerialview.googleapis.com/v1/videos:lookupVideo?${urlParameter.toString()}`
-        );
-        const videoResult = await response.json();
-
-        if (videoResult.state === "PROCESSING") {
-          setStatus("Video still processing...");
-        } else if (videoResult.error) {
-          const errorMsg = videoResult.error.message || "Unknown error";
-          setStatus(
-            `Error: ${errorMsg}\n\nℹ️ Aerial View videos are only available for specific locations.`
-          );
-        } else if (videoResult.uris?.MP4_MEDIUM?.landscapeUri) {
-          setVideoSrc(videoResult.uris.MP4_MEDIUM.landscapeUri);
-          setStatus("");
-        } else {
-          setStatus("Video not available in the expected format.");
-        }
-      } catch (error) {
-        setStatus("Error loading video: " + error.message);
-      }
+  const initAerialView = async () => {
+    if (loadTriggered) return;
+    setLoadTriggered(true);
+    
+    setStatus("Requesting API key...");
+    const apiKey = await requestAPIKey();
+    
+    if (!apiKey) {
+      setStatus("Redirecting to all entries...");
+      setTimeout(() => navigate('/all-entries'), 1000);
+      return;
     }
 
-    initAerialView();
-  }, []);
+    setStatus("Loading...");
+    const parameterKey = videoIdOrAddress(PARAMETER_VALUE);
+    const urlParameter = new URLSearchParams();
+    urlParameter.set(parameterKey, PARAMETER_VALUE);
+    urlParameter.set("key", apiKey);
+
+    try {
+      const response = await fetch(
+        `https://aerialview.googleapis.com/v1/videos:lookupVideo?${urlParameter.toString()}`
+      );
+      const videoResult = await response.json();
+
+      if (videoResult.state === "PROCESSING") {
+        setStatus("Video still processing...");
+      } else if (videoResult.error) {
+        const errorMsg = videoResult.error.message || "Unknown error";
+        setStatus(
+          `Error: ${errorMsg}\n\nℹ️ Aerial View videos are only available for specific locations.`
+        );
+      } else if (videoResult.uris?.MP4_MEDIUM?.landscapeUri) {
+        setVideoSrc(videoResult.uris.MP4_MEDIUM.landscapeUri);
+        setStatus("");
+      } else {
+        setStatus("Video not available in the expected format.");
+      }
+    } catch (error) {
+      setStatus("Error loading video: " + error.message);
+    }
+  };
 
   const handleVideoClick = () => {
     if (videoRef.current) {
@@ -77,12 +89,25 @@ export default function SitesPage() {
               <p className="tourDesc">
                 South-View residents who are honored for their contributions to the city of Atlanta.
               </p>
+              <Link
+                to="/all-entries"
+                style={{
+                  display: 'inline-block',
+                  marginTop: '15px',
+                  padding: '10px 20px',
+                  backgroundColor: '#61dafb',
+                  color: '#0a0a0a',
+                  textDecoration: 'none',
+                  borderRadius: '6px',
+                  fontWeight: '600'
+                }}
+              >
+                Browse All Entries
+              </Link>
             </>
           }
           right={
-            status ? (
-              <div className="tourPlaceholder">{status}</div>
-            ) : videoSrc ? (
+            videoSrc ? (
               <video
                 className="tourImage"
                 ref={videoRef}
@@ -92,7 +117,14 @@ export default function SitesPage() {
                 style={{ cursor: "pointer" }}
               />
             ) : (
-              <div className="tourPlaceholder">Image or Map Here</div>
+              <div 
+                className="tourPlaceholder" 
+                onClick={!loadTriggered ? initAerialView : undefined}
+                style={{ cursor: !loadTriggered ? 'pointer' : 'default' }}
+              >
+                {status}
+                {!loadTriggered && <div style={{ marginTop: '10px', fontSize: '12px' }}>Click to load Aerial View (requires API key)</div>}
+              </div>
             )
           }
         />
