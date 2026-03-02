@@ -26,9 +26,9 @@ export default function AllEntries() {
           id: e.id,
           name: e.name,
           blurb:
-            e.details?.description ||
             e.details?.short_blurb ||
             e.details?.blurb ||
+            e.details?.description ||
             "No blurb yet.",
           address: e.details?.address || null,
           image: e.image || null,

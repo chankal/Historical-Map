@@ -39,24 +39,16 @@ export default function EntryCard({
                 &lt; Return to Stops
               </Link>
 
-              {image && (
-                <div className="entryBox" style={{ padding: 0, overflow: 'hidden' }}>
-                  <img 
-                    src={image} 
-                    alt={name}
-                    className="entryImage"
-                    style={{ 
-                      width: '100%', 
-                      maxHeight: '300px', 
-                      objectFit: 'cover',
-                      display: 'block'
-                    }}
-                  />
-                </div>
-              )}
-
               <section className="entryBox entryIdentity">
-                <div className="entryAvatar" aria-hidden="true" />
+                <div 
+                  className="entryAvatar" 
+                  style={{
+                    backgroundImage: image ? `url(${image})` : 'none',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                  aria-hidden="true" 
+                />
                 <div>
                   <h2 className="entryName">{name}</h2>
                   <p className="entryBlurb">{blurb}</p>
