@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./MapWithPins.css";
 
 function loadScript(src) {
@@ -29,6 +30,7 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
   const mapDivRef = useRef(null);
   const mapRef = useRef(null);
   const markersRef = useRef([]);
+  const navigate = useNavigate();
 
   // Geocode addresses to get coordinates
   useEffect(() => {
@@ -71,6 +73,7 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
             name: entry.name,
             lat: parseFloat(lat),
             lng: parseFloat(lng),
+            entryId: entry.id,
             index: i,
           });
         } else {
@@ -97,6 +100,7 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
                   name: entry.name,
                   lat: parseFloat(data[0].lat),
                   lng: parseFloat(data[0].lon),
+                  entryId: entry.id,
                   index: i,
                 });
               } else {
@@ -169,8 +173,8 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
     // Create markers for each stop
     geocodedStops.forEach((stop, i) => {
       const icon = L.divIcon({
-        className: "",
-        html: `<div class="map-pin-wrap">
+        html: 
+        `<div style="cursor: pointer;">
           <div class="map-pin-body">
             <span class="map-pin-num">${i + 1}</span>
           </div>
@@ -182,24 +186,50 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
       const marker = L.marker([stop.lat, stop.lng], { icon }).addTo(
         mapRef.current
       );
+
+      // Add click handler to navigate to entry page
+      if (stop.entryId) {
+        marker.on("click", () => {
+          navigate(`/entry/${stop.entryId}`);
+        });
+      }
+
       markersRef.current.push(marker);
     });
-  }, [geocodedStops]);
+  }, [geocodedStops, navigate]);
 
-  // Handle zoom when entry is selected
+  // Handle zoom when entry is selected or deselected
   useEffect(() => {
-    if (
-      !mapRef.current ||
-      selectedIndex === null ||
-      !geocodedStops[selectedIndex]
-    )
-      return;
+    if (!mapRef.current || geocodedStops.length === 0) return;
 
-    const stop = geocodedStops[selectedIndex];
-    mapRef.current.flyTo([stop.lat, stop.lng], 17, {
-      duration: 0.8,
-      easeLinearity: 0.5,
-    });
+    if (selectedIndex === null) {
+      // Zoom out to show all markers
+      if (geocodedStops.length === 1) {
+        // If only one marker, center on it with default zoom
+        mapRef.current.flyTo([geocodedStops[0].lat, geocodedStops[0].lng], 12, {
+          duration: 0.8,
+          easeLinearity: 0.5,
+        });
+      } else {
+        // If multiple markers, fit bounds to show all
+        const L = window.L;
+        const bounds = L.latLngBounds(
+          geocodedStops.map((stop) => [stop.lat, stop.lng])
+        );
+        mapRef.current.flyToBounds(bounds, {
+          padding: [50, 50],
+          duration: 0.8,
+          easeLinearity: 0.5,
+        });
+      }
+    } else if (geocodedStops[selectedIndex]) {
+      // Zoom in to selected marker
+      const stop = geocodedStops[selectedIndex];
+      mapRef.current.flyTo([stop.lat, stop.lng], 17, {
+        duration: 0.8,
+        easeLinearity: 0.5,
+      });
+    }
   }, [selectedIndex, geocodedStops]);
 
   return (

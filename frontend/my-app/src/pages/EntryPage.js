@@ -3,12 +3,14 @@ import { useParams } from "react-router-dom";
 import EntryCard from "../components/EntryCard";
 
 const API_BASE = "http://127.0.0.1:8000/api";
+const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API;
 
 export default function EntryPage() {
   const { id } = useParams();
   const [entry, setEntry] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [latLng, setLatLng] = useState(null);
 
   useEffect(() => {
     const fetchEntry = async () => {
@@ -45,6 +47,30 @@ export default function EntryPage() {
     }
   }, [id]);
 
+  // Geocode the address to get lat/lng
+  useEffect(() => {
+    const geocodeAddress = async (address) => {
+      try {
+        const res = await fetch(
+          `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_API_KEY}`
+        );
+        const data = await res.json();
+        if (data.status === "OK" && data.results.length > 0) {
+          const location = data.results[0].geometry.location;
+          setLatLng(location);
+        } else {
+          setLatLng(null);
+        }
+      } catch {
+        setLatLng(null);
+      }
+    };
+
+    if (entry?.address) {
+      geocodeAddress(entry.address);
+    }
+  }, [entry]);
+
   if (loading) {
     return (
       <div style={{ padding: "40px", textAlign: "center" }}>
@@ -78,10 +104,21 @@ export default function EntryPage() {
       image={entry.image}
       returnTo="/all-entries"
       right={
-        // add the street view stuff here
-        <div className="entryRightEmpty">
-            <p>STREET VIEW HERE</p>
-        </div>
+        latLng ? (
+          <iframe
+            title="Street View"
+            width="100%"
+            height="430"
+            style={{ border: 0 }}
+            loading="lazy"
+            allowFullScreen
+            src={`https://www.google.com/maps/embed/v1/streetview?key=${GOOGLE_API_KEY}&location=${latLng.lat},${latLng.lng}&heading=210&pitch=10`}
+          />
+        ) : entry.address ? (
+          <div className="entryRightEmpty">
+            <p>Street View not available for this address</p>
+          </div>
+        ) : null
       }
     />
   );

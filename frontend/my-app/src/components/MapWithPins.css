@@ -81,6 +81,11 @@
   font-size: 10px !important;
 }
 
+.leaflet-div-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
 @media (max-width: 900px) {
   .map-with-pins-container,
   .map-canvas {

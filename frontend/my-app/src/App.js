@@ -12,6 +12,7 @@ import AllEntries from "./pages/AllEntries";
 import UploadEntry from "./pages/UploadEntry";
 
 
+
 // To use video ID as parameter input instead of address, replace parameter value with a videoID '-wVXGP6Hkogfqz6sZulUf3'.
 // Use sample video ID to test (this is guaranteed to work):
 const PARAMETER_VALUE = '600 Peachtree St NE, Atlanta, GA 30308';
