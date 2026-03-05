@@ -90,6 +90,12 @@ export default function SitesPage() {
                 South-View residents who are honored for their contributions to the city of Atlanta.
               </p>
               <Link
+                className="getStartedButton"
+                to="/all-entries"
+              >
+                Get Started
+              </Link>
+              <Link
                 to="/all-entries"
                 style={{
                   display: 'inline-block',

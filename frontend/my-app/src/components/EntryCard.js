@@ -7,6 +7,9 @@ export default function EntryCard({
   name = "Name",
   blurb = "Short blurb",
   longDescription = "Long description",
+  stopNumber = null,
+  prevEntryId = null,
+  nextEntryId = null,
   returnTo = "/tours",
   address = null,
   image = null,
@@ -36,19 +39,24 @@ export default function EntryCard({
           left={
             <div className="entryLeftLayout">
               <Link className="entryBox entryBack" to={returnTo}>
-                &lt; Return to Stops
+                <span className="entryBackIcon" aria-hidden="true">
+                  &#8249;
+                </span>
+                <span>Return to Stops</span>
               </Link>
 
               <section className="entryBox entryIdentity">
-                <div 
-                  className="entryAvatar" 
-                  style={{
-                    backgroundImage: image ? `url(${image})` : 'none',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  }}
-                  aria-hidden="true" 
-                />
+                <div className="entryAvatarWrap" aria-hidden="true">
+                  <div className="entryStopBadge">{stopNumber ?? ""}</div>
+                  <div
+                    className="entryAvatar"
+                    style={{
+                      backgroundImage: image ? `url(${image})` : "none",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  />
+                </div>
                 <div>
                   <h2 className="entryName">{name}</h2>
                   <p className="entryBlurb">{blurb}</p>
@@ -57,12 +65,12 @@ export default function EntryCard({
 
               <div className="entryActionRow">
                 <button
-                  className="entryBox entryAction"
+                  className="entryBox entryPager"
                   onClick={handleGetDirections}
                 >
                   Get Directions
                 </button>
-                <button className="entryBox entryAction">View &amp; Submit Memories</button>
+                <button className="entryBox entryPager">View &amp; Submit Memories</button>
               </div>
 
               <section className="entryBox entryLongDescription">
@@ -70,8 +78,24 @@ export default function EntryCard({
               </section>
 
               <div className="entryNavRow">
-                <button className="entryBox entryPager">&lt; Previous</button>
-                <button className="entryBox entryPager">Next &gt;</button>
+                {prevEntryId ? (
+                  <Link className="entryBox entryPager" to={`/entry/${prevEntryId}`}>
+                    &lt; Previous
+                  </Link>
+                ) : (
+                  <button className="entryBox entryPager" type="button" disabled>
+                    &lt; Previous
+                  </button>
+                )}
+                {nextEntryId ? (
+                  <Link className="entryBox entryPager" to={`/entry/${nextEntryId}`}>
+                    Next &gt;
+                  </Link>
+                ) : (
+                  <button className="entryBox entryPager" type="button" disabled>
+                    Next &gt;
+                  </button>
+                )}
               </div>
             </div>
           }

@@ -13,6 +13,9 @@ export default function EntryPage() {
   const [error, setError] = useState("");
   const [latLng, setLatLng] = useState(null);
   const [googleAPIKey, setGoogleAPIKey] = useState(null);
+  const [stopNumber, setStopNumber] = useState(null);
+  const [prevEntryId, setPrevEntryId] = useState(null);
+  const [nextEntryId, setNextEntryId] = useState(null);
 
   useEffect(() => {
     const fetchEntry = async () => {
@@ -21,6 +24,24 @@ export default function EntryPage() {
         const res = await fetch(`${API_BASE}/entry/${id}/`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
+        const allRes = await fetch(`${API_BASE}/all/`);
+        let computedStopNumber = null;
+        let computedPrevEntryId = null;
+        let computedNextEntryId = null;
+
+        if (allRes.ok) {
+          const allData = await allRes.json();
+          const matchIndex = allData.findIndex((e) => String(e.id) === String(data.id));
+          computedStopNumber = matchIndex >= 0 ? matchIndex + 1 : null;
+
+          if (matchIndex > 0) {
+            computedPrevEntryId = allData[matchIndex - 1]?.id ?? null;
+          }
+
+          if (matchIndex >= 0 && matchIndex < allData.length - 1) {
+            computedNextEntryId = allData[matchIndex + 1]?.id ?? null;
+          }
+        }
 
         setEntry({
           id: data.id,
@@ -34,6 +55,9 @@ export default function EntryPage() {
           address: data.details?.address || null,
           image: data.image || null,
         });
+        setStopNumber(computedStopNumber);
+        setPrevEntryId(computedPrevEntryId);
+        setNextEntryId(computedNextEntryId);
       } catch (err) {
         setError(`Failed to load entry: ${err.message}`);
       } finally {
@@ -107,6 +131,9 @@ export default function EntryPage() {
       name={entry.name}
       blurb={entry.blurb}
       longDescription={entry.longDescription}
+      stopNumber={stopNumber}
+      prevEntryId={prevEntryId}
+      nextEntryId={nextEntryId}
       address={entry.address}
       image={entry.image}
       returnTo="/all-entries"

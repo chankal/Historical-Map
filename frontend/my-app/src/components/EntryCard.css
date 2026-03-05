@@ -1,60 +1,91 @@
 .entryPage {
   min-height: 100vh;
   background: #f3f3f3;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
 .entryContent {
-  width: min(1200px, 96vw); 
-  margin: 0 auto 40px;
+  width: min(1200px, 96vw);
+  margin: 0 auto 28px;
 }
 
 .entryToursHeaderBlock {
-  width: min(1200px, 96vw); 
+  width: min(1200px, 96vw);
 }
 
 .entryTourCard {
-  grid-template-columns: minmax(280px, 420px) 1fr;
+  grid-template-columns: minmax(300px, 460px) 1fr;
+  border: 1px solid #c9c9c9;
+  background: #fdfdfd;
 }
 
 .entryLeftLayout {
-  min-height: 620px;
+  min-height: 650px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .entryBox {
-  border: 1px solid #d6d6d6;
-  background: #fff;
-  border-radius: 6px;
-  color: #222;
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+  color: #1d1d1d;
 }
 
 .entryBack {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   text-decoration: none;
-  padding: 10px 12px;
+  padding: 2px 0 0;
+  color: #666;
+  font-size: 1rem;
+}
+
+.entryBackIcon {
+  font-size: 1.25rem;
+  transform: translateY(-1px);
 }
 
 .entryIdentity {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px;
+  gap: 14px;
+  padding: 2px 0 0;
+}
+
+.entryAvatarWrap {
+  position: relative;
 }
 
 .entryAvatar {
-  width: 56px;
-  height: 56px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   background: #d7d7d7;
-  border: 1px solid #bdbdbd;
+  border: 1px solid #9f9f9f;
+}
+
+.entryStopBadge {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: #d33f67;
+  color: #fff;
+  border: 2px solid #d8d8d8;
+  display: grid;
+  place-items: center;
+  font-size: 0.92rem;
+  font-weight: 700;
 }
 
 .entryName {
   margin: 0 0 6px;
-  font-size: 1.9rem;
+  font-size: 2rem;
   font-family: "Times New Roman", Times, serif;
   font-weight: 500;
 }
@@ -67,46 +98,78 @@
 .entryActionRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 14px;
+  margin-top: 4px;
 }
 
 .entryAction {
-  padding: 9px 8px;
+  border: 2px solid #d33f67;
+  background: none;
+  color: #1d1d1d;
+  border-radius: 10px;
+  padding: 4px 10px;
   text-transform: uppercase;
-  font-size: 0.63rem;
+  font-size: 0.67rem;
   letter-spacing: 0.06em;
   font-weight: 700;
   cursor: pointer;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.entryAction:hover {
+  background: #f8f1f4;
 }
 
 .entryLongDescription {
-  padding: 12px;
-  line-height: 1.45;
-  min-height: 180px;
+  padding: 2px 0 0;
+  line-height: 1.35;
+  min-height: 250px;
+  font-size: 1rem;
+  max-width: 44ch;
+  white-space: pre-line;
 }
 
 .entryNavRow {
   margin-top: auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 14px;
 }
 
 .entryPager {
-  padding: 9px 12px;
+  border: 2px solid #d33f67;
+  background: none;
+  color: #1d1d1d;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
   text-transform: uppercase;
-  font-size: 0.7rem;
+  font-size: 0.67rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   cursor: pointer;
+  font-family: "Times New Roman", Times, serif;
+  text-decoration: none;
+}
+
+.entryPager:not(:disabled):hover {
+  background: #d33f67;
+  color: #fff;
+}
+
+.entryPager:disabled {
+  opacity: 0.55;
+  cursor: default;
 }
 
 .entryRightEmpty {
   width: 100%;
   height: 100%;
-  min-height: 620px;
-  background: #e9e9e9;
-  border-left: 1px solid #d8d8d8;
+  min-height: 650px;
+  background: #e2e2e2;
+  border-left: 1px solid #cccccc;
 }
 
 @media (max-width: 900px) {
@@ -117,11 +180,19 @@
   .entryRightEmpty {
     min-height: 280px;
     border-left: 0;
-    border-top: 1px solid #d8d8d8;
+    border-top: 1px solid #cccccc;
   }
 
   .entryActionRow,
   .entryNavRow {
     grid-template-columns: 1fr;
+  }
+
+  .entryName {
+    font-size: 1.8rem;
+  }
+
+  .entryLongDescription {
+    min-height: 0;
   }
 }

@@ -3,7 +3,7 @@
  * Copyright 2023 Google LLC. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
@@ -251,7 +251,8 @@ function App() {
     <GoogleMapsAPIProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<SitesPage />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/tours" element={<SitesPage />} />
           <Route path="/entry/:id" element={<EntryPage />} />
           <Route path="/all-entries" element={<AllEntries />} />

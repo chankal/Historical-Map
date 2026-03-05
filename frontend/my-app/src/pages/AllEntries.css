@@ -1,12 +1,16 @@
 .allEntriesPage {
   min-height: 100vh;
-  background: #f3f3f3;
-  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f5f5;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .allEntriesContent {
   width: min(1200px, 96vw);
   margin: 0 auto 36px;
+}
+
+.allEntriesToursHeaderBlock {
+  width: min(1200px, 96vw);
 }
 
 .allEntriesCard {
@@ -16,38 +20,57 @@
 .allEntriesLeft {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   min-height: 620px;
 }
 
 .returnToTours {
-  color: #666;
+  color: #555;
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
+  font-weight: 400;
 }
 
 .tourInfoBox {
-  border: 1px solid #dfdfdf;
-  background: #fff;
+  border: none;
+  background: #fdfdfd;
   border-radius: 6px;
-  padding: 14px;
+  padding: 12px 14px 16px;
+}
+
+.tourHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.tourHeaderLine {
+  height: 2px;
+  background: #d14b6a;
+  width: 72px;
+  flex: 0 0 72px;
+  border-radius: 2px;
 }
 
 .tourInfoTitle {
   margin: 0;
-  font-size: 2rem;
+  font-size: clamp(1.55rem, 3.1vw, 2.15rem);
   font-family: "Times New Roman", Times, serif;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .tourInfoTime {
-  margin: 8px 0 12px;
-  font-size: 0.95rem;
+  margin: 0;
+  font-size: 1.03rem;
   color: #333;
 }
 
 .tourStartButton {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid #d14b6a;
   background: #fff;
   color: #111;
@@ -55,49 +78,82 @@
   border-radius: 999px;
   font-weight: 700;
   text-transform: uppercase;
-  font-size: 0.78rem;
+  font-size: 0.95rem;
   letter-spacing: 0.04em;
-  padding: 10px 22px;
+  padding: 8px 22px;
   cursor: pointer;
-  float: right;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-width: 190px;
+}
+
+.tourStartButton:hover {
+  background-color: #d14b6a;
+  color: #fff;
 }
 
 .tourStops {
-  margin-top: 12px;
-  display: inline-flex;
+  margin-top: 10px;
+  display: flex;
   align-items: center;
   gap: 8px;
   color: #333;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .tourStops img {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   object-fit: contain;
+}
+
+.tourActionRow {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .entryList {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.allEntriesEntryBox {
-  border: 1px solid #dfdfdf;
-  background: #fff;
-  border-radius: 6px;
-  padding: 10px;
-  display: flex;
-  align-items: center;
   gap: 12px;
 }
 
-.allEntriesEntryThumb {
-  width: 56px;
-  height: 56px;
+.allEntriesEntryBox {
+  border: none;
+  background: #fcfcfc;
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  overflow: visible;
+}
+
+.entryIndexBadge {
+  position: absolute;
+  left: -16px;
+  top: 12px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  border: 1px solid #cfcfcf;
+  background: #d14b6a;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.allEntriesEntryThumb {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  border: 1px solid #d5d5d5;
   background: #dadada;
   flex: 0 0 auto;
 }
@@ -107,16 +163,16 @@
 }
 
 .allEntriesEntryName {
-  margin: 0 0 4px;
+  margin: 0 0 6px;
   font-family: "Times New Roman", Times, serif;
-  font-size: 1.9rem;
+  font-size: clamp(1.55rem, 3.2vw, 2.2rem);
   font-weight: 500;
   line-height: 1;
 }
 
 .allEntriesEntryBlurb {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #424242;
 }
 
@@ -129,6 +185,20 @@
 @media (max-width: 900px) {
   .allEntriesCard {
     grid-template-columns: 1fr;
+  }
+
+  .tourHeaderLine {
+    width: 52px;
+    flex-basis: 52px;
+  }
+
+  .tourActionRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tourStartButton {
+    min-width: 0;
   }
 
   .allEntriesRightEmpty {

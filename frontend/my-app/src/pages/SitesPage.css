@@ -21,3 +21,25 @@
 .tourTitleLink:hover {
   text-decoration: underline;
 }
+
+.getStartedButton {
+  display: inline-block;
+  border: 1px solid #d14b6a;
+  background: #fff;
+  color: #111;
+  text-decoration: none;
+  border-radius: 999px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  padding: 10px 22px;
+  cursor: pointer;
+  float: right;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.getStartedButton:hover {
+  background-color: #d14b6a;
+  color: #ffffff;
+}
