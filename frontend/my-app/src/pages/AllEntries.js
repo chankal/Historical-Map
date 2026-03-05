@@ -47,7 +47,7 @@ export default function AllEntries() {
 
   return (
     <div className="allEntriesPage">
-      <Navbar showToursHeader />
+      <Navbar showToursHeader toursHeaderClassName="allEntriesToursHeaderBlock" />
       <main className="allEntriesContent">
         <TourCard
           className="allEntriesCard"
@@ -76,18 +76,24 @@ export default function AllEntries() {
               </Link>
 
               <section className="tourInfoBox">
-                <h2 className="tourInfoTitle">Atlanta History Tour</h2>
+                <div className="tourHeaderRow">
+                  <span className="tourHeaderLine" aria-hidden="true" />
+                  <h2 className="tourInfoTitle">Atlanta History Tour</h2>
+                  <span className="tourHeaderLine" aria-hidden="true" />
+                </div>
                 <div className="tourStops">
                   <img src={busStopIcon} alt="Bus stop icon" />
                   <span>{entries.length} stops</span>
                 </div>
-                <p className="tourInfoTime">20-25 minutes</p>
-                <Link
-                  className="tourStartButton"
-                  to={entries.length > 0 ? `/entry/${entries[0].id}` : "/entry"}
-                >
-                  Get Started
-                </Link>
+                <div className="tourActionRow">
+                  <p className="tourInfoTime"> Historical Sites</p>
+                  <Link
+                    className="tourStartButton"
+                    to={entries.length > 0 ? `/entry/${entries[0].id}` : "/entry"}
+                  >
+                    Get Started
+                  </Link>
+                </div>
               </section>
 
               <section className="entryList">
@@ -111,6 +117,7 @@ export default function AllEntries() {
                           transition: "border-color 0.2s",
                         }}
                       >
+                        <span className="entryIndexBadge">{index + 1}</span>
                         <div 
                           className="allEntriesEntryThumb" 
                           style={{

@@ -15,7 +15,7 @@ export default function Navbar({
         </div>
 
         <nav className="nav">
-          <NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}>
+          <NavLink to="https://southviewcemetery.com/" className={({ isActive }) => (isActive ? "active" : "")}>
             SOUTH-VIEW CEMETERY WEBSITE
           </NavLink>
           
@@ -23,7 +23,7 @@ export default function Navbar({
             TOURS
           </NavLink>
 
-          <a className="contactBtn" href="#contact">
+          <a className="contactBtn" href="https://southviewcemetery.com/contact-us/">
             CONTACT US
           </a>
         </nav>
