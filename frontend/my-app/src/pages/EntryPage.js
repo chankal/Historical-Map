@@ -46,25 +46,20 @@ export default function EntryPage() {
     }
   }, [id]);
 
-  // Geocode the address to get lat/lng
+  // Geocode the address using the internal API (proxies Nominatim, server-side cached)
   useEffect(() => {
     const geocodeAddress = async (address) => {
-      const apiKey = await requestAPIKey();
-      if (!apiKey) {
-        setLatLng(null);
-        return;
-      }
-      
-      setGoogleAPIKey(apiKey);
-      
       try {
         const res = await fetch(
-          `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`
+          `${API_BASE}/geocode/?address=${encodeURIComponent(address)}`
         );
-        const data = await res.json();
-        if (data.status === "OK" && data.results.length > 0) {
-          const location = data.results[0].geometry.location;
-          setLatLng(location);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.lat && data.lng) {
+            setLatLng({ lat: data.lat, lng: data.lng });
+          } else {
+            setLatLng(null);
+          }
         } else {
           setLatLng(null);
         }
@@ -76,7 +71,13 @@ export default function EntryPage() {
     if (entry?.address) {
       geocodeAddress(entry.address);
     }
-  }, [entry, requestAPIKey]);
+  }, [entry]);
+
+  // Request Google API key and show Street View when user clicks
+  const handleLoadStreetView = async () => {
+    const key = await requestAPIKey();
+    if (key) setGoogleAPIKey(key);
+  };
 
   if (loading) {
     return (
@@ -121,9 +122,13 @@ export default function EntryPage() {
             allowFullScreen
             src={`https://www.google.com/maps/embed/v1/streetview?key=${googleAPIKey}&location=${latLng.lat},${latLng.lng}&heading=210&pitch=10`}
           />
-        ) : entry.address ? (
-          <div className="entryRightEmpty">
-            <p>Click to load Street View (requires API key)</p>
+        ) : latLng ? (
+          <div
+            className="entryRightEmpty"
+            onClick={handleLoadStreetView}
+            style={{ cursor: "pointer" }}
+          >
+            <p>Click to load Street View (requires Google API key)</p>
           </div>
         ) : null
       }
