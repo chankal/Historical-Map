@@ -59,7 +59,7 @@ export default function UploadEntry() {
       uploadData.append("details", JSON.stringify(details));
 
       if (imageFile) {
-        uploadData.append("image", imageFile);
+        uploadData.append("image_upload", imageFile);
       }
 
       const response = await fetch(`${API_BASE}/entries/`, {

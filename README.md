@@ -14,4 +14,6 @@ Run backend like:
 cd into backend
 python manage.py runserver
 
+Before first run, use python manage.py migrate.
+
 
