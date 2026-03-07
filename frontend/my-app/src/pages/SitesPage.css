@@ -43,3 +43,17 @@
   background-color: #d14b6a;
   color: #ffffff;
 }
+
+.youtubeEmbedSection {
+  margin-top: 24px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+}
+
+.youtubeEmbedFrame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  display: block;
+}
