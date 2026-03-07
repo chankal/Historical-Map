@@ -35,12 +35,12 @@
   padding: 10px 4px;
 }
 
-.nav a:hover {
-  color: #000;
+.nav a:not(.contactBtn):hover {
+  color: #d14b6a;
 }
 
 .nav a.active {
-  color: #d14b6a;
+  color: #2a2a2a;
 }
 
 .contactBtn {
@@ -49,6 +49,11 @@
   padding: 10px 14px !important;
   border-radius: 4px;
   font-weight: 600;
+}
+
+.contactBtn:hover {
+  background: #000;
+  color: #fff !important;
 }
 
 .toursHeaderBlock {

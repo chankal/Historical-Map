@@ -67,6 +67,18 @@
   color: #333;
 }
 
+.tourInfoTimeWithIcon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tourInfoTimeWithIcon img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
 .tourStartButton {
   display: inline-flex;
   align-items: center;

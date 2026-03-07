@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import TourCard from "../components/TourCard";
 import MapWithPins from "../components/MapWithPins";
 import busStopIcon from "../images/bus-stop.png";
+import hmapicon from "../images/Hmap.png";
 import "./AllEntries.css";
 
 const API_BASE = "http://127.0.0.1:8000/api";
@@ -86,7 +87,12 @@ export default function AllEntries() {
                   <span>{entries.length} stops</span>
                 </div>
                 <div className="tourActionRow">
-                  <p className="tourInfoTime"> Historical Sites</p>
+                  <p className="tourInfoTime">
+                    <span className="tourInfoTimeWithIcon">
+                      <img src={hmapicon} alt="Historical sites icon" />
+                      <span>Historical Sites</span>
+                    </span>
+                  </p>
                   <Link
                     className="tourStartButton"
                     to={entries.length > 0 ? `/entry/${entries[0].id}` : "/entry"}
