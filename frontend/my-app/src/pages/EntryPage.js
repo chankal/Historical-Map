@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import EntryCard from "../components/EntryCard";
-import { useGoogleMapsAPI } from "../contexts/GoogleMapsAPIContext";
 
-const API_BASE = "http://127.0.0.1:8000/api";
+const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
+const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || null;
 
 export default function EntryPage() {
   const { id } = useParams();
-  const { requestAPIKey } = useGoogleMapsAPI();
   const [entry, setEntry] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [latLng, setLatLng] = useState(null);
-  const [googleAPIKey, setGoogleAPIKey] = useState(null);
   const [stopNumber, setStopNumber] = useState(null);
   const [prevEntryId, setPrevEntryId] = useState(null);
   const [nextEntryId, setNextEntryId] = useState(null);
@@ -71,25 +69,21 @@ export default function EntryPage() {
     }
   }, [id]);
 
-  // Geocode the address to get lat/lng
+  // Geocode the address by calling Nominatim directly from the browser
   useEffect(() => {
     const geocodeAddress = async (address) => {
-      const apiKey = await requestAPIKey();
-      if (!apiKey) {
-        setLatLng(null);
-        return;
-      }
-      
-      setGoogleAPIKey(apiKey);
-      
       try {
         const res = await fetch(
-          `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`
+          `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(address)}`,
+          { headers: { 'Accept-Language': 'en' } }
         );
-        const data = await res.json();
-        if (data.status === "OK" && data.results.length > 0) {
-          const location = data.results[0].geometry.location;
-          setLatLng(location);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.length > 0) {
+            setLatLng({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
+          } else {
+            setLatLng(null);
+          }
         } else {
           setLatLng(null);
         }
@@ -101,7 +95,7 @@ export default function EntryPage() {
     if (entry?.address) {
       geocodeAddress(entry.address);
     }
-  }, [entry, requestAPIKey]);
+  }, [entry]);
 
   if (loading) {
     return (
@@ -140,7 +134,7 @@ export default function EntryPage() {
       image={entry.image}
       returnTo="/all-entries"
       right={
-        latLng && googleAPIKey ? (
+        latLng && GOOGLE_MAPS_API_KEY ? (
           <iframe
             title="Street View"
             width="100%"
@@ -148,7 +142,7 @@ export default function EntryPage() {
             style={{ border: 0 }}
             loading="lazy"
             allowFullScreen
-            src={`https://www.google.com/maps/embed/v1/streetview?key=${googleAPIKey}&location=${latLng.lat},${latLng.lng}&heading=210&pitch=10`}
+            src={`https://www.google.com/maps/embed/v1/streetview?key=${GOOGLE_MAPS_API_KEY}&location=${latLng.lat},${latLng.lng}&heading=210&pitch=10`}
           />
         ) : entry.address ? (
           <div className="entryRightEmpty">

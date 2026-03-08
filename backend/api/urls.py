@@ -9,6 +9,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('all/', views.get_all_entries, name='all-entries'),
     path('entry/<int:pk>/', views.get_entry, name='get-entry'),
+    path('geocode/', views.geocode, name='geocode'),
     # admin panel APIs
     path('admin-auth/login/', views.admin_login, name='admin-login'),
     path('admin-auth/verify/', views.admin_verify, name='admin-verify'),

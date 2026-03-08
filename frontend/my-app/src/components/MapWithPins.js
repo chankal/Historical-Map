@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./MapWithPins.css";
 
+const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
+
 function loadScript(src) {
   return new Promise((resolve, reject) => {
     if (document.querySelector(`script[src="${src}"]`)) {
@@ -81,16 +83,10 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
           const addressString = address;
 
           try {
-            // Use Nominatim (OpenStreetMap) geocoding API
+            // Call Nominatim directly from the browser
             const response = await fetch(
-              `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-                addressString
-              )}&limit=1`,
-              {
-                headers: {
-                  "User-Agent": "HistoricalMapApp/1.0",
-                },
-              }
+              `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(addressString)}`,
+              { headers: { 'Accept-Language': 'en' } }
             );
 
             if (response.ok) {
@@ -106,10 +102,9 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
               } else {
                 console.warn(`No geocoding results for: ${addressString}`);
               }
+            } else {
+              console.warn(`No geocoding results for: ${addressString}`);
             }
-
-            // Rate limit: wait 1 second between requests (Nominatim requirement)
-            await new Promise((resolve) => setTimeout(resolve, 1000));
           } catch (error) {
             console.error(`Error geocoding ${addressString}:`, error);
           }

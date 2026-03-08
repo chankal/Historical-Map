@@ -35,7 +35,11 @@ ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'southview-map-api.onrender.com',  # production
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
@@ -140,6 +144,7 @@ STATIC_URL = 'static/'
 
 # CORS settings - Allow React frontend to access Django API
 CORS_ALLOWED_ORIGINS = [
+    "https://southview-map-app.onrender.com",  # real production api
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
