@@ -296,6 +296,7 @@ export default function AdminDashboard() {
                   name="blurb"
                   value={formData.blurb}
                   onChange={handleFormChange}
+                  required
                   placeholder="Short subtitle"
                 />
               </div>
@@ -307,6 +308,7 @@ export default function AdminDashboard() {
                   name="description"
                   value={formData.description}
                   onChange={handleFormChange}
+                  required
                   rows={5}
                   placeholder="Full description…"
                 />
@@ -320,6 +322,7 @@ export default function AdminDashboard() {
                     name="address"
                     value={formData.address}
                     onChange={handleFormChange}
+                    required
                     placeholder="e.g., 600 Peachtree St NE"
                   />
                 </div>
