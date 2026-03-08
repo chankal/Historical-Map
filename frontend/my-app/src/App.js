@@ -23,7 +23,7 @@ function App() {
           <Route path="/" element={<SitesPage />} />
           {/* <Route path="/home" element={<HomePage />} /> */}
           <Route path="/tours" element={<SitesPage />} />
-          <Route path="/entry/:id" element={<EntryPage />} />
+          <Route path="/entry/:slug" element={<EntryPage />} />
           <Route path="/all-entries" element={<AllEntries />} />
           <Route path="/upload" element={<UploadEntry />} />
           <Route path="/admin" element={<AdminLogin />} />

@@ -9,39 +9,40 @@ const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || null;
 
 export default function EntryPage() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [entry, setEntry] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [latLng, setLatLng] = useState(null);
   const [stopNumber, setStopNumber] = useState(null);
-  const [prevEntryId, setPrevEntryId] = useState(null);
-  const [nextEntryId, setNextEntryId] = useState(null);
+  const [prevEntrySlug, setPrevEntrySlug] = useState(null);
+  const [nextEntrySlug, setNextEntrySlug] = useState(null);
   const [usingFallback, setUsingFallback] = useState(false);
 
   useEffect(() => {
     const fetchEntry = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`${API_BASE}/entry/${id}/`);
+        const res = await fetch(`${API_BASE}/entry/${slug}/`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         const allRes = await fetch(`${API_BASE}/all/`);
         let computedStopNumber = null;
-        let computedPrevEntryId = null;
-        let computedNextEntryId = null;
+        let computedPrevEntrySlug = null;
+        let computedNextEntrySlug = null;
 
         if (allRes.ok) {
           const allData = await allRes.json();
-          const matchIndex = allData.findIndex((e) => String(e.id) === String(data.id));
+          const getSlug = (e) => e.slug || e.name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || String(e.id);
+          const matchIndex = allData.findIndex((e) => getSlug(e) === (data.slug || slug));
           computedStopNumber = matchIndex >= 0 ? matchIndex + 1 : null;
 
           if (matchIndex > 0) {
-            computedPrevEntryId = allData[matchIndex - 1]?.id ?? null;
+            computedPrevEntrySlug = getSlug(allData[matchIndex - 1]);
           }
 
           if (matchIndex >= 0 && matchIndex < allData.length - 1) {
-            computedNextEntryId = allData[matchIndex + 1]?.id ?? null;
+            computedNextEntrySlug = getSlug(allData[matchIndex + 1]);
           }
         }
 
@@ -66,14 +67,15 @@ export default function EntryPage() {
           setLatLng(null);
         }
         setStopNumber(computedStopNumber);
-        setPrevEntryId(computedPrevEntryId);
-        setNextEntryId(computedNextEntryId);
+        setPrevEntrySlug(computedPrevEntrySlug);
+        setNextEntrySlug(computedNextEntrySlug);
       } catch (err) {
         console.warn("API unavailable, using fallback data:", err.message);
-        const fallback = fallbackData.find((e) => String(e.id) === String(id));
+        const getFallbackSlug = (e) => e.slug || e.name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || String(e.id);
+        const fallback = fallbackData.find((e) => getFallbackSlug(e) === slug);
         if (fallback) {
           setUsingFallback(true);
-          const matchIndex = fallbackData.findIndex((e) => String(e.id) === String(id));
+          const matchIndex = fallbackData.findIndex((e) => getFallbackSlug(e) === slug);
           setEntry({
             id: fallback.id,
             name: fallback.name,
@@ -84,8 +86,8 @@ export default function EntryPage() {
             image: fallback.image || null,
           });
           setStopNumber(matchIndex >= 0 ? matchIndex + 1 : null);
-          setPrevEntryId(matchIndex > 0 ? fallbackData[matchIndex - 1].id : null);
-          setNextEntryId(matchIndex < fallbackData.length - 1 ? fallbackData[matchIndex + 1].id : null);
+          setPrevEntrySlug(matchIndex > 0 ? getFallbackSlug(fallbackData[matchIndex - 1]) : null);
+          setNextEntrySlug(matchIndex < fallbackData.length - 1 ? getFallbackSlug(fallbackData[matchIndex + 1]) : null);
           if (fallback.latLng) setLatLng(fallback.latLng);
         } else {
           setError(`Failed to load entry: ${err.message}`);
@@ -95,10 +97,10 @@ export default function EntryPage() {
       }
     };
 
-    if (id) {
+    if (slug) {
       fetchEntry();
     }
-  }, [id]);
+  }, [slug]);
 
 
   if (loading) {
@@ -201,8 +203,8 @@ export default function EntryPage() {
       blurb={entry.blurb}
       longDescription={entry.longDescription}
       stopNumber={stopNumber}
-      prevEntryId={prevEntryId}
-      nextEntryId={nextEntryId}
+      prevEntrySlug={prevEntrySlug}
+      nextEntrySlug={nextEntrySlug}
       address={entry.address}
       obituaryUrl={entry.obituary}
       image={entry.image}

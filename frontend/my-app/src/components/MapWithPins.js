@@ -125,9 +125,9 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
       );
 
       // Add click handler to navigate to entry page
-      if (stop.entryId) {
+      if (stop.entrySlug) {
         marker.on("click", () => {
-          navigate(`/entry/${stop.entryId}`);
+          navigate(`/entry/${stop.entrySlug}`);
         });
       }
 

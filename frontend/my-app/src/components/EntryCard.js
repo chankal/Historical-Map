@@ -8,8 +8,8 @@ export default function EntryCard({
   blurb = "Short blurb",
   longDescription = "Long description",
   stopNumber = null,
-  prevEntryId = null,
-  nextEntryId = null,
+  prevEntrySlug = null,
+  nextEntrySlug = null,
   returnTo = "/tours",
   address = null,
   obituaryUrl = null,
@@ -99,8 +99,8 @@ export default function EntryCard({
               </section>
 
               <div className="entryNavRow">
-                {prevEntryId ? (
-                  <Link className="entryBox entryPager" to={`/entry/${prevEntryId}`}>
+                {prevEntrySlug ? (
+                  <Link className="entryBox entryPager" to={`/entry/${prevEntrySlug}`}>
                     &lt; Previous
                   </Link>
                 ) : (
@@ -108,8 +108,8 @@ export default function EntryCard({
                     &lt; Previous
                   </button>
                 )}
-                {nextEntryId ? (
-                  <Link className="entryBox entryPager" to={`/entry/${nextEntryId}`}>
+                {nextEntrySlug ? (
+                  <Link className="entryBox entryPager" to={`/entry/${nextEntrySlug}`}>
                     Next &gt;
                   </Link>
                 ) : (

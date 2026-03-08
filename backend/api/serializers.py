@@ -35,10 +35,14 @@ def _geocode_details(details):
 
 class HistoricalEntrySerializer(serializers.ModelSerializer):
     image_upload = serializers.ImageField(required=False, write_only=True)
+    slug = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = HistoricalEntry
-        fields = ['id', 'name', 'details', 'image', 'image_upload']
+        fields = ['id', 'name', 'slug', 'details', 'image', 'image_upload']
+
+    def get_slug(self, obj):
+        return slugify(obj.name) or str(obj.id)
 
     def create(self, validated_data):
         image_upload = validated_data.pop('image_upload', None)

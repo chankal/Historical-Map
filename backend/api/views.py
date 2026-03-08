@@ -1,5 +1,6 @@
 import hmac as hmac_lib
 from django.core import signing
+from django.utils.text import slugify
 from django.conf import settings
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
@@ -64,7 +65,7 @@ def get_all_entries(request):
     return Response(serializer.data)
 
 
-# Get a single entry by ID
+# Get a single entry by ID (for admin/API)
 @api_view(['GET'])
 def get_entry(request, pk):
     try:
@@ -73,6 +74,17 @@ def get_entry(request, pk):
         return Response(serializer.data)
     except HistoricalEntry.DoesNotExist:
         return Response({'error': 'Entry not found'}, status=404)
+
+
+# Get a single entry by slug (name-based URL)
+@api_view(['GET'])
+def get_entry_by_slug(request, slug):
+    slug_normalized = slugify(slug) or slug.lower().strip()
+    for entry in HistoricalEntry.objects.all():
+        if slugify(entry.name) == slug_normalized:
+            serializer = HistoricalEntrySerializer(entry, context={'request': request})
+            return Response(serializer.data)
+    return Response({'error': 'Entry not found'}, status=404)
 
 
 @api_view(['POST'])

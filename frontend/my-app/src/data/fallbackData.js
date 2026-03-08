@@ -6,6 +6,7 @@ const fallbackData = [
   {
     id: 1,
     name: "John Wesley Dobbs",
+    slug: "john-wesley-dobbs",
     details: {
       blurb: "Voting Rights Advocate & Grandfather of Maynard Jackson",
       address: "309 Auburn Ave NE, Atlanta, GA 30303",
@@ -19,6 +20,7 @@ const fallbackData = [
   {
     id: 2,
     name: "John Lewis",
+    slug: "john-lewis",
     details: {
       blurb: "Civil Rights Leader, US Congressman",
       address: "350 Ferst Dr NW, Atlanta, GA 30332",
@@ -32,6 +34,7 @@ const fallbackData = [
   {
     id: 3,
     name: "Herman J. Russell",
+    slug: "herman-j-russell",
     details: {
       blurb: "Entrepreneur, Civil Rights Advocate",
       address: "765 Peeples St SW, Atlanta, GA 30310",

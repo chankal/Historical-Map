@@ -71,10 +71,11 @@ export default function UploadEntry() {
       }
 
       const result = await response.json();
-      setSuccess(`Entry created successfully! ID: ${result.id}`);
+      const entrySlug = result.slug || result.name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || result.id;
+      setSuccess(`Entry created successfully!`);
       
       setTimeout(() => {
-        navigate(`/entry/${result.id}`);
+        navigate(`/entry/${entrySlug}`);
       }, 2000);
     } catch (err) {
       setError(`Failed to upload: ${err.message}`);
