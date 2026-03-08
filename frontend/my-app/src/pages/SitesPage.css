@@ -5,8 +5,26 @@
 }
 
 .sitesContent {
-  width: min(1100px, 92vw);
+  width: min(1200px, 96vw);  /* match AllEntries */
   margin: 0 auto 40px;
+}
+
+.sitesTourCard {
+  grid-template-columns: minmax(320px, 430px) 1fr;
+}
+
+.sitesToursHeaderBlock {
+  width: min(1200px, 96vw);
+} 
+
+.sitesTourCard .tourLeft {
+  min-height: 620px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sitesTourCard .tourRight {
+  min-height: 620px;
 }
 
 .tourSpacer {
@@ -36,7 +54,8 @@
   letter-spacing: 0.04em;
   padding: 10px 22px;
   cursor: pointer;
-  margin-top: 4px;
+  width: fit-content;
+  margin: 20px auto 0;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
