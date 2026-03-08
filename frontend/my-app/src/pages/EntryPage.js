@@ -70,25 +70,16 @@ export default function EntryPage() {
     }
   }, [id]);
 
-  // Geocode the address to get lat/lng
+  // Geocode the address using internal API (proxies Nominatim, no Google key needed)
   useEffect(() => {
     const geocodeAddress = async (address) => {
-      const apiKey = await requestAPIKey();
-      if (!apiKey) {
-        setLatLng(null);
-        return;
-      }
-      
-      setGoogleAPIKey(apiKey);
-      
       try {
         const res = await fetch(
-          `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`
+          `http://127.0.0.1:8000/api/geocode/?q=${encodeURIComponent(address)}`
         );
-        const data = await res.json();
-        if (data.status === "OK" && data.results.length > 0) {
-          const location = data.results[0].geometry.location;
-          setLatLng(location);
+        if (res.ok) {
+          const data = await res.json();
+          setLatLng(data); // { lat, lng }
         } else {
           setLatLng(null);
         }
@@ -100,7 +91,15 @@ export default function EntryPage() {
     if (entry?.address) {
       geocodeAddress(entry.address);
     }
-  }, [entry, requestAPIKey]);
+  }, [entry]);
+
+  // Request Google API key only for Street View, once lat/lng is resolved
+  useEffect(() => {
+    if (!latLng) return;
+    requestAPIKey().then((key) => {
+      setGoogleAPIKey(key);
+    });
+  }, [latLng, requestAPIKey]);
 
   if (loading) {
     return (

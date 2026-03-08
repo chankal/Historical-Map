@@ -1,4 +1,7 @@
 import hmac as hmac_lib
+import json
+import urllib.parse
+import urllib.request
 from django.core import signing
 from django.conf import settings
 from rest_framework import viewsets
@@ -6,6 +9,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import HistoricalEntry
 from .serializers import HistoricalEntrySerializer
+
+# In-memory geocode cache: address string -> {"lat": float, "lng": float}
+_geocode_cache = {}
 
 ADMIN_TOKEN_MAX_AGE = 86400  # 24 hours
 
@@ -93,3 +99,32 @@ def admin_verify(request):
     if not _check_admin_token(request):
         return Response({'error': 'Unauthorized'}, status=401)
     return Response({'valid': True})
+
+
+@api_view(['GET'])
+def geocode(request):
+    address = request.query_params.get('q', '').strip()
+    if not address:
+        return Response({'error': 'Missing q parameter'}, status=400)
+
+    # Return cached result if available
+    if address in _geocode_cache:
+        return Response(_geocode_cache[address])
+
+    url = (
+        'https://nominatim.openstreetmap.org/search?format=json&limit=1&q='
+        + urllib.parse.quote(address)
+    )
+    req = urllib.request.Request(url, headers={'User-Agent': 'HistoricalMapApp/1.0'})
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read().decode())
+    except Exception:
+        return Response({'error': 'Geocoding service unavailable'}, status=502)
+
+    if not data:
+        return Response({'error': 'No results found'}, status=404)
+
+    result = {'lat': float(data[0]['lat']), 'lng': float(data[0]['lon'])}
+    _geocode_cache[address] = result
+    return Response(result)
