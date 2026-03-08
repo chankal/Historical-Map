@@ -7,7 +7,7 @@ import busStopIcon from "../images/bus-stop.png";
 import hmapicon from "../images/Hmap.png";
 import "./AllEntries.css";
 
-const API_BASE = "http://127.0.0.1:8000/api";
+const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
 
 export default function AllEntries() {
   const [entries, setEntries] = useState([]);

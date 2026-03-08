@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import EntryCard from "../components/EntryCard";
 import { useGoogleMapsAPI } from "../contexts/GoogleMapsAPIContext";
 
-const API_BASE = "http://127.0.0.1:8000/api";
+const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
 
 export default function EntryPage() {
   const { id } = useParams();
