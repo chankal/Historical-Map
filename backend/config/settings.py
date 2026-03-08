@@ -29,6 +29,9 @@ load_dotenv(BASE_DIR / '.env')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-)r7f!kq$s2lalj7--2&c8j9caypqe@y-t%g3u82#=*y70nos@c')
 
+# password for admin panel
+ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
