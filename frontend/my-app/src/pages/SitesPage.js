@@ -7,10 +7,11 @@ import "./SitesPage.css";
 export default function SitesPage() {
   return (
     <div className="sitesPage">
-      <Navbar showToursHeader />
+      <Navbar showToursHeader toursHeaderClassName="sitesToursHeaderBlock"/>
 
       <div className="sitesContent">
         <TourCard
+          className="sitesTourCard"
           left={
             <>
               <h2 className="tourName">

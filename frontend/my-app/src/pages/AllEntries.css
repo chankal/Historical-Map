@@ -58,7 +58,19 @@
   font-size: clamp(1.55rem, 3.1vw, 2.15rem);
   font-family: "Times New Roman", Times, serif;
   font-weight: 500;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+}
+
+.description p {
+  margin: 12px 0 0;
+  font-size: 1.0rem;
+  line-height: 1.45;
+  color: #222;
+}
+
+.description {
+  margin-bottom: 20px;
 }
 
 .tourInfoTime {
@@ -90,12 +102,12 @@
   border-radius: 999px;
   font-weight: 700;
   text-transform: uppercase;
-  font-size: 0.95rem;
+  font-size: 0.76rem;
   letter-spacing: 0.04em;
-  padding: 8px 22px;
+  padding: 5px 14px;
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
-  min-width: 190px;
+  min-width: 124px;
 }
 
 .tourStartButton:hover {
@@ -104,17 +116,17 @@
 }
 
 .tourStops {
-  margin-top: 10px;
+  margin-top: 0;
   display: flex;
   align-items: center;
   gap: 8px;
   color: #333;
-  font-size: 1rem;
+  font-size: 0.82rem;
 }
 
 .tourStops img {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   object-fit: contain;
 }
 
@@ -144,30 +156,37 @@
   overflow: visible;
 }
 
+.allEntriesThumbWrap {
+  position: relative;
+  width: 74px;
+  height: 74px;
+  flex: 0 0 auto;
+}
+
 .entryIndexBadge {
   position: absolute;
-  left: -16px;
-  top: 12px;
-  width: 28px;
-  height: 28px;
+  left: -8px;
+  top: -8px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: #d14b6a;
   color: #fff;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
+  z-index: 2;
 }
 
 .allEntriesEntryThumb {
-  width: 74px;
-  height: 74px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   border: 1px solid #d5d5d5;
   background: #dadada;
-  flex: 0 0 auto;
 }
 
 .allEntriesEntryText {
@@ -177,9 +196,9 @@
 .allEntriesEntryName {
   margin: 0 0 6px;
   font-family: "Times New Roman", Times, serif;
-  font-size: clamp(1.55rem, 3.2vw, 2.2rem);
+  font-size: clamp(1.35rem, 2.8vw, 2rem);
   font-weight: 500;
-  line-height: 1;
+  line-height: 1.1;
 }
 
 .allEntriesEntryBlurb {
@@ -199,6 +218,10 @@
     grid-template-columns: 1fr;
   }
 
+  .allEntriesLeft {
+    min-height: 0;
+  }
+
   .tourHeaderLine {
     width: 52px;
     flex-basis: 52px;
@@ -215,5 +238,77 @@
 
   .allEntriesRightEmpty {
     min-height: 280px;
+  }
+}
+
+@media (max-width: 640px) {
+  .allEntriesContent,
+  .allEntriesToursHeaderBlock {
+    width: min(1200px, 94vw);
+  }
+
+  .returnToTours {
+    font-size: 0.95rem;
+  }
+
+  .tourInfoBox {
+    padding: 10px 12px 14px;
+  }
+
+  .tourHeaderRow {
+    gap: 10px;
+  }
+
+  .tourHeaderLine {
+    width: 34px;
+    flex-basis: 34px;
+  }
+
+  .tourInfoTitle {
+    font-size: 2rem;
+    line-height: 1.1;
+  }
+
+  .description p {
+    font-size: 0.92rem;
+  }
+
+  .tourActionRow {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tourStartButton {
+    min-width: 110px;
+  }
+
+  .allEntriesEntryBox {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .allEntriesThumbWrap {
+    width: 62px;
+    height: 62px;
+  }
+
+  .entryIndexBadge {
+    width: 22px;
+    height: 22px;
+    font-size: 0.8rem;
+    left: -6px;
+    top: -6px;
+  }
+
+  .allEntriesEntryName {
+    font-size: clamp(1.2rem, 6.8vw, 1.65rem);
+    margin-bottom: 4px;
+  }
+
+  .allEntriesEntryBlurb {
+    font-size: 0.92rem;
+    line-height: 1.35;
   }
 }

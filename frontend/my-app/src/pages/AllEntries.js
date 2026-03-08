@@ -64,17 +64,13 @@ export default function AllEntries() {
                   <h2 className="tourInfoTitle">Atlanta History Tour</h2>
                   <span className="tourHeaderLine" aria-hidden="true" />
                 </div>
-                <div className="tourStops">
-                  <img src={busStopIcon} alt="Bus stop icon" />
-                  <span>{entries.length} stops</span>
-                </div>
+                
                 <div className="tourActionRow">
-                  <p className="tourInfoTime">
-                    <span className="tourInfoTimeWithIcon">
-                      <img src={hmapicon} alt="Historical sites icon" />
-                      <span>Historical Sites</span>
-                    </span>
-                  </p>
+                  <div className="tourStops">
+                    <img src={busStopIcon} alt="Bus stop icon" />
+                    <span>{entries.length} stops</span>
+                  </div>
+
                   <Link
                     className="tourStartButton"
                     to={entries.length > 0 ? `/entry/${entries[0].id}` : "/entry"}
@@ -105,16 +101,17 @@ export default function AllEntries() {
                           transition: "border-color 0.2s",
                         }}
                       >
-                        <span className="entryIndexBadge">{index + 1}</span>
-                        <div 
-                          className="allEntriesEntryThumb" 
-                          style={{
-                            backgroundImage: entry.image ? `url(${entry.image})` : 'none',
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                          }}
-                          aria-hidden="true" 
-                        />
+                        <div className="allEntriesThumbWrap" aria-hidden="true">
+                          <span className="entryIndexBadge">{index + 1}</span>
+                          <div
+                            className="allEntriesEntryThumb"
+                            style={{
+                              backgroundImage: entry.image ? `url(${entry.image})` : "none",
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                            }}
+                          />
+                        </div>
                         <div className="allEntriesEntryText">
                           <h3 className="allEntriesEntryName">{entry.name}</h3>
                           <p className="allEntriesEntryBlurb">{entry.blurb}</p>
