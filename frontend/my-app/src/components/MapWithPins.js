@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./MapWithPins.css";
 
+const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
+
 function loadScript(src) {
   return new Promise((resolve, reject) => {
     if (document.querySelector(`script[src="${src}"]`)) {
@@ -83,7 +85,7 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
           try {
             // Use internal geocode API (proxies Nominatim with server-side caching)
             const response = await fetch(
-              `http://127.0.0.1:8000/api/geocode/?q=${encodeURIComponent(addressString)}`
+              `${API_BASE}/geocode/?q=${encodeURIComponent(addressString)}`
             );
 
             if (response.ok) {
