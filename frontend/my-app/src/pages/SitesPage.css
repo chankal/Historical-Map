@@ -24,6 +24,7 @@
 
 .getStartedButton {
   display: inline-block;
+  align-self: flex-start;
   border: 1px solid #d14b6a;
   background: #fff;
   color: #111;
@@ -35,7 +36,7 @@
   letter-spacing: 0.04em;
   padding: 10px 22px;
   cursor: pointer;
-  float: right;
+  margin-top: 4px;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
@@ -44,16 +45,3 @@
   color: #ffffff;
 }
 
-.youtubeEmbedSection {
-  margin-top: 24px;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #000;
-}
-
-.youtubeEmbedFrame {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  border: 0;
-  display: block;
-}

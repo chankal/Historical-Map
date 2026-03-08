@@ -9,6 +9,9 @@
 
 .tourLeft {
   padding: 22px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .tourName {
@@ -47,6 +50,10 @@
   min-height: 430px;
   object-fit: cover;
   display: block;
+}
+
+.tourRight video.tourVideo {
+  pointer-events: none; /* prevent pause/controls interaction */
 }
 
 .tourPlaceholder {

@@ -31,13 +31,15 @@ export default function SitesPage() {
             </>
           }
           right={
-            <iframe
-        width="800"
-        height="450"
-        src="https://youtube.com/embed/9a5mzYUssDw" 
-
-        title="YouTube video"
-        allowFullScreen> </iframe>
+            <video
+              className="tourVideo"
+              src={process.env.REACT_APP_TOUR_VIDEO_URL}
+              autoPlay
+              loop
+              muted
+              playsInline
+              onPause={(e) => e.target.play()}
+            />
           }
           
         />
