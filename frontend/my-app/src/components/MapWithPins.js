@@ -75,7 +75,7 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
             name: entry.name,
             lat: parseFloat(lat),
             lng: parseFloat(lng),
-            entryId: entry.id,
+            entrySlug: entry.slug || entry.name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || String(entry.id),
             index: i,
           });
         } else {
@@ -96,7 +96,7 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
                   name: entry.name,
                   lat: parseFloat(data[0].lat),
                   lng: parseFloat(data[0].lon),
-                  entryId: entry.id,
+                  entrySlug: entry.slug || entry.name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || String(entry.id),
                   index: i,
                 });
               } else {
@@ -183,9 +183,9 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
       );
 
       // Add click handler to navigate to entry page
-      if (stop.entryId) {
+      if (stop.entrySlug) {
         marker.on("click", () => {
-          navigate(`/entry/${stop.entryId}`);
+          navigate(`/entry/${stop.entrySlug}`);
         });
       }
 

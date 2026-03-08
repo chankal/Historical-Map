@@ -27,6 +27,7 @@ export default function AllEntries() {
         const mapped = data.map((e) => ({
           id: e.id,
           name: e.name,
+          slug: e.slug || e.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
           blurb:
             e.details?.short_blurb ||
             e.details?.blurb ||
@@ -43,6 +44,7 @@ export default function AllEntries() {
         const mapped = fallbackData.map((e) => ({
           id: e.id,
           name: e.name,
+          slug: e.slug || e.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
           blurb:
             e.details?.short_blurb ||
             e.details?.blurb ||
@@ -101,7 +103,7 @@ export default function AllEntries() {
 
                   <Link
                     className="tourStartButton"
-                    to={entries.length > 0 ? `/entry/${entries[0].id}` : "/entry"}
+                    to={entries.length > 0 ? `/entry/${entries[0].slug}` : "/entry"}
                   >
                     Get Started
                   </Link>
@@ -115,7 +117,7 @@ export default function AllEntries() {
                   !error &&
                   entries.map((entry, index) => (
                     <Link
-                      to={`/entry/${entry.id}`}
+                      to={`/entry/${entry.slug}`}
                       key={entry.id}
                       style={{ textDecoration: "none", color: "inherit" }}
                     >
