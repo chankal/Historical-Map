@@ -4,7 +4,6 @@ import Navbar from "../components/Navbar";
 import TourCard from "../components/TourCard";
 import MapWithPins from "../components/MapWithPins";
 import busStopIcon from "../images/bus-stop.png";
-import hmapicon from "../images/Hmap.png";
 import fallbackData from "../data/fallbackData.js";
 import "./AllEntries.css";
 
@@ -13,7 +12,7 @@ const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
 export default function AllEntries() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error] = useState("");
   const [selectedEntryIndex, setSelectedEntryIndex] = useState(null);
   const [usingFallback, setUsingFallback] = useState(false);
 
@@ -28,6 +27,7 @@ export default function AllEntries() {
         const mapped = data.map((e) => ({
           id: e.id,
           name: e.name,
+          slug: e.slug || e.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
           blurb:
             e.details?.short_blurb ||
             e.details?.blurb ||
@@ -44,6 +44,7 @@ export default function AllEntries() {
         const mapped = fallbackData.map((e) => ({
           id: e.id,
           name: e.name,
+          slug: e.slug || e.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
           blurb:
             e.details?.short_blurb ||
             e.details?.blurb ||
@@ -102,7 +103,7 @@ export default function AllEntries() {
 
                   <Link
                     className="tourStartButton"
-                    to={entries.length > 0 ? `/entry/${entries[0].id}` : "/entry"}
+                    to={entries.length > 0 ? `/entry/${entries[0].slug}` : "/entry"}
                   >
                     Get Started
                   </Link>
@@ -116,7 +117,7 @@ export default function AllEntries() {
                   !error &&
                   entries.map((entry, index) => (
                     <Link
-                      to={`/entry/${entry.id}`}
+                      to={`/entry/${entry.slug}`}
                       key={entry.id}
                       style={{ textDecoration: "none", color: "inherit" }}
                     >

@@ -41,8 +41,7 @@
 }
 
 .getStartedButton {
-  display: inline-block;
-  align-self: flex-start;
+  display: block;
   border: 1px solid #d14b6a;
   background: #fff;
   color: #111;
@@ -64,3 +63,50 @@
   color: #ffffff;
 }
 
+.youtubeEmbedSection {
+  width: 100%;
+  height: 100%;
+  min-height: 620px;
+  margin-top: 0;
+  border-radius: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.youtubeEmbedFrame {
+  width: 100%;
+  height: 100%;
+  min-height: 620px;
+  border: 0;
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .sitesTourCard {
+    grid-template-columns: 1fr;
+  }
+
+  .sitesTourCard .tourLeft {
+    align-items: center;
+    text-align: center;
+  }
+
+  .sitesTourCard .tourName,
+  .sitesTourCard .tourDesc {
+    text-align: center;
+  }
+
+  .sitesTourCard .tourLeft,
+  .sitesTourCard .tourRight,
+  .youtubeEmbedSection,
+  .youtubeEmbedFrame {
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sitesContent,
+  .sitesToursHeaderBlock {
+    width: min(1200px, 94vw);
+  }
+}

@@ -12,14 +12,14 @@
 .allEntriesToursHeaderBlock {
   width: min(1200px, 96vw);
 }
- 
+
 /* Match SitesPage navbar typography on this route only */
 .allEntriesPage .topbar,
 .allEntriesPage .nav a,
 .allEntriesPage .contactBtn {
   font-family: Arial, Helvetica, sans-serif;
 }
- 
+
 .allEntriesCard {
   grid-template-columns: minmax(320px, 430px) 1fr;
 }
@@ -229,12 +229,12 @@
   .allEntriesLeft {
     min-height: 0;
   }
- 
+
   .tourHeaderRow {
     width: 100%;
     gap: 12px;
   }
- 
+
   .tourHeaderLine {
     width: auto;
     flex: 1 1 0;
