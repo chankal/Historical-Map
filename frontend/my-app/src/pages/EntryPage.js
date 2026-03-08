@@ -53,6 +53,7 @@ export default function EntryPage() {
             data.details?.description ||
             "No description available.",
           address: data.details?.address || null,
+          obituary: data.details?.obituary || null,
           image: data.image || null,
         });
         setStopNumber(computedStopNumber);
@@ -135,6 +136,7 @@ export default function EntryPage() {
       prevEntryId={prevEntryId}
       nextEntryId={nextEntryId}
       address={entry.address}
+      obituaryUrl={entry.obituary}
       image={entry.image}
       returnTo="/all-entries"
       right={

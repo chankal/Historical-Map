@@ -12,6 +12,7 @@ export default function EntryCard({
   nextEntryId = null,
   returnTo = "/tours",
   address = null,
+  obituaryUrl = null,
   image = null,
   right,
 }) {
@@ -27,6 +28,19 @@ export default function EntryCard({
     )}`;
     // new tab
     window.open(mapsUrl, "_blank");
+  };
+
+  const handleMemoriesClick = () => {
+    if (!obituaryUrl) {
+      alert("No obituary link available for this entry");
+      return;
+    }
+
+    const normalizedUrl = /^https?:\/\//i.test(obituaryUrl)
+      ? obituaryUrl
+      : `https://${obituaryUrl}`;
+
+    window.open(normalizedUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -70,7 +84,14 @@ export default function EntryCard({
                 >
                   Get Directions
                 </button>
-                <button className="entryBox entryPager">View &amp; Submit Memories</button>
+                <button
+                  className="entryBox entryPager"
+                  onClick={handleMemoriesClick}
+                  type="button"
+                  disabled={!obituaryUrl}
+                >
+                  View &amp; Submit Memories
+                </button>
               </div>
 
               <section className="entryBox entryLongDescription">

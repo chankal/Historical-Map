@@ -58,8 +58,6 @@ export default function AllEntries() {
                 &lt; Return to Tours
               </Link>
 
-              
-
               <section className="tourInfoBox">
                 <div className="tourHeaderRow">
                   <span className="tourHeaderLine" aria-hidden="true" />
