@@ -10,9 +10,37 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name="historicalentry",
-            name="slug",
-            field=models.SlugField(blank=True, max_length=200, unique=True),
+        # Use raw SQL for all DB work to avoid Django queueing the _like index twice
+        # (once for AddField, once for AlterField), which causes a duplicate-index error.
+        migrations.RunSQL(
+            sql="""
+                ALTER TABLE api_historicalentry
+                    ADD COLUMN slug varchar(200) NOT NULL DEFAULT '';
+
+                UPDATE api_historicalentry
+                SET slug = lower(
+                    trim('-' FROM
+                        regexp_replace(
+                            regexp_replace(trim(lower(name)), '[^a-z0-9\\s-]', '', 'g'),
+                            '[\\s]+', '-', 'g'
+                        )
+                    )
+                );
+
+                ALTER TABLE api_historicalentry
+                    ADD CONSTRAINT api_historicalentry_slug_key UNIQUE (slug);
+            """,
+            reverse_sql="ALTER TABLE api_historicalentry DROP COLUMN slug;",
+        ),
+        # Update Django's migration state to match — no extra DDL is emitted.
+        migrations.SeparateDatabaseAndState(
+            database_operations=[],
+            state_operations=[
+                migrations.AddField(
+                    model_name="historicalentry",
+                    name="slug",
+                    field=models.SlugField(blank=True, max_length=200, unique=True),
+                ),
+            ],
         ),
     ]

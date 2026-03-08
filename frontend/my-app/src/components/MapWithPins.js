@@ -48,7 +48,7 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
           name: entry.name,
           lat: parseFloat(lat),
           lng: parseFloat(lng),
-          entryId: entry.id,
+          entrySlug: entry.slug,
           index: i,
         });
       } else {
