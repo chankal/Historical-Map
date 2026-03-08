@@ -7,10 +7,11 @@ import "./SitesPage.css";
 export default function SitesPage() {
   return (
     <div className="sitesPage">
-      <Navbar showToursHeader />
+      <Navbar showToursHeader toursHeaderClassName="sitesToursHeaderBlock"/>
 
       <div className="sitesContent">
         <TourCard
+          className="sitesTourCard"
           left={
             <>
               <h2 className="tourName">
@@ -31,13 +32,14 @@ export default function SitesPage() {
             </>
           }
           right={
-            <iframe
-        width="800"
-        height="450"
-        src="https://youtube.com/embed/9a5mzYUssDw" 
-
-        title="YouTube video"
-        allowFullScreen> </iframe>
+              <div className="youtubeEmbedSection">
+                <iframe
+                  className="youtubeEmbedFrame"
+                  src="https://youtube.com/embed/9a5mzYUssDw"
+                  title="YouTube video"
+                  allowFullScreen
+                />
+              </div>
           }
           
         />

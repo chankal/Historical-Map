@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 import logo from "../images/svclogo.png";
@@ -7,6 +8,10 @@ export default function Navbar({
   toursHeaderClassName = "",
   toursHeaderTitle = "3D Tours",
 }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <>
       <header className="topbar">
@@ -14,16 +19,32 @@ export default function Navbar({
           <img className="logo" src={logo} alt="South-View Cemetery Association" />
         </div>
 
-        <nav className="nav">
-          <NavLink to="https://southviewcemetery.com/" className={({ isActive }) => (isActive ? "active" : "")}>
+        <button
+          type="button"
+          className="menuToggle"
+          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((prev) => !prev)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+
+        <nav className={`nav ${menuOpen ? "open" : ""}`}>
+          <NavLink
+            to="https://southviewcemetery.com/"
+            className={({ isActive }) => (isActive ? "active" : "")}
+            onClick={closeMenu}
+          >
             SOUTH-VIEW CEMETERY WEBSITE
           </NavLink>
-          
-          <NavLink to="/tours" className={({ isActive }) => (isActive ? "active" : "")}>
+
+          <NavLink to="/tours" className={({ isActive }) => (isActive ? "active" : "")} onClick={closeMenu}>
             TOURS
           </NavLink>
 
-          <a className="contactBtn" href="https://southviewcemetery.com/contact-us/">
+          <a className="contactBtn" href="https://southviewcemetery.com/contact-us/" onClick={closeMenu}>
             CONTACT US
           </a>
         </nav>
