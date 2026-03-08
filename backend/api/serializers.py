@@ -2,6 +2,7 @@ import json
 import urllib.parse
 import urllib.request
 
+from django.utils.text import slugify
 from rest_framework import serializers
 from .models import HistoricalEntry
 from .storage_utils import upload_image_to_supabase
