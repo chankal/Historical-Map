@@ -11,6 +11,7 @@ const EMPTY_FORM = {
   description: "",
   address: "",
   year: "",
+  obituary: "",
 };
 
 export default function AdminDashboard() {
@@ -88,6 +89,7 @@ export default function AdminDashboard() {
       description: entry.details?.description || "",
       address: entry.details?.address || "",
       year: entry.details?.year || "",
+      obituary: entry.details?.obituary || "",
     });
     setImageFile(null);
     setImagePreview(entry.image || null);
@@ -130,6 +132,7 @@ export default function AdminDashboard() {
           description: formData.description,
           address: formData.address,
           year: formData.year,
+          obituary: formData.obituary,
         })
       );
       if (imageFile) body.append("image_upload", imageFile);
@@ -330,6 +333,18 @@ export default function AdminDashboard() {
                     placeholder="e.g., 1815"
                   />
                 </div>
+              </div>
+
+              <div className="adminFormGroup">
+                <label htmlFor="obituary">Obituary Link</label>
+                <input
+                  id="obituary"
+                  type="url"
+                  name="obituary"
+                  value={formData.obituary}
+                  onChange={handleFormChange}
+                  placeholder="Link to obituary"
+                />
               </div>
 
               <div className="adminFormGroup">
