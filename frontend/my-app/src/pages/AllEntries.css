@@ -46,19 +46,20 @@
 }
 
 .tourHeaderLine {
-  height: 2px;
+  height: 3px;
   background: #d14b6a;
-  width: 72px;
+  /* width: 1000px; */
   flex: 0 0 72px;
   border-radius: 2px;
 }
 
 .tourInfoTitle {
   margin: 0;
-  font-size: clamp(1.55rem, 3.1vw, 2.15rem);
+  font-size: clamp(1.6rem, 2.4vw, 2rem);
   font-family: "Times New Roman", Times, serif;
   font-weight: 500;
-  white-space: normal;
+  line-height: 1.15;
+  white-space: nowrap;
   text-align: center;
 }
 
@@ -121,17 +122,17 @@
   align-items: center;
   gap: 8px;
   color: #333;
-  font-size: 0.82rem;
+  font-size: 1.5rem;
 }
 
 .tourStops img {
-  width: 12px;
-  height: 12px;
+  width: 30px;
+  height: 40px;
   object-fit: contain;
 }
 
 .tourActionRow {
-  margin-top: 8px;
+  margin-top: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -222,9 +223,17 @@
     min-height: 0;
   }
 
+  .tourHeaderRow {
+    width: 100%;
+    gap: 12px;
+  }
+
   .tourHeaderLine {
-    width: 52px;
-    flex-basis: 52px;
+    width: auto;
+    flex: 1 1 0;
+    max-width: none;
+    min-width: 0;
+    transform: translateY(1px);
   }
 
   .tourActionRow {
@@ -260,12 +269,14 @@
   }
 
   .tourHeaderLine {
-    width: 34px;
-    flex-basis: 34px;
+    width: auto;
+    flex: 1 1 0;
+    max-width: none;
+    min-width: 0;
   }
 
   .tourInfoTitle {
-    font-size: 2rem;
+    font-size: clamp(1.25rem, 5.8vw, 1.6rem);
     line-height: 1.1;
   }
 

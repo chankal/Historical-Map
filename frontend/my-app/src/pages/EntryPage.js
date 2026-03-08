@@ -142,6 +142,7 @@ export default function EntryPage() {
             style={{ border: 0 }}
             loading="lazy"
             allowFullScreen
+            allow="accelerometer; gyroscope"
             src={`https://www.google.com/maps/embed/v1/streetview?key=${GOOGLE_MAPS_API_KEY}&location=${latLng.lat},${latLng.lng}&heading=210&pitch=10`}
           />
         ) : entry.address ? (

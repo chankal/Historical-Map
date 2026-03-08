@@ -33,12 +33,7 @@ export default function SitesPage() {
           }
           right={
               <div className="youtubeEmbedSection">
-                <iframe
-                  className="youtubeEmbedFrame"
-                  src="https://youtube.com/embed/9a5mzYUssDw"
-                  title="YouTube video"
-                  allowFullScreen
-                />
+                <p>test</p>
               </div>
           }
           

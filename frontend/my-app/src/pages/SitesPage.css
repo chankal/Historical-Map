@@ -82,10 +82,31 @@
 }
 
 @media (max-width: 900px) {
+  .sitesTourCard {
+    grid-template-columns: 1fr;
+  }
+
+  .sitesTourCard .tourLeft {
+    align-items: center;
+    text-align: center;
+  }
+
+  .sitesTourCard .tourName,
+  .sitesTourCard .tourDesc {
+    text-align: center;
+  }
+
   .sitesTourCard .tourLeft,
   .sitesTourCard .tourRight,
   .youtubeEmbedSection,
   .youtubeEmbedFrame {
     min-height: 260px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sitesContent,
+  .sitesToursHeaderBlock {
+    width: min(1200px, 94vw);
   }
 }
