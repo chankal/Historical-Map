@@ -3,12 +3,12 @@
   background: #f5f5f5;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
-
+ 
 .allEntriesContent {
   width: min(1200px, 96vw);
   margin: 0 auto 36px;
 }
-
+ 
 .allEntriesToursHeaderBlock {
   width: min(1200px, 96vw);
 }
@@ -23,35 +23,35 @@
 .allEntriesCard {
   grid-template-columns: minmax(320px, 430px) 1fr;
 }
-
+ 
 .allEntriesLeft {
   display: flex;
   flex-direction: column;
   gap: 12px;
   min-height: 620px;
 }
-
+ 
 .returnToTours {
   color: #555;
   text-decoration: none;
   font-size: 1.05rem;
   font-weight: 400;
 }
-
+ 
 .tourInfoBox {
   border: none;
   background: #fdfdfd;
   border-radius: 6px;
   padding: 12px 14px 16px;
 }
-
+ 
 .tourHeaderRow {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 14px;
 }
-
+ 
 .tourHeaderLine {
   height: 3px;
   background: #d14b6a;
@@ -59,7 +59,7 @@
   flex: 0 0 72px;
   border-radius: 2px;
 }
-
+ 
 .tourInfoTitle {
   margin: 0;
   font-size: clamp(1.6rem, 2.4vw, 2rem);
@@ -69,36 +69,36 @@
   white-space: nowrap;
   text-align: center;
 }
-
+ 
 .description p {
   margin: 12px 0 0;
   font-size: 1.0rem;
   line-height: 1.45;
   color: #222;
 }
-
+ 
 .description {
   margin-bottom: 20px;
 }
-
+ 
 .tourInfoTime {
   margin: 0;
   font-size: 1.03rem;
   color: #333;
 }
-
+ 
 .tourInfoTimeWithIcon {
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
-
+ 
 .tourInfoTimeWithIcon img {
   width: 14px;
   height: 14px;
   object-fit: contain;
 }
-
+ 
 .tourStartButton {
   display: inline-flex;
   align-items: center;
@@ -117,12 +117,12 @@
   transition: background-color 0.2s ease, color 0.2s ease;
   min-width: 124px;
 }
-
+ 
 .tourStartButton:hover {
   background-color: #d14b6a;
   color: #fff;
 }
-
+ 
 .tourStops {
   margin-top: 0;
   display: flex;
@@ -131,13 +131,13 @@
   color: #333;
   font-size: 1.5rem;
 }
-
+ 
 .tourStops img {
   width: 30px;
   height: 40px;
   object-fit: contain;
 }
-
+ 
 .tourActionRow {
   margin-top: 16px;
   display: flex;
@@ -145,13 +145,13 @@
   justify-content: space-between;
   gap: 12px;
 }
-
+ 
 .entryList {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-
+ 
 .allEntriesEntryBox {
   border: none;
   background: #fcfcfc;
@@ -163,14 +163,14 @@
   position: relative;
   overflow: visible;
 }
-
+ 
 .allEntriesThumbWrap {
   position: relative;
   width: 74px;
   height: 74px;
   flex: 0 0 auto;
 }
-
+ 
 .entryIndexBadge {
   position: absolute;
   left: -8px;
@@ -188,7 +188,7 @@
   line-height: 1;
   z-index: 2;
 }
-
+ 
 .allEntriesEntryThumb {
   width: 100%;
   height: 100%;
@@ -196,11 +196,11 @@
   border: 1px solid #d5d5d5;
   background: #dadada;
 }
-
+ 
 .allEntriesEntryText {
   min-width: 0;
 }
-
+ 
 .allEntriesEntryName {
   margin: 0 0 6px;
   font-family: "Times New Roman", Times, serif;
@@ -208,24 +208,24 @@
   font-weight: 500;
   line-height: 1.1;
 }
-
+ 
 .allEntriesEntryBlurb {
   margin: 0;
   font-size: 1rem;
   color: #424242;
 }
-
+ 
 .allEntriesRightEmpty {
   width: 100%;
   min-height: 620px;
   background: #efefef;
 }
-
+ 
 @media (max-width: 900px) {
   .allEntriesCard {
     grid-template-columns: 1fr;
   }
-
+ 
   .allEntriesLeft {
     min-height: 0;
   }
@@ -242,76 +242,76 @@
     min-width: 0;
     transform: translateY(1px);
   }
-
+ 
   .tourActionRow {
     flex-direction: column;
     align-items: flex-start;
   }
-
+ 
   .tourStartButton {
     min-width: 0;
   }
-
+ 
   .allEntriesRightEmpty {
     min-height: 280px;
   }
 }
-
+ 
 @media (max-width: 640px) {
   .allEntriesContent,
   .allEntriesToursHeaderBlock {
     width: min(1200px, 94vw);
   }
-
+ 
   .returnToTours {
     font-size: 0.95rem;
   }
-
+ 
   .tourInfoBox {
     padding: 10px 12px 14px;
   }
-
+ 
   .tourHeaderRow {
     gap: 10px;
   }
-
+ 
   .tourHeaderLine {
     width: auto;
     flex: 1 1 0;
     max-width: none;
     min-width: 0;
   }
-
+ 
   .tourInfoTitle {
     font-size: clamp(1.25rem, 5.8vw, 1.6rem);
     line-height: 1.1;
   }
-
+ 
   .description p {
     font-size: 0.92rem;
   }
-
+ 
   .tourActionRow {
     flex-direction: row;
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
   }
-
+ 
   .tourStartButton {
     min-width: 110px;
   }
-
+ 
   .allEntriesEntryBox {
     padding: 10px;
     gap: 10px;
   }
-
+ 
   .allEntriesThumbWrap {
     width: 62px;
     height: 62px;
   }
-
+ 
   .entryIndexBadge {
     width: 22px;
     height: 22px;
@@ -319,12 +319,12 @@
     left: -6px;
     top: -6px;
   }
-
+ 
   .allEntriesEntryName {
     font-size: clamp(1.2rem, 6.8vw, 1.65rem);
     margin-bottom: 4px;
   }
-
+ 
   .allEntriesEntryBlurb {
     font-size: 0.92rem;
     line-height: 1.35;
