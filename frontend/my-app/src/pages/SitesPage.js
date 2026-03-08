@@ -94,23 +94,9 @@ export default function SitesPage() {
                 className="getStartedButton"
                 to="/all-entries"
               >
-                Get Started
-              </Link>
-              <Link
-                to="/all-entries"
-                style={{
-                  display: 'inline-block',
-                  marginTop: '15px',
-                  padding: '10px 20px',
-                  backgroundColor: '#61dafb',
-                  color: '#0a0a0a',
-                  textDecoration: 'none',
-                  borderRadius: '6px',
-                  fontWeight: '600'
-                }}
-              >
                 Browse All Entries
               </Link>
+              
             </>
           }
           right={
