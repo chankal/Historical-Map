@@ -71,16 +71,21 @@ export default function EntryPage() {
     }
   }, [id]);
 
-  // Geocode the address using internal API (proxies Nominatim, no Google key needed)
+  // Geocode the address by calling Nominatim directly from the browser
   useEffect(() => {
     const geocodeAddress = async (address) => {
       try {
         const res = await fetch(
-          `http://127.0.0.1:8000/api/geocode/?q=${encodeURIComponent(address)}`
+          `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(address)}`,
+          { headers: { 'Accept-Language': 'en' } }
         );
         if (res.ok) {
           const data = await res.json();
-          setLatLng(data); // { lat, lng }
+          if (data.length > 0) {
+            setLatLng({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
+          } else {
+            setLatLng(null);
+          }
         } else {
           setLatLng(null);
         }

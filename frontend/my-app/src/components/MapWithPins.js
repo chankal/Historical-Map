@@ -83,20 +83,25 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
           const addressString = address;
 
           try {
-            // Use internal geocode API (proxies Nominatim with server-side caching)
+            // Call Nominatim directly from the browser
             const response = await fetch(
-              `${API_BASE}/geocode/?q=${encodeURIComponent(addressString)}`
+              `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(addressString)}`,
+              { headers: { 'Accept-Language': 'en' } }
             );
 
             if (response.ok) {
               const data = await response.json();
-              results.push({
-                name: entry.name,
-                lat: data.lat,
-                lng: data.lng,
-                entryId: entry.id,
-                index: i,
-              });
+              if (data.length > 0) {
+                results.push({
+                  name: entry.name,
+                  lat: parseFloat(data[0].lat),
+                  lng: parseFloat(data[0].lon),
+                  entryId: entry.id,
+                  index: i,
+                });
+              } else {
+                console.warn(`No geocoding results for: ${addressString}`);
+              }
             } else {
               console.warn(`No geocoding results for: ${addressString}`);
             }
