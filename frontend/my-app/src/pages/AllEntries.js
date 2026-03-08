@@ -5,6 +5,7 @@ import TourCard from "../components/TourCard";
 import MapWithPins from "../components/MapWithPins";
 import busStopIcon from "../images/bus-stop.png";
 import hmapicon from "../images/Hmap.png";
+import fallbackData from "../data/fallbackData.js";
 import "./AllEntries.css";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
@@ -14,6 +15,7 @@ export default function AllEntries() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedEntryIndex, setSelectedEntryIndex] = useState(null);
+  const [usingFallback, setUsingFallback] = useState(false);
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -37,7 +39,20 @@ export default function AllEntries() {
 
         setEntries(mapped);
       } catch (err) {
-        setError(`Failed to load entries: ${err.message}`);
+        console.warn("API unavailable, using fallback data:", err.message);
+        setUsingFallback(true);
+        const mapped = fallbackData.map((e) => ({
+          id: e.id,
+          name: e.name,
+          blurb:
+            e.details?.short_blurb ||
+            e.details?.blurb ||
+            e.details?.description ||
+            "No blurb yet.",
+          address: e.details?.address || null,
+          image: e.image || null,
+        }));
+        setEntries(mapped);
       } finally {
         setLoading(false);
       }
@@ -48,6 +63,20 @@ export default function AllEntries() {
 
   return (
     <div className="allEntriesPage">
+      {usingFallback && (
+        <div style={{
+          background: "#e65c00",
+          color: "#fff",
+          textAlign: "center",
+          padding: "6px 16px",
+          fontSize: "0.82rem",
+          fontFamily: '"Times New Roman", Times, serif',
+          fontWeight: "lighter",
+          letterSpacing: "0.01em",
+        }}>
+          Live data is currently unavailable. Please contact an admin if this persists.
+        </div>
+      )}
       <Navbar showToursHeader toursHeaderClassName="allEntriesToursHeaderBlock" />
       <main className="allEntriesContent">
         <TourCard
