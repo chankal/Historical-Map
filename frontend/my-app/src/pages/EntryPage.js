@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import EntryCard from "../components/EntryCard";
+import Navbar from "../components/Navbar";
+import TourCard from "../components/TourCard";
 import fallbackData from "../data/fallbackData.js";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
@@ -120,9 +122,64 @@ export default function EntryPage() {
   }, [entry, usingFallback]);
 
   if (loading) {
+    const sk = {
+      display: "inline-block",
+      background: "linear-gradient(90deg, #e8e8e8 25%, #d2d2d2 50%, #e8e8e8 75%)",
+      backgroundSize: "200% 100%",
+      animation: "entrySkeletonShimmer 1.4s infinite",
+      borderRadius: "5px",
+    };
     return (
-      <div style={{ padding: "40px", textAlign: "center" }}>
-        Loading entry...
+      <div className="entryPage">
+        <style>{`
+          @keyframes entrySkeletonShimmer {
+            0%   { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+          }
+        `}</style>
+        <Navbar showToursHeader toursHeaderClassName="entryToursHeaderBlock" />
+        <main className="entryContent">
+          <TourCard
+            className="entryTourCard"
+            left={
+              <div className="entryLeftLayout">
+                {/* back link placeholder */}
+                <div style={{ ...sk, width: "110px", height: "14px" }} />
+
+                {/* identity row */}
+                <section className="entryIdentity" style={{ padding: "2px 0 0" }}>
+                  <div className="entryAvatarWrap" aria-hidden="true">
+                    <div style={{ ...sk, width: "68px", height: "68px", borderRadius: "50%" }} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ ...sk, height: "28px", width: "60%", marginBottom: "10px" }} />
+                    <div style={{ ...sk, height: "13px", width: "85%" }} />
+                  </div>
+                </section>
+
+                {/* action buttons */}
+                <div className="entryActionRow">
+                  <div style={{ ...sk, height: "32px", borderRadius: "10px", width: "100%" }} />
+                  <div style={{ ...sk, height: "32px", borderRadius: "10px", width: "100%" }} />
+                </div>
+
+                {/* description lines */}
+                <section style={{ paddingTop: "2px" }}>
+                  {[100, 92, 97, 87, 75, 90, 82].map((w, i) => (
+                    <div key={i} style={{ ...sk, height: "13px", width: `${w}%`, marginBottom: "10px" }} />
+                  ))}
+                </section>
+
+                {/* nav row */}
+                <div className="entryNavRow">
+                  <div style={{ ...sk, height: "28px", borderRadius: "10px", width: "100%" }} />
+                  <div style={{ ...sk, height: "28px", borderRadius: "10px", width: "100%" }} />
+                </div>
+              </div>
+            }
+            right={<div className="entryRightEmpty" style={{ background: "#e8e8e8" }} />}
+          />
+        </main>
       </div>
     );
   }
