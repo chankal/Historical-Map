@@ -1,0 +1,417 @@
+.adminDashPage {
+  min-height: 100vh;
+  background: #f5f5f5;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.adminDashContent {
+  width: min(1100px, 94vw);
+  margin: 0 auto;
+  padding: 36px 0 60px;
+}
+
+/* Header row */
+.adminDashHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.adminDashTitle {
+  font-family: "Times New Roman", Times, serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: 500;
+  margin: 0 0 4px;
+  color: #1a1a1a;
+}
+
+.adminDashSubtitle {
+  margin: 0;
+  color: #777;
+  font-size: 0.95rem;
+}
+
+.adminDashActions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.adminAddBtn {
+  background: #d14b6a;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: background 0.15s;
+}
+
+.adminAddBtn:hover {
+  background: #b83d59;
+}
+
+.adminLogoutBtn {
+  background: transparent;
+  color: #555;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.adminLogoutBtn:hover {
+  border-color: #888;
+  color: #222;
+}
+
+/* State messages */
+.adminError,
+.adminLoading,
+.adminEmpty {
+  text-align: center;
+  padding: 48px;
+  color: #777;
+  font-size: 1rem;
+}
+
+.adminError {
+  color: #c0392b;
+}
+
+/* Entry table */
+.adminTable {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+}
+
+.adminTableHeader,
+.adminTableRow {
+  display: grid;
+  grid-template-columns: 44px 1fr 1fr 72px 72px 148px;
+  gap: 12px;
+  padding: 12px 18px;
+  align-items: center;
+}
+
+.adminTableHeader {
+  background: #f9f9f9;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 11px;
+  font-weight: 700;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.adminTableRow {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.1s;
+}
+
+.adminTableRow:last-child {
+  border-bottom: none;
+}
+
+.adminTableRow:hover {
+  background: #fafafa;
+}
+
+.adminRowNum {
+  color: #aaa;
+  font-size: 13px;
+}
+
+.adminRowName {
+  font-weight: 600;
+  color: #1a1a1a;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adminRowMeta {
+  color: #555;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adminRowImg img {
+  width: 52px;
+  height: 38px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  display: block;
+}
+
+.adminNoImg {
+  font-size: 12px;
+  color: #bbb;
+}
+
+.adminRowBtns {
+  display: flex;
+  gap: 8px;
+}
+
+.adminEditBtn {
+  background: transparent;
+  border: 1px solid #d14b6a;
+  color: #d14b6a;
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.adminEditBtn:hover {
+  background: #d14b6a;
+  color: #fff;
+}
+
+.adminDeleteBtn {
+  background: transparent;
+  border: 1px solid #d0d0d0;
+  color: #999;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.adminDeleteBtn:hover {
+  border-color: #e74c3c;
+  color: #e74c3c;
+}
+
+/* Modal overlay */
+.adminModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.adminModal {
+  background: #fff;
+  border-radius: 10px;
+  width: min(640px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+/* Confirmation dialog variant */
+.adminConfirmModal {
+  width: min(420px, 100%);
+  padding: 36px 32px 28px;
+}
+
+.adminConfirmModal h2 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 0 0 14px;
+  color: #1a1a1a;
+}
+
+.adminConfirmModal p {
+  color: #444;
+  line-height: 1.65;
+  margin: 0 0 28px;
+}
+
+/* Modal header */
+.adminModalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px 0;
+}
+
+.adminModalHeader h2 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.65rem;
+  font-weight: 500;
+  margin: 0;
+  color: #1a1a1a;
+}
+
+.adminModalClose {
+  background: none;
+  border: none;
+  font-size: 30px;
+  color: #aaa;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 2px;
+  transition: color 0.15s;
+}
+
+.adminModalClose:hover {
+  color: #333;
+}
+
+/* Modal form */
+.adminModalForm {
+  padding: 20px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.adminFormGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.adminFormRow {
+  display: flex;
+  gap: 16px;
+}
+
+.adminFormRow .adminFormGroup {
+  flex: 1;
+}
+
+.adminFormGroup label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.adminFormGroup input,
+.adminFormGroup textarea {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #d0d0d0;
+  border-radius: 5px;
+  background: #fafafa;
+  color: #1a1a1a;
+  font-family: inherit;
+  transition: border-color 0.15s, background 0.15s;
+  resize: vertical;
+}
+
+.adminFormGroup input:focus,
+.adminFormGroup textarea:focus {
+  outline: none;
+  border-color: #d14b6a;
+  background: #fff;
+}
+
+.adminFormGroup input[type="file"] {
+  padding: 7px 10px;
+  cursor: pointer;
+}
+
+.adminImgPreview {
+  margin-top: 8px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  max-height: 200px;
+}
+
+.adminImgPreview img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.adminFormError {
+  color: #c0392b;
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+/* Modal footer buttons */
+.adminModalFooter {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.adminCancelBtn {
+  background: transparent;
+  color: #555;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.adminCancelBtn:hover {
+  border-color: #888;
+}
+
+.adminSaveBtn {
+  background: #d14b6a;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.adminSaveBtn:hover:not(:disabled) {
+  background: #b83d59;
+}
+
+.adminSaveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.adminDeleteConfirmBtn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.adminDeleteConfirmBtn:hover:not(:disabled) {
+  background: #c0392b;
+}
+
+.adminDeleteConfirmBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
