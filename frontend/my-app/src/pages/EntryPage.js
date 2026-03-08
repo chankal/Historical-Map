@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import EntryCard from "../components/EntryCard";
+import fallbackData from "../data/fallbackData.js";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || null;
@@ -14,6 +15,7 @@ export default function EntryPage() {
   const [stopNumber, setStopNumber] = useState(null);
   const [prevEntryId, setPrevEntryId] = useState(null);
   const [nextEntryId, setNextEntryId] = useState(null);
+  const [usingFallback, setUsingFallback] = useState(false);
 
   useEffect(() => {
     const fetchEntry = async () => {
@@ -58,7 +60,27 @@ export default function EntryPage() {
         setPrevEntryId(computedPrevEntryId);
         setNextEntryId(computedNextEntryId);
       } catch (err) {
-        setError(`Failed to load entry: ${err.message}`);
+        console.warn("API unavailable, using fallback data:", err.message);
+        const fallback = fallbackData.find((e) => String(e.id) === String(id));
+        if (fallback) {
+          setUsingFallback(true);
+          const matchIndex = fallbackData.findIndex((e) => String(e.id) === String(id));
+          setEntry({
+            id: fallback.id,
+            name: fallback.name,
+            blurb: fallback.details?.blurb || "No blurb available.",
+            longDescription: fallback.details?.description || "No description available.",
+            address: fallback.details?.address || null,
+            obituary: fallback.details?.obituary || null,
+            image: fallback.image || null,
+          });
+          setStopNumber(matchIndex >= 0 ? matchIndex + 1 : null);
+          setPrevEntryId(matchIndex > 0 ? fallbackData[matchIndex - 1].id : null);
+          setNextEntryId(matchIndex < fallbackData.length - 1 ? fallbackData[matchIndex + 1].id : null);
+          if (fallback.latLng) setLatLng(fallback.latLng);
+        } else {
+          setError(`Failed to load entry: ${err.message}`);
+        }
       } finally {
         setLoading(false);
       }
@@ -92,10 +114,10 @@ export default function EntryPage() {
       }
     };
 
-    if (entry?.address) {
+    if (entry?.address && !usingFallback) {
       geocodeAddress(entry.address);
     }
-  }, [entry]);
+  }, [entry, usingFallback]);
 
   if (loading) {
     return (
@@ -122,7 +144,22 @@ export default function EntryPage() {
   }
 
   return (
-    <EntryCard
+    <>
+      {usingFallback && (
+        <div style={{
+          background: "#e65c00",
+          color: "#fff",
+          textAlign: "center",
+          padding: "6px 16px",
+          fontSize: "0.82rem",
+          fontFamily: '"Times New Roman", Times, serif',
+          fontWeight: "lighter",
+          letterSpacing: "0.01em",
+        }}>
+          Live data is currently unavailable. Please contact an admin if this persists.
+        </div>
+      )}
+      <EntryCard
       name={entry.name}
       blurb={entry.blurb}
       longDescription={entry.longDescription}
@@ -152,5 +189,6 @@ export default function EntryPage() {
         ) : null
       }
     />
+    </>
   );
 }

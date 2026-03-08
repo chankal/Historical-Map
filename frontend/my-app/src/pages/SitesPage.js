@@ -32,9 +32,15 @@ export default function SitesPage() {
             </>
           }
           right={
-              <div className="youtubeEmbedSection">
-                <p>test</p>
-              </div>
+            <video
+              className="tourVideo"
+              src={process.env.REACT_APP_TOUR_VIDEO_URL}
+              autoPlay
+              loop
+              muted
+              playsInline
+              onPause={(e) => e.target.play()}
+            />
           }
           
         />
