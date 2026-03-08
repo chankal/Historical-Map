@@ -59,6 +59,13 @@ export default function EntryPage() {
           obituary: data.details?.obituary || null,
           image: data.image || null,
         });
+        const lat = data.details?.lat;
+        const lng = data.details?.lng;
+        if (lat != null && lng != null) {
+          setLatLng({ lat: parseFloat(lat), lng: parseFloat(lng) });
+        } else {
+          setLatLng(null);
+        }
         setStopNumber(computedStopNumber);
         setPrevEntrySlug(computedPrevEntrySlug);
         setNextEntrySlug(computedNextEntrySlug);
@@ -95,33 +102,6 @@ export default function EntryPage() {
     }
   }, [slug]);
 
-  // Geocode the address by calling Nominatim directly from the browser
-  useEffect(() => {
-    const geocodeAddress = async (address) => {
-      try {
-        const res = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(address)}`,
-          { headers: { 'Accept-Language': 'en' } }
-        );
-        if (res.ok) {
-          const data = await res.json();
-          if (data.length > 0) {
-            setLatLng({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
-          } else {
-            setLatLng(null);
-          }
-        } else {
-          setLatLng(null);
-        }
-      } catch {
-        setLatLng(null);
-      }
-    };
-
-    if (entry?.address && !usingFallback) {
-      geocodeAddress(entry.address);
-    }
-  }, [entry, usingFallback]);
 
   if (loading) {
     const sk = {
@@ -241,9 +221,14 @@ export default function EntryPage() {
             allow="accelerometer; gyroscope"
             src={`https://www.google.com/maps/embed/v1/streetview?key=${GOOGLE_MAPS_API_KEY}&location=${latLng.lat},${latLng.lng}&heading=210&pitch=10`}
           />
-        ) : entry.address ? (
+        ) : !latLng ? (
           <div className="entryRightEmpty">
-            <p>Click to load Street View (requires API key)</p>
+            <p style={{ color: "#c0392b", fontWeight: "bold" }}>
+              No location coordinates found for this entry.
+            </p>
+            <p style={{ fontSize: "0.85rem", color: "#555" }}>
+              Please contact an admin to add coordinates for this entry.
+            </p>
           </div>
         ) : null
       }
