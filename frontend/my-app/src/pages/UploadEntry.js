@@ -12,7 +12,6 @@ export default function UploadEntry() {
     blurb: "",
     description: "",
     address: "",
-    year: "",
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -54,7 +53,6 @@ export default function UploadEntry() {
         blurb: formData.blurb,
         description: formData.description,
         address: formData.address,
-        year: formData.year,
       };
       uploadData.append("details", JSON.stringify(details));
 
@@ -139,18 +137,6 @@ export default function UploadEntry() {
                 value={formData.address}
                 onChange={handleInputChange}
                 placeholder="e.g., 600 Peachtree St NE, Atlanta, GA 30308"
-              />
-            </div>
-
-            <div className="formGroup">
-              <label htmlFor="year">Year</label>
-              <input
-                type="text"
-                id="year"
-                name="year"
-                value={formData.year}
-                onChange={handleInputChange}
-                placeholder="e.g., 1815"
               />
             </div>
 

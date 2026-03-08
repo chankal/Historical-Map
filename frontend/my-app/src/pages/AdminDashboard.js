@@ -10,7 +10,6 @@ const EMPTY_FORM = {
   blurb: "",
   description: "",
   address: "",
-  year: "",
   obituary: "",
 };
 
@@ -88,7 +87,6 @@ export default function AdminDashboard() {
       blurb: entry.details?.blurb || "",
       description: entry.details?.description || "",
       address: entry.details?.address || "",
-      year: entry.details?.year || "",
       obituary: entry.details?.obituary || "",
     });
     setImageFile(null);
@@ -131,7 +129,6 @@ export default function AdminDashboard() {
           blurb: formData.blurb,
           description: formData.description,
           address: formData.address,
-          year: formData.year,
           obituary: formData.obituary,
         })
       );
@@ -223,7 +220,6 @@ export default function AdminDashboard() {
               <span>#</span>
               <span>Name</span>
               <span>Address</span>
-              <span>Year</span>
               <span>Image</span>
               <span>Actions</span>
             </div>
@@ -233,9 +229,6 @@ export default function AdminDashboard() {
                 <span className="adminRowName">{entry.name}</span>
                 <span className="adminRowMeta">
                   {entry.details?.address || "—"}
-                </span>
-                <span className="adminRowMeta">
-                  {entry.details?.year || "—"}
                 </span>
                 <span className="adminRowImg">
                   {entry.image ? (
@@ -314,28 +307,16 @@ export default function AdminDashboard() {
                 />
               </div>
 
-              <div className="adminFormRow">
-                <div className="adminFormGroup">
-                  <label htmlFor="address">Address</label>
-                  <input
-                    id="address"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleFormChange}
-                    required
-                    placeholder="e.g., 600 Peachtree St NE"
-                  />
-                </div>
-                <div className="adminFormGroup">
-                  <label htmlFor="year">Year</label>
-                  <input
-                    id="year"
-                    name="year"
-                    value={formData.year}
-                    onChange={handleFormChange}
-                    placeholder="e.g., 1815"
-                  />
-                </div>
+              <div className="adminFormGroup">
+                <label htmlFor="address">Address</label>
+                <input
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleFormChange}
+                  required
+                  placeholder="e.g., 600 Peachtree St NE"
+                />
               </div>
 
               <div className="adminFormGroup">
