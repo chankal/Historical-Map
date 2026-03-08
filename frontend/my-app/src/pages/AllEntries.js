@@ -34,6 +34,8 @@ export default function AllEntries() {
             e.details?.description ||
             "No blurb yet.",
           address: e.details?.address || null,
+          lat: e.details?.lat ?? null,
+          lng: e.details?.lng ?? null,
           image: e.image || null,
         }));
 
@@ -50,6 +52,8 @@ export default function AllEntries() {
             e.details?.description ||
             "No blurb yet.",
           address: e.details?.address || null,
+          lat: e.latLng?.lat ?? e.details?.lat ?? null,
+          lng: e.latLng?.lng ?? e.details?.lng ?? null,
           image: e.image || null,
         }));
         setEntries(mapped);

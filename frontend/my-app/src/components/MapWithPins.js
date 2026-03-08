@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./MapWithPins.css";
 
-const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
-
 function loadScript(src) {
   return new Promise((resolve, reject) => {
     if (document.querySelector(`script[src="${src}"]`)) {
@@ -34,87 +32,31 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
   const markersRef = useRef([]);
   const navigate = useNavigate();
 
-  // Geocode addresses to get coordinates
+  // Build stops from database-stored lat/lng
   useEffect(() => {
-    if (entries.length === 0) return;
+    if (entries.length === 0) {
+      setGeocodedStops([]);
+      return;
+    }
 
-    const geocodeAddresses = async () => {
-      const results = [];
-
-      for (let i = 0; i < entries.length; i++) {
-        const entry = entries[i];
-        const address = entry.address;
-
-        // Skip if no address
-        if (!address) {
-          console.warn(`No address for entry: ${entry.name}`);
-          continue;
-        }
-
-        // Check if address already has coordinates
-        let lat, lng;
-
-        if (typeof address === "object") {
-          lat =
-            address.lat ||
-            address.latitude ||
-            address.coordinates?.lat ||
-            address.coordinates?.latitude;
-          lng =
-            address.lng ||
-            address.lon ||
-            address.longitude ||
-            address.coordinates?.lng ||
-            address.coordinates?.lon ||
-            address.coordinates?.longitude;
-        }
-
-        // If we have coordinates, use them
-        if (lat && lng) {
-          results.push({
-            name: entry.name,
-            lat: parseFloat(lat),
-            lng: parseFloat(lng),
-            entryId: entry.id,
-            index: i,
-          });
-        } else {
-          // Otherwise, geocode the address string
-          const addressString = address;
-
-          try {
-            // Call Nominatim directly from the browser
-            const response = await fetch(
-              `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(addressString)}`,
-              { headers: { 'Accept-Language': 'en' } }
-            );
-
-            if (response.ok) {
-              const data = await response.json();
-              if (data.length > 0) {
-                results.push({
-                  name: entry.name,
-                  lat: parseFloat(data[0].lat),
-                  lng: parseFloat(data[0].lon),
-                  entryId: entry.id,
-                  index: i,
-                });
-              } else {
-                console.warn(`No geocoding results for: ${addressString}`);
-              }
-            } else {
-              console.warn(`No geocoding results for: ${addressString}`);
-            }
-          } catch (error) {
-            console.error(`Error geocoding ${addressString}:`, error);
-          }
-        }
+    const results = [];
+    entries.forEach((entry, i) => {
+      const lat = entry.lat;
+      const lng = entry.lng;
+      if (lat != null && lng != null) {
+        results.push({
+          name: entry.name,
+          lat: parseFloat(lat),
+          lng: parseFloat(lng),
+          entryId: entry.id,
+          index: i,
+        });
+      } else {
+        console.warn(`No coordinates stored for entry: ${entry.name}`);
       }
+    });
 
-      setGeocodedStops(results);
-    };
-
-    geocodeAddresses();
+    setGeocodedStops(results);
   }, [entries]);
 
   // Load Leaflet once
