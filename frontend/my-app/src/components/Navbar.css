@@ -101,6 +101,7 @@
 
   .nav.open {
     display: flex;
+    width: 95%;
   }
 
   .nav a {
