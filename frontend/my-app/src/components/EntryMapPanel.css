@@ -8,6 +8,30 @@
   height: 100%;
 }
 
+/* Wrapper targeted by the Fullscreen API — map + chrome fill the screen */
+.entryMapPanelFullscreenRoot {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: #1a1a1a;
+}
+
+.entryMapPanelFullscreenRoot:fullscreen,
+.entryMapPanelFullscreenRoot:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+.entryMapPanelFullscreenRoot:fullscreen .entryMapPanelFrame,
+.entryMapPanelFullscreenRoot:-webkit-full-screen .entryMapPanelFrame {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
 .entryMapPanelFrame {
   position: relative;
   flex: 1;
@@ -45,6 +69,49 @@
 
 .entryMapPanelFrame--empty .entryMapPanelDockMeta {
   color: #444;
+}
+
+.entryMapPanelFrame--empty .entryMapPanelHeader {
+  position: relative;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  pointer-events: auto;
+}
+
+.entryMapPanelFrame--empty .entryMapPanelHeaderText {
+  color: #1a1a1a;
+  text-shadow: none;
+}
+
+.entryMapPanelFrame--empty .entryMapPanelHeaderTitle {
+  color: #1a1a1a;
+  text-shadow: none;
+}
+
+.entryMapPanelFrame--empty .entryMapPanelHeaderSub {
+  color: #444;
+  text-shadow: none;
+}
+
+.entryMapPanelFrame--empty .entryMapPanelFsBtn {
+  border-color: #d14b6a;
+  background: #fff;
+  color: #111;
+}
+
+.entryMapPanelFrame--empty .entryMapPanelFsBtn:hover {
+  background: #d14b6a;
+  color: #fff;
+  border-color: #d14b6a;
+}
+
+.entryMapPanelDock--plain {
+  position: relative;
+  background: rgba(0, 0, 0, 0.06);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .entryMapPanelEmptyMsg {
@@ -85,6 +152,38 @@
   );
   color: #fff;
   pointer-events: none;
+}
+
+.entryMapPanelHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  pointer-events: auto;
+}
+
+.entryMapPanelFsBtn {
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 6px 12px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.entryMapPanelFsBtn:hover {
+  background: rgba(209, 75, 106, 0.92);
+  border-color: rgba(209, 75, 106, 0.95);
+}
+
+.entryMapPanelFsLabel {
+  white-space: nowrap;
 }
 
 .entryMapPanelHeaderText {
