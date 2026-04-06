@@ -2,11 +2,31 @@ import johnWesleyDobbs from "../images/john_wesley_dobbs.png";
 import johnLewis from "../images/john_lewis.jpg";
 import hermanRussell from "../images/herman_russell.png";
 
+const LOREM = [
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
+];
+
+function threeStops(address, lat, lng) {
+  return [0, 1, 2].map((i) => ({
+    address,
+    spot_blurb: LOREM[i],
+    lat,
+    lng,
+  }));
+}
+
 const fallbackData = [
   {
     id: 1,
     name: "John Wesley Dobbs",
     slug: "john-wesley-dobbs",
+    stops: threeStops(
+      "309 Auburn Ave NE, Atlanta, GA 30303",
+      33.755343636987824,
+      -84.3778733190625
+    ),
     details: {
       blurb: "Voting Rights Advocate & Grandfather of Maynard Jackson",
       address: "309 Auburn Ave NE, Atlanta, GA 30303",
@@ -21,6 +41,11 @@ const fallbackData = [
     id: 2,
     name: "John Lewis",
     slug: "john-lewis",
+    stops: threeStops(
+      "350 Ferst Dr NW, Atlanta, GA 30332",
+      33.77382557301242,
+      -84.39923578659527
+    ),
     details: {
       blurb: "Civil Rights Leader, US Congressman",
       address: "350 Ferst Dr NW, Atlanta, GA 30332",
@@ -35,6 +60,11 @@ const fallbackData = [
     id: 3,
     name: "Herman J. Russell",
     slug: "herman-j-russell",
+    stops: threeStops(
+      "765 Peeples St SW, Atlanta, GA 30310",
+      33.73343240840232,
+      -84.42143672513741
+    ),
     details: {
       blurb: "Entrepreneur, Civil Rights Advocate",
       address: "765 Peeples St SW, Atlanta, GA 30310",

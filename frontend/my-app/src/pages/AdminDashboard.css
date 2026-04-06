@@ -415,3 +415,95 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* Multi-stop editor */
+.adminStopsSection {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 14px 16px;
+  background: #fafafa;
+  margin-bottom: 4px;
+}
+
+.adminStopsSectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.adminStopsSectionHead label {
+  font-weight: 600;
+  color: #333;
+}
+
+.adminAddStopBtn {
+  background: #fff;
+  border: 1px solid #d14b6a;
+  color: #d14b6a;
+  border-radius: 5px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.adminAddStopBtn:hover {
+  background: #fff5f7;
+}
+
+.adminStopsHint {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.45;
+}
+
+.adminStopCard {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.adminStopCard:last-child {
+  margin-bottom: 0;
+}
+
+.adminStopCardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+}
+
+.adminRemoveStopBtn {
+  background: transparent;
+  border: none;
+  color: #c0392b;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.adminStopCard input,
+.adminStopCard textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.adminStopCard textarea {
+  margin-bottom: 0;
+  resize: vertical;
+  min-height: 52px;
+}

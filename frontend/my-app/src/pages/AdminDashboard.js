@@ -5,12 +5,14 @@ import "./AdminDashboard.css";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
 
+const EMPTY_STOP = { address: "", spot_blurb: "" };
+
 const EMPTY_FORM = {
   name: "",
   blurb: "",
   description: "",
-  address: "",
   obituary: "",
+  stops: [{ ...EMPTY_STOP }],
 };
 
 export default function AdminDashboard() {
@@ -82,12 +84,24 @@ export default function AdminDashboard() {
   };
 
   const openEdit = (entry) => {
+    let stops =
+      Array.isArray(entry.stops) && entry.stops.length > 0
+        ? entry.stops.map((s) => ({
+            address: s.address || "",
+            spot_blurb: s.spot_blurb || "",
+          }))
+        : [
+            {
+              address: entry.details?.address || "",
+              spot_blurb: "",
+            },
+          ];
     setFormData({
       name: entry.name || "",
       blurb: entry.details?.blurb || "",
       description: entry.details?.description || "",
-      address: entry.details?.address || "",
       obituary: entry.details?.obituary || "",
+      stops,
     });
     setImageFile(null);
     setImagePreview(entry.image || null);
@@ -107,6 +121,29 @@ export default function AdminDashboard() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleStopChange = (index, field, value) => {
+    setFormData((prev) => {
+      const next = [...prev.stops];
+      next[index] = { ...next[index], [field]: value };
+      return { ...prev, stops: next };
+    });
+  };
+
+  const addStop = () => {
+    setFormData((prev) => ({
+      ...prev,
+      stops: [...prev.stops, { ...EMPTY_STOP }],
+    }));
+  };
+
+  const removeStop = (index) => {
+    setFormData((prev) => {
+      if (prev.stops.length <= 1) return prev;
+      const next = prev.stops.filter((_, i) => i !== index);
+      return { ...prev, stops: next };
+    });
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -121,6 +158,14 @@ export default function AdminDashboard() {
     setFormLoading(true);
     setFormError("");
     try {
+      const primaryAddress = (formData.stops[0]?.address || "").trim();
+      const stopsPayload = formData.stops
+        .map((s) => ({
+          address: (s.address || "").trim(),
+          spot_blurb: (s.spot_blurb || "").trim(),
+        }))
+        .filter((s) => s.address);
+
       const body = new FormData();
       body.append("name", formData.name);
       body.append(
@@ -128,10 +173,11 @@ export default function AdminDashboard() {
         JSON.stringify({
           blurb: formData.blurb,
           description: formData.description,
-          address: formData.address,
+          address: primaryAddress,
           obituary: formData.obituary,
         })
       );
+      body.append("stops", JSON.stringify(stopsPayload.length ? stopsPayload : formData.stops));
       if (imageFile) body.append("image_upload", imageFile);
 
       const isEdit = modal.mode === "edit";
@@ -307,16 +353,54 @@ export default function AdminDashboard() {
                 />
               </div>
 
-              <div className="adminFormGroup">
-                <label htmlFor="address">Address</label>
-                <input
-                  id="address"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleFormChange}
-                  required
-                  placeholder="e.g., 600 Peachtree St NE"
-                />
+              <div className="adminStopsSection">
+                <div className="adminStopsSectionHead">
+                  <label>Locations / stops *</label>
+                  <button
+                    type="button"
+                    className="adminAddStopBtn"
+                    onClick={addStop}
+                  >
+                    + Add stop
+                  </button>
+                </div>
+                <p className="adminStopsHint">
+                  Each stop has an address (for the map) and a short blurb (shown on the entry
+                  page). At least one address is required.
+                </p>
+                {formData.stops.map((stop, idx) => (
+                  <div className="adminStopCard" key={idx}>
+                    <div className="adminStopCardHead">
+                      <span>Stop {idx + 1}</span>
+                      {formData.stops.length > 1 && (
+                        <button
+                          type="button"
+                          className="adminRemoveStopBtn"
+                          onClick={() => removeStop(idx)}
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                    <input
+                      type="text"
+                      required={idx === 0}
+                      value={stop.address}
+                      onChange={(e) =>
+                        handleStopChange(idx, "address", e.target.value)
+                      }
+                      placeholder="Street address"
+                    />
+                    <textarea
+                      rows={2}
+                      value={stop.spot_blurb}
+                      onChange={(e) =>
+                        handleStopChange(idx, "spot_blurb", e.target.value)
+                      }
+                      placeholder="Short blurb for this spot (map tooltip)"
+                    />
+                  </div>
+                ))}
               </div>
 
               <div className="adminFormGroup">

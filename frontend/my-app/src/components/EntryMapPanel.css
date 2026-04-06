@@ -1,0 +1,254 @@
+/* Fills parent .tourRight (see EntryCard.css) */
+.entryMapPanel--fill {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.entryMapPanelFrame {
+  position: relative;
+  flex: 1;
+  min-height: min(72vh, 860px);
+  width: 100%;
+  background: #1a1a1a;
+  overflow: hidden;
+}
+
+.entryMapPanelFrame--empty {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: min(50vh, 400px);
+  background: #e8e8e8;
+}
+
+.entryMapPanelFrame--empty .entryMapPanelDock {
+  position: relative;
+  margin-top: auto;
+  background: rgba(0, 0, 0, 0.06);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.entryMapPanelFrame--empty .entryMapPanelNavBtn {
+  border-color: #d14b6a;
+  background: #fff;
+  color: #111;
+}
+
+.entryMapPanelFrame--empty .entryMapPanelNavBtn:hover:not(:disabled) {
+  background: #d14b6a;
+  color: #fff;
+}
+
+.entryMapPanelFrame--empty .entryMapPanelDockMeta {
+  color: #444;
+}
+
+.entryMapPanelEmptyMsg {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  min-height: 0;
+}
+
+.entryMapPanelIframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.entryMapPanelHeader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px 28px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.35) 55%,
+    transparent 100%
+  );
+  color: #fff;
+  pointer-events: none;
+}
+
+.entryMapPanelHeaderText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.entryMapPanelHeaderTitle {
+  font-family: "Times New Roman", Times, serif;
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
+}
+
+.entryMapPanelHeaderSub {
+  font-size: 0.78rem;
+  opacity: 0.92;
+  line-height: 1.35;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  word-break: break-word;
+}
+
+.entryMapPanelHeaderBadge {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(209, 75, 106, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.entryMapPanelOrbWrap {
+  position: absolute;
+  top: 56px;
+  right: 12px;
+  z-index: 5;
+  pointer-events: auto;
+}
+
+.entryMapPanelOrb {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  background: rgba(209, 75, 106, 0.92);
+  color: #fff;
+  font-weight: 700;
+  font-style: italic;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: help;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+
+.entryMapPanelOrbWrap:hover .entryMapPanelTooltip,
+.entryMapPanelOrbWrap:focus-within .entryMapPanelTooltip {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: none;
+}
+
+.entryMapPanelTooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(280px, 70vw);
+  padding: 10px 12px;
+  background: rgba(33, 33, 33, 0.95);
+  color: #f5f5f5;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+  z-index: 6;
+}
+
+.entryMapPanelDock {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 14px 12px 16px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.78) 0%,
+    rgba(0, 0, 0, 0.4) 65%,
+    transparent 100%
+  );
+  pointer-events: auto;
+}
+
+.entryMapPanelNavBtn {
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  backdrop-filter: blur(6px);
+}
+
+.entryMapPanelNavBtn:hover:not(:disabled) {
+  background: rgba(209, 75, 106, 0.95);
+  border-color: rgba(209, 75, 106, 0.95);
+  color: #fff;
+}
+
+.entryMapPanelNavBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.entryMapPanelDockHint {
+  flex: 1;
+  text-align: center;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.entryMapPanelDockMeta {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #333;
+}
+
+@media (max-width: 820px) {
+  .entryMapPanelTooltip {
+    right: auto;
+    left: 0;
+  }
+
+  .entryMapPanelHeader {
+    padding-top: 10px;
+    padding-right: 10px;
+  }
+
+  .entryMapPanelDockHint {
+    display: none;
+  }
+}

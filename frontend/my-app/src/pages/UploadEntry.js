@@ -5,13 +5,16 @@ import "./UploadEntry.css";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
 
+const EMPTY_STOP = { address: "", spot_blurb: "" };
+
 export default function UploadEntry() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     blurb: "",
     description: "",
-    address: "",
+    obituary: "",
+    stops: [{ ...EMPTY_STOP }],
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -25,6 +28,31 @@ export default function UploadEntry() {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleStopChange = (index, field, value) => {
+    setFormData((prev) => {
+      const next = [...prev.stops];
+      next[index] = { ...next[index], [field]: value };
+      return { ...prev, stops: next };
+    });
+  };
+
+  const addStop = () => {
+    setFormData((prev) => ({
+      ...prev,
+      stops: [...prev.stops, { ...EMPTY_STOP }],
+    }));
+  };
+
+  const removeStop = (index) => {
+    setFormData((prev) => {
+      if (prev.stops.length <= 1) return prev;
+      return {
+        ...prev,
+        stops: prev.stops.filter((_, i) => i !== index),
+      };
+    });
   };
 
   const handleImageChange = (e) => {
@@ -46,15 +74,28 @@ export default function UploadEntry() {
     setSuccess("");
 
     try {
+      const primaryAddress = (formData.stops[0]?.address || "").trim();
+      const stopsPayload = formData.stops
+        .map((s) => ({
+          address: (s.address || "").trim(),
+          spot_blurb: (s.spot_blurb || "").trim(),
+        }))
+        .filter((s) => s.address);
+
       const uploadData = new FormData();
       uploadData.append("name", formData.name);
 
       const details = {
         blurb: formData.blurb,
         description: formData.description,
-        address: formData.address,
+        address: primaryAddress,
+        obituary: formData.obituary,
       };
       uploadData.append("details", JSON.stringify(details));
+      uploadData.append(
+        "stops",
+        JSON.stringify(stopsPayload.length ? stopsPayload : formData.stops)
+      );
 
       if (imageFile) {
         uploadData.append("image_upload", imageFile);
@@ -71,9 +112,12 @@ export default function UploadEntry() {
       }
 
       const result = await response.json();
-      const entrySlug = result.slug || result.name?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || result.id;
+      const entrySlug =
+        result.slug ||
+        result.name?.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") ||
+        result.id;
       setSuccess(`Entry created successfully!`);
-      
+
       setTimeout(() => {
         navigate(`/entry/${entrySlug}`);
       }, 2000);
@@ -90,7 +134,7 @@ export default function UploadEntry() {
       <main className="uploadContent">
         <div className="uploadContainer">
           <h1>Upload New Historical Entry</h1>
-          
+
           <form onSubmit={handleSubmit} className="uploadForm">
             <div className="formGroup">
               <label htmlFor="name">Entry Name *</label>
@@ -130,15 +174,56 @@ export default function UploadEntry() {
             </div>
 
             <div className="formGroup">
-              <label htmlFor="address">Address</label>
+              <label htmlFor="obituary">Obituary link (optional)</label>
               <input
-                type="text"
-                id="address"
-                name="address"
-                value={formData.address}
+                type="url"
+                id="obituary"
+                name="obituary"
+                value={formData.obituary}
                 onChange={handleInputChange}
-                placeholder="e.g., 600 Peachtree St NE, Atlanta, GA 30308"
+                placeholder="https://..."
               />
+            </div>
+
+            <div className="uploadStopsSection">
+              <div className="uploadStopsHead">
+                <label>Locations / stops *</label>
+                <button type="button" className="uploadAddStopBtn" onClick={addStop}>
+                  + Add stop
+                </button>
+              </div>
+              <p className="uploadStopsHint">
+                Each stop needs an address for the map and an optional short blurb for the tooltip.
+              </p>
+              {formData.stops.map((stop, idx) => (
+                <div className="uploadStopCard" key={idx}>
+                  <div className="uploadStopCardHead">
+                    <span>Stop {idx + 1}</span>
+                    {formData.stops.length > 1 && (
+                      <button
+                        type="button"
+                        className="uploadRemoveStopBtn"
+                        onClick={() => removeStop(idx)}
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                  <input
+                    type="text"
+                    required={idx === 0}
+                    value={stop.address}
+                    onChange={(e) => handleStopChange(idx, "address", e.target.value)}
+                    placeholder="Street address"
+                  />
+                  <textarea
+                    rows={2}
+                    value={stop.spot_blurb}
+                    onChange={(e) => handleStopChange(idx, "spot_blurb", e.target.value)}
+                    placeholder="Short blurb for this spot (map tooltip)"
+                  />
+                </div>
+              ))}
             </div>
 
             <div className="formGroup">

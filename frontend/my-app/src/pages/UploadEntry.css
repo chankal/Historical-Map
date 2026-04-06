@@ -142,3 +142,91 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.uploadStopsSection {
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 16px;
+  background: #141414;
+}
+
+.uploadStopsHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.uploadStopsHead label {
+  font-weight: 600;
+  color: #61dafb;
+}
+
+.uploadAddStopBtn {
+  background: transparent;
+  border: 1px solid #61dafb;
+  color: #61dafb;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.uploadAddStopBtn:hover {
+  background: rgba(97, 218, 251, 0.1);
+}
+
+.uploadStopsHint {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: #aaa;
+  line-height: 1.45;
+}
+
+.uploadStopCard {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.uploadStopCard:last-child {
+  margin-bottom: 0;
+}
+
+.uploadStopCardHead {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #ccc;
+}
+
+.uploadRemoveStopBtn {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  cursor: pointer;
+  font-size: 13px;
+  text-decoration: underline;
+}
+
+.uploadStopCard input,
+.uploadStopCard textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background: #0f0f0f;
+  color: #fff;
+  font-size: 14px;
+}
+
+.uploadStopCard textarea {
+  margin-bottom: 0;
+  min-height: 52px;
+  resize: vertical;
+}

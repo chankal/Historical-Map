@@ -9,7 +9,7 @@ class HistoricalEntryAdminForm(forms.ModelForm):
 
     class Meta:
         model = HistoricalEntry
-        fields = ['name', 'details', 'image', 'image_upload']
+        fields = ['name', 'details', 'stops', 'image', 'image_upload']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
