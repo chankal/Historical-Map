@@ -1,11 +1,21 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import "./AdminDashboard.css";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
+const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || null;
 
-const EMPTY_STOP = { address: "", spot_blurb: "" };
+const EMPTY_STOP = {
+  address: "",
+  spot_blurb: "",
+  lat: null,
+  lng: null,
+  heading: 210,
+  pitch: 10,
+  fov: 90,
+  pano: "",
+};
 
 const EMPTY_FORM = {
   name: "",
@@ -14,6 +24,17 @@ const EMPTY_FORM = {
   obituary: "",
   stops: [{ ...EMPTY_STOP }],
 };
+
+function cloneForm(form) {
+  return {
+    ...form,
+    stops: (form.stops || []).map((s) => ({ ...s })),
+  };
+}
+
+function snapshotForm(form) {
+  return JSON.stringify(cloneForm(form));
+}
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -28,10 +49,20 @@ export default function AdminDashboard() {
   const [imagePreview, setImagePreview] = useState(null);
   const [formLoading, setFormLoading] = useState(false);
   const [formError, setFormError] = useState("");
+  const formRef = useRef(null);
+  const [initialFormSnapshot, setInitialFormSnapshot] = useState("");
+  const [showUnsavedPrompt, setShowUnsavedPrompt] = useState(false);
 
   // Delete confirmation
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+
+  // Street View editor state
+  const [streetViewOpenIndex, setStreetViewOpenIndex] = useState(null);
+  const [streetViewLoading, setStreetViewLoading] = useState(false);
+  const [streetViewError, setStreetViewError] = useState("");
+  const [streetViewDraft, setStreetViewDraft] = useState(null);
+  const [latLngLoadingIndex, setLatLngLoadingIndex] = useState(null);
 
   const token = localStorage.getItem("admin_token");
 
@@ -76,10 +107,16 @@ export default function AdminDashboard() {
 
   // --- Modal helpers ---
   const openAdd = () => {
-    setFormData(EMPTY_FORM);
+    const nextForm = cloneForm(EMPTY_FORM);
+    setFormData(nextForm);
+    setInitialFormSnapshot(snapshotForm(nextForm));
     setImageFile(null);
     setImagePreview(null);
     setFormError("");
+    setStreetViewOpenIndex(null);
+    setStreetViewError("");
+    setStreetViewDraft(null);
+    setShowUnsavedPrompt(false);
     setModal({ mode: "add" });
   };
 
@@ -89,31 +126,73 @@ export default function AdminDashboard() {
         ? entry.stops.map((s) => ({
             address: s.address || "",
             spot_blurb: s.spot_blurb || "",
+            lat: s.lat ?? null,
+            lng: s.lng ?? null,
+            heading: typeof s.heading === "number" ? s.heading : 210,
+            pitch: typeof s.pitch === "number" ? s.pitch : 10,
+            fov: typeof s.fov === "number" ? s.fov : 90,
+            pano: s.pano || "",
           }))
         : [
             {
               address: entry.details?.address || "",
               spot_blurb: "",
+              lat: entry.details?.lat ?? null,
+              lng: entry.details?.lng ?? null,
+              heading: 210,
+              pitch: 10,
+              fov: 90,
+              pano: "",
             },
           ];
-    setFormData({
+    const nextForm = {
       name: entry.name || "",
       blurb: entry.details?.blurb || "",
       description: entry.details?.description || "",
       obituary: entry.details?.obituary || "",
       stops,
-    });
+    };
+    setFormData(nextForm);
+    setInitialFormSnapshot(snapshotForm(nextForm));
     setImageFile(null);
     setImagePreview(entry.image || null);
     setFormError("");
+    setStreetViewOpenIndex(null);
+    setStreetViewError("");
+    setStreetViewDraft(null);
+    setShowUnsavedPrompt(false);
     setModal({ mode: "edit", entry });
   };
 
-  const closeModal = () => {
+  const closeModalImmediate = () => {
     setModal(null);
     setImageFile(null);
     setImagePreview(null);
     setFormError("");
+    setStreetViewOpenIndex(null);
+    setStreetViewError("");
+    setStreetViewDraft(null);
+    setInitialFormSnapshot("");
+    setShowUnsavedPrompt(false);
+  };
+
+  const hasUnsavedChanges =
+    !!modal &&
+    ((initialFormSnapshot && snapshotForm(formData) !== initialFormSnapshot) ||
+      !!imageFile);
+
+  const requestCloseModal = () => {
+    if (formLoading) return;
+    if (hasUnsavedChanges) {
+      setShowUnsavedPrompt(true);
+      return;
+    }
+    closeModalImmediate();
+  };
+
+  const handleUnsavedSave = () => {
+    setShowUnsavedPrompt(false);
+    formRef.current?.requestSubmit();
   };
 
   const handleFormChange = (e) => {
@@ -127,6 +206,138 @@ export default function AdminDashboard() {
       next[index] = { ...next[index], [field]: value };
       return { ...prev, stops: next };
     });
+  };
+
+  const geocodeAddress = useCallback(async (address) => {
+    const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(
+      address
+    )}`;
+    const geocodeRes = await fetch(geocodeUrl, {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+    if (!geocodeRes.ok) {
+      throw new Error(`Geocoding failed with HTTP ${geocodeRes.status}.`);
+    }
+    const geocodeData = await geocodeRes.json();
+    if (!Array.isArray(geocodeData) || geocodeData.length === 0) {
+      throw new Error("Unable to geocode this address.");
+    }
+    return {
+      lat: Number(geocodeData[0].lat),
+      lng: Number(geocodeData[0].lon),
+    };
+  }, []);
+
+  const loadLatLngForStop = async (index) => {
+    const stop = formData.stops[index];
+    const address = (stop?.address || "").trim();
+    if (!address) {
+      setStreetViewError(
+        "Please enter an address for this stop before loading coordinates."
+      );
+      return;
+    }
+
+    try {
+      setStreetViewError("");
+      setLatLngLoadingIndex(index);
+      const { lat, lng } = await geocodeAddress(address);
+
+      setFormData((prev) => {
+        const next = [...prev.stops];
+        next[index] = {
+          ...next[index],
+          lat,
+          lng,
+        };
+        return { ...prev, stops: next };
+      });
+
+      if (streetViewOpenIndex === index && streetViewDraft) {
+        setStreetViewDraft((prev) =>
+          prev ? { ...prev, lat, lng } : prev
+        );
+      }
+    } catch (err) {
+      setStreetViewError(err.message || "Could not load coordinates.");
+    } finally {
+      setLatLngLoadingIndex(null);
+    }
+  };
+
+  const openStreetViewEditor = async (index) => {
+    const stop = formData.stops[index];
+    const address = (stop?.address || "").trim();
+    if (!address) {
+      setStreetViewError(
+        "Please enter an address for this stop before opening Street View."
+      );
+      return;
+    }
+    if (!GOOGLE_MAPS_API_KEY) {
+      setStreetViewError("REACT_APP_GOOGLE_MAPS_API_KEY is not set.");
+      return;
+    }
+
+    try {
+      setStreetViewLoading(true);
+      setStreetViewError("");
+      let lat = stop.lat != null ? Number(stop.lat) : null;
+      let lng = stop.lng != null ? Number(stop.lng) : null;
+
+      if (lat == null || lng == null) {
+        const geocoded = await geocodeAddress(address);
+        lat = geocoded.lat;
+        lng = geocoded.lng;
+      }
+
+      setStreetViewDraft({
+        index,
+        address,
+        lat,
+        lng,
+        heading: Number.isFinite(stop.heading) ? stop.heading : 210,
+        pitch: Number.isFinite(stop.pitch) ? stop.pitch : 10,
+        fov: Number.isFinite(stop.fov) ? stop.fov : 90,
+        pano: stop.pano || "",
+      });
+      setStreetViewOpenIndex(index);
+    } catch (err) {
+      setStreetViewError(err.message || "Could not load Street View.");
+    } finally {
+      setStreetViewLoading(false);
+    }
+  };
+
+  const handleStreetViewDraftChange = (patch) => {
+    setStreetViewDraft((prev) => ({ ...prev, ...patch }));
+  };
+
+  const confirmStreetView = () => {
+    if (streetViewOpenIndex == null || !streetViewDraft) return;
+    setFormData((prev) => {
+      const next = [...prev.stops];
+      const existing = next[streetViewOpenIndex] || { ...EMPTY_STOP };
+      next[streetViewOpenIndex] = {
+        ...existing,
+        lat: streetViewDraft.lat,
+        lng: streetViewDraft.lng,
+        heading: streetViewDraft.heading,
+        pitch: streetViewDraft.pitch,
+        fov: streetViewDraft.fov,
+        pano: streetViewDraft.pano || "",
+      };
+      return { ...prev, stops: next };
+    });
+    setStreetViewOpenIndex(null);
+    setStreetViewDraft(null);
+  };
+
+  const cancelStreetView = () => {
+    setStreetViewOpenIndex(null);
+    setStreetViewDraft(null);
   };
 
   const addStop = () => {
@@ -158,11 +369,23 @@ export default function AdminDashboard() {
     setFormLoading(true);
     setFormError("");
     try {
+      const toFiniteNumber = (value) => {
+        if (value == null || value === "") return null;
+        const parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : null;
+      };
+
       const primaryAddress = (formData.stops[0]?.address || "").trim();
       const stopsPayload = formData.stops
         .map((s) => ({
           address: (s.address || "").trim(),
           spot_blurb: (s.spot_blurb || "").trim(),
+          ...(toFiniteNumber(s.lat) != null ? { lat: toFiniteNumber(s.lat) } : {}),
+          ...(toFiniteNumber(s.lng) != null ? { lng: toFiniteNumber(s.lng) } : {}),
+          ...(s.heading != null ? { heading: Number(s.heading) } : {}),
+          ...(s.pitch != null ? { pitch: Number(s.pitch) } : {}),
+          ...(s.fov != null ? { fov: Number(s.fov) } : {}),
+          ...(s.pano ? { pano: s.pano } : {}),
         }))
         .filter((s) => s.address);
 
@@ -195,7 +418,7 @@ export default function AdminDashboard() {
         const data = await res.json();
         throw new Error(JSON.stringify(data));
       }
-      closeModal();
+      closeModalImmediate();
       fetchEntries();
     } catch (err) {
       setFormError(err.message);
@@ -307,15 +530,15 @@ export default function AdminDashboard() {
 
       {/* Add / Edit Modal */}
       {modal && (
-        <div className="adminModalOverlay" onClick={closeModal}>
+        <div className="adminModalOverlay" onClick={requestCloseModal}>
           <div className="adminModal" onClick={(e) => e.stopPropagation()}>
             <div className="adminModalHeader">
               <h2>{modal.mode === "add" ? "Add New Entry" : "Edit Entry"}</h2>
-              <button className="adminModalClose" onClick={closeModal}>
+              <button className="adminModalClose" onClick={requestCloseModal}>
                 ×
               </button>
             </div>
-            <form onSubmit={handleFormSubmit} className="adminModalForm">
+            <form ref={formRef} onSubmit={handleFormSubmit} className="adminModalForm">
               <div className="adminFormGroup">
                 <label htmlFor="name">Name *</label>
                 <input
@@ -366,7 +589,8 @@ export default function AdminDashboard() {
                 </div>
                 <p className="adminStopsHint">
                   Each stop has an address (for the map) and a short blurb (shown on the entry
-                  page). At least one address is required.
+                  page). At least one address is required. Use "Detect View" to set heading,
+                  pitch, and zoom.
                 </p>
                 {formData.stops.map((stop, idx) => (
                   <div className="adminStopCard" key={idx}>
@@ -399,8 +623,46 @@ export default function AdminDashboard() {
                       }
                       placeholder="Short blurb for this spot (map tooltip)"
                     />
+                    <div className="adminStopTools">
+                      <button
+                        type="button"
+                        className="adminLoadCoordsBtn"
+                        onClick={() => loadLatLngForStop(idx)}
+                        disabled={latLngLoadingIndex === idx}
+                      >
+                        {latLngLoadingIndex === idx ? "Loading…" : "Load Lat/Lng"}
+                      </button>
+                      <button
+                        type="button"
+                        className="adminDetectViewBtn"
+                        onClick={() => openStreetViewEditor(idx)}
+                        disabled={streetViewLoading}
+                      >
+                        {streetViewLoading && streetViewOpenIndex === idx
+                          ? "Opening…"
+                          : "Detect View"}
+                      </button>
+                      {stop.lat != null && stop.lng != null && (
+                        <span className="adminViewMeta">
+                          Saved view: h {Math.round(stop.heading ?? 210)}°, p {Math.round(
+                            stop.pitch ?? 10
+                          )}
+                          °, fov {Math.round(stop.fov ?? 90)}°
+                        </span>
+                      )}
+                    </div>
+
+                    {streetViewOpenIndex === idx && streetViewDraft && (
+                      <StreetViewEditor
+                        draft={streetViewDraft}
+                        onDraftChange={handleStreetViewDraftChange}
+                        onCancel={cancelStreetView}
+                        onConfirm={confirmStreetView}
+                      />
+                    )}
                   </div>
                 ))}
+                {streetViewError && <p className="adminFormError">{streetViewError}</p>}
               </div>
 
               <div className="adminFormGroup">
@@ -438,7 +700,7 @@ export default function AdminDashboard() {
                 <button
                   type="button"
                   className="adminCancelBtn"
-                  onClick={closeModal}
+                  onClick={requestCloseModal}
                 >
                   Cancel
                 </button>
@@ -455,6 +717,41 @@ export default function AdminDashboard() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showUnsavedPrompt && (
+        <div className="adminModalOverlay" onClick={() => setShowUnsavedPrompt(false)}>
+          <div
+            className="adminModal adminConfirmModal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2>Unsaved Changes</h2>
+            <p>
+              You have unsaved changes. Do you want to save before closing?
+            </p>
+            <div className="adminModalFooter">
+              <button
+                className="adminCancelBtn"
+                onClick={() => setShowUnsavedPrompt(false)}
+              >
+                Keep Editing
+              </button>
+              <button
+                className="adminDeleteBtn"
+                onClick={closeModalImmediate}
+              >
+                Discard
+              </button>
+              <button
+                className="adminSaveBtn"
+                onClick={handleUnsavedSave}
+                disabled={formLoading}
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -492,6 +789,116 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function StreetViewEditor({ draft, onDraftChange, onCancel, onConfirm }) {
+  const setDraftNumberField = (field, rawValue) => {
+    if (rawValue === "") {
+      onDraftChange({ [field]: "" });
+      return;
+    }
+    const parsed = Number(rawValue);
+    if (!Number.isFinite(parsed)) return;
+    onDraftChange({ [field]: parsed });
+  };
+
+  const previewParams = new URLSearchParams();
+  if (GOOGLE_MAPS_API_KEY) previewParams.set("key", GOOGLE_MAPS_API_KEY);
+  if (draft.pano) {
+    previewParams.set("pano", draft.pano);
+  } else if (draft.lat !== "" && draft.lng !== "") {
+    previewParams.set("location", `${draft.lat},${draft.lng}`);
+  }
+  previewParams.set("heading", String(draft.heading ?? 210));
+  previewParams.set("pitch", String(draft.pitch ?? 10));
+  previewParams.set("fov", String(draft.fov ?? 90));
+
+  return (
+    <div className="adminStreetViewEditor">
+      <p className="adminStreetViewHint">
+        Adjust heading, pitch, and field of view using the controls below. The iframe preview
+        updates live, then confirm to save this stop's view.
+      </p>
+      <div className="adminStreetViewCanvas">
+        <iframe
+          title="Street View preview"
+          className="adminStreetViewIframe"
+          loading="lazy"
+          allowFullScreen
+          allow="accelerometer; gyroscope; fullscreen"
+          src={`https://www.google.com/maps/embed/v1/streetview?${previewParams.toString()}`}
+        />
+      </div>
+      <div className="adminStreetViewReadout">
+        <span>Lat {draft.lat}</span>
+        <span>Lng {draft.lng}</span>
+        <span>Heading {draft.heading}°</span>
+        <span>Pitch {draft.pitch}°</span>
+        <span>FOV {draft.fov}°</span>
+      </div>
+      <div className="adminStreetViewControls">
+        <label>
+          Heading
+          <input
+            type="range"
+            min="-180"
+            max="360"
+            step="1"
+            value={draft.heading ?? 210}
+            onChange={(e) => onDraftChange({ heading: Number(e.target.value) })}
+          />
+        </label>
+        <label>
+          Pitch
+          <input
+            type="range"
+            min="-90"
+            max="90"
+            step="1"
+            value={draft.pitch ?? 10}
+            onChange={(e) => onDraftChange({ pitch: Number(e.target.value) })}
+          />
+        </label>
+        <label>
+          FOV
+          <input
+            type="range"
+            min="10"
+            max="100"
+            step="1"
+            value={draft.fov ?? 90}
+            onChange={(e) => onDraftChange({ fov: Number(e.target.value) })}
+          />
+        </label>
+        <label>
+          Latitude
+          <input
+            type="number"
+            step="0.000001"
+            value={draft.lat ?? ""}
+            onChange={(e) => setDraftNumberField("lat", e.target.value)}
+          />
+        </label>
+        <label>
+          Longitude
+          <input
+            type="number"
+            step="0.000001"
+            value={draft.lng ?? ""}
+            onChange={(e) => setDraftNumberField("lng", e.target.value)}
+          />
+        </label>
+      </div>
+      <div className="adminStreetViewActions">
+        <button type="button" className="adminCancelBtn" onClick={onCancel}>
+          Cancel
+        </button>
+        <button type="button" className="adminSaveBtn" onClick={onConfirm}>
+          Confirm View
+        </button>
+      </div>
     </div>
   );
 }

@@ -40,6 +40,7 @@ export default function EntryMapPanel({
   onNextSpot,
   onPrevSpot,
   googleMapsApiKey,
+  streetViewOptions,
 }) {
   const rootRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -75,8 +76,22 @@ export default function EntryMapPanel({
     }
   }, []);
 
-  const hasMap = latLng && googleMapsApiKey;
+  const hasMap = !!googleMapsApiKey && (!!latLng || !!streetViewOptions?.pano);
   const showIntraNav = totalStops > 1;
+
+  const embedParams = new URLSearchParams();
+  if (googleMapsApiKey) embedParams.set("key", googleMapsApiKey);
+  if (streetViewOptions?.pano) embedParams.set("pano", streetViewOptions.pano);
+  if (latLng) embedParams.set("location", `${latLng.lat},${latLng.lng}`);
+  if (streetViewOptions?.heading != null) {
+    embedParams.set("heading", String(streetViewOptions.heading));
+  }
+  if (streetViewOptions?.pitch != null) {
+    embedParams.set("pitch", String(streetViewOptions.pitch));
+  }
+  if (streetViewOptions?.fov != null) {
+    embedParams.set("fov", String(streetViewOptions.fov));
+  }
 
   const headerBlock = (
     <header className="entryMapPanelHeader">
@@ -197,7 +212,7 @@ export default function EntryMapPanel({
                 loading="lazy"
                 allowFullScreen
                 allow="accelerometer; gyroscope; fullscreen"
-                src={`https://www.google.com/maps/embed/v1/streetview?key=${googleMapsApiKey}&location=${latLng.lat},${latLng.lng}&heading=210&pitch=10`}
+                src={`https://www.google.com/maps/embed/v1/streetview?${embedParams.toString()}`}
               />
               {headerBlock}
               {orbBlock}

@@ -9,6 +9,47 @@ from .models import HistoricalEntry
 from .storage_utils import upload_image_to_supabase
 
 
+def _clamp(value, min_value, max_value):
+    return max(min_value, min(max_value, value))
+
+
+def _normalize_stop_camera(stop):
+    if not isinstance(stop, dict):
+        return stop
+    s = dict(stop)
+
+    for key in ("lat", "lng"):
+        if s.get(key) is None or s.get(key) == "":
+            continue
+        try:
+            s[key] = float(s[key])
+        except (TypeError, ValueError):
+            s.pop(key, None)
+
+    if s.get("heading") is not None and s.get("heading") != "":
+        try:
+            s["heading"] = _clamp(float(s["heading"]), -180.0, 360.0)
+        except (TypeError, ValueError):
+            s.pop("heading", None)
+
+    if s.get("pitch") is not None and s.get("pitch") != "":
+        try:
+            s["pitch"] = _clamp(float(s["pitch"]), -90.0, 90.0)
+        except (TypeError, ValueError):
+            s.pop("pitch", None)
+
+    if s.get("fov") is not None and s.get("fov") != "":
+        try:
+            s["fov"] = _clamp(float(s["fov"]), 10.0, 100.0)
+        except (TypeError, ValueError):
+            s.pop("fov", None)
+
+    if s.get("pano") is not None:
+        s["pano"] = str(s.get("pano") or "").strip()
+
+    return s
+
+
 def _geocode_details(details):
     if not isinstance(details, dict):
         return details
@@ -43,7 +84,7 @@ def _geocode_stops(stops):
         if not isinstance(stop, dict):
             out.append(stop)
             continue
-        s = dict(stop)
+        s = _normalize_stop_camera(stop)
         address = (s.get("address") or "").strip()
         if not address:
             out.append(s)
@@ -112,7 +153,7 @@ class HistoricalEntrySerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('Invalid stops JSON.') from exc
         if not isinstance(value, list):
             raise serializers.ValidationError('stops must be a list.')
-        return value
+        return [_normalize_stop_camera(stop) for stop in value]
 
     def to_representation(self, instance):
         data = super().to_representation(instance)

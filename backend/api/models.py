@@ -8,7 +8,10 @@ class HistoricalEntry(models.Model):
     stops = models.JSONField(
         default=list,
         blank=True,
-        help_text="List of {address, spot_blurb, lat?, lng?} for multiple map locations.",
+        help_text=(
+            "List of {address, spot_blurb, lat?, lng?, heading?, pitch?, fov?, pano?} "
+            "for multiple map locations."
+        ),
     )
     image = models.URLField(max_length=500, blank=True, null=True)
 

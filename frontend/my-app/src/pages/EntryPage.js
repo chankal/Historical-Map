@@ -263,6 +263,13 @@ export default function EntryPage() {
   const directionsAddress =
     currentStop?.address || entry.address || null;
   const spotBlurb = currentStop?.spot_blurb || "";
+  const streetViewOptions = {
+    heading:
+      currentStop?.heading != null ? Number(currentStop.heading) : undefined,
+    pitch: currentStop?.pitch != null ? Number(currentStop.pitch) : undefined,
+    fov: currentStop?.fov != null ? Number(currentStop.fov) : undefined,
+    pano: currentStop?.pano || "",
+  };
   const addrLine =
     typeof currentStop?.address === "string" ? currentStop.address.trim() : "";
   const locationSubline =
@@ -308,6 +315,7 @@ export default function EntryPage() {
             onNextSpot={handleNextIntraStop}
             onPrevSpot={handlePrevIntraStop}
             googleMapsApiKey={GOOGLE_MAPS_API_KEY}
+            streetViewOptions={streetViewOptions}
           />
         }
       />
