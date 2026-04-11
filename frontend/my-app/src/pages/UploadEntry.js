@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import "./UploadEntry.css";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
@@ -130,7 +129,6 @@ export default function UploadEntry() {
 
   return (
     <div className="uploadEntryPage">
-      <Navbar />
       <main className="uploadContent">
         <div className="uploadContainer">
           <h1>Upload New Historical Entry</h1>

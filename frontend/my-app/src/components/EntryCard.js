@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import Navbar from "./Navbar";
 import TourCard from "./TourCard";
 import "./EntryCard.css";
 
@@ -45,8 +44,6 @@ export default function EntryCard({
 
   return (
     <div className="entryPage">
-      <Navbar showToursHeader toursHeaderClassName="entryToursHeaderBlock" />
-
       <main className="entryContent">
         <TourCard
           className="entryTourCard"
@@ -58,6 +55,27 @@ export default function EntryCard({
                 </span>
                 <span>Return to Stops</span>
               </Link>
+
+              <div className="entryNavRow">
+                {prevEntrySlug ? (
+                  <Link className="entryBox entryNavBtn" to={`/entry/${prevEntrySlug}`}>
+                    &lt; Prev
+                  </Link>
+                ) : (
+                  <button className="entryBox entryNavBtn" type="button" disabled>
+                    &lt; Prev
+                  </button>
+                )}
+                {nextEntrySlug ? (
+                  <Link className="entryBox entryNavBtn" to={`/entry/${nextEntrySlug}`}>
+                    Next &gt;
+                  </Link>
+                ) : (
+                  <button className="entryBox entryNavBtn" type="button" disabled>
+                    Next &gt;
+                  </button>
+                )}
+              </div>
 
               <section className="entryBox entryIdentity">
                 <div className="entryAvatarWrap" aria-hidden="true">
@@ -98,26 +116,6 @@ export default function EntryCard({
                 {longDescription}
               </section>
 
-              <div className="entryNavRow">
-                {prevEntrySlug ? (
-                  <Link className="entryBox entryPager" to={`/entry/${prevEntrySlug}`}>
-                    &lt; Previous
-                  </Link>
-                ) : (
-                  <button className="entryBox entryPager" type="button" disabled>
-                    &lt; Previous
-                  </button>
-                )}
-                {nextEntrySlug ? (
-                  <Link className="entryBox entryPager" to={`/entry/${nextEntrySlug}`}>
-                    Next &gt;
-                  </Link>
-                ) : (
-                  <button className="entryBox entryPager" type="button" disabled>
-                    Next &gt;
-                  </button>
-                )}
-              </div>
             </div>
           }
           right={right || <div className="entryRightEmpty" />}

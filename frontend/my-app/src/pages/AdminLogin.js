@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import "./AdminLogin.css";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
@@ -53,7 +52,6 @@ export default function AdminLogin() {
 
   return (
     <div className="adminLoginPage">
-      <Navbar />
       <main className="adminLoginContent">
         <div className="adminLoginCard">
           <h1 className="adminLoginTitle">Admin Panel</h1>

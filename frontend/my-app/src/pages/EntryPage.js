@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import EntryCard from "../components/EntryCard";
 import EntryMapPanel from "../components/EntryMapPanel";
-import Navbar from "../components/Navbar";
 import TourCard from "../components/TourCard";
 import fallbackData from "../data/fallbackData.js";
 
@@ -187,7 +186,6 @@ export default function EntryPage() {
             100% { background-position: -200% 0; }
           }
         `}</style>
-        <Navbar showToursHeader toursHeaderClassName="entryToursHeaderBlock" />
         <main className="entryContent">
           <TourCard
             className="entryTourCard"

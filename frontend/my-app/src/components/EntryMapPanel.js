@@ -143,8 +143,9 @@ export default function EntryMapPanel({
           className="entryMapPanelNavBtn"
           onClick={onPrevSpot}
           disabled={activeIndex <= 0}
+          aria-label="Previous spot"
         >
-          ← Previous
+          &#8249;
         </button>
         <span className="entryMapPanelDockHint">Move between spots</span>
         <button
@@ -152,8 +153,9 @@ export default function EntryMapPanel({
           className="entryMapPanelNavBtn"
           onClick={onNextSpot}
           disabled={activeIndex >= totalStops - 1}
+          aria-label="Next spot"
         >
-          Next →
+          &#8250;
         </button>
       </div>
     );
@@ -176,8 +178,9 @@ export default function EntryMapPanel({
                   className="entryMapPanelNavBtn"
                   onClick={onPrevSpot}
                   disabled={activeIndex <= 0}
+                  aria-label="Previous spot"
                 >
-                  ← Previous
+                  &#8249;
                 </button>
                 <span className="entryMapPanelDockMeta">
                   {activeIndex + 1} / {totalStops}
@@ -187,8 +190,9 @@ export default function EntryMapPanel({
                   className="entryMapPanelNavBtn"
                   onClick={onNextSpot}
                   disabled={activeIndex >= totalStops - 1}
+                  aria-label="Next spot"
                 >
-                  Next →
+                  &#8250;
                 </button>
               </div>
             )}

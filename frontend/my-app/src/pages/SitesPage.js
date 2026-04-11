@@ -1,4 +1,3 @@
-import Navbar from "../components/Navbar";
 import TourCard from "../components/TourCard";
 import { Link } from "react-router-dom";
 import "./SitesPage.css";
@@ -7,8 +6,6 @@ import "./SitesPage.css";
 export default function SitesPage() {
   return (
     <div className="sitesPage">
-      <Navbar showToursHeader toursHeaderClassName="sitesToursHeaderBlock"/>
-
       <div className="sitesContent">
         <TourCard
           className="sitesTourCard"

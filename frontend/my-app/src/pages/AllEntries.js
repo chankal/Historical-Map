@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import TourCard from "../components/TourCard";
 import MapWithPins from "../components/MapWithPins";
 import busStopIcon from "../images/bus-stop.png";
@@ -82,7 +81,6 @@ export default function AllEntries() {
           Live data is currently unavailable. Please contact an admin if this persists.
         </div>
       )}
-      <Navbar showToursHeader toursHeaderClassName="allEntriesToursHeaderBlock" />
       <main className="allEntriesContent">
         <TourCard
           className="allEntriesCard"

@@ -139,10 +139,39 @@
 }
 
 .entryNavRow {
-  margin-top: auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 14px;
+}
+
+.entryNavBtn {
+  border: 2px solid #d33f67;
+  background: none;
+  color: #d33f67;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 76px;
+  padding: 4px 14px;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  font-family: "Times New Roman", Times, serif;
+  text-decoration: none;
+}
+
+.entryNavBtn:not(:disabled):hover {
+  background: #d33f67;
+  color: #fff;
+}
+
+.entryNavBtn:disabled {
+  opacity: 0.55;
+  cursor: default;
 }
 
 .entryPager {
@@ -198,8 +227,7 @@
     border-top: 1px solid #cccccc;
   }
 
-  .entryActionRow,
-  .entryNavRow {
+  .entryActionRow {
     grid-template-columns: 1fr;
   }
 
@@ -209,5 +237,14 @@
 
   .entryLongDescription {
     min-height: 0;
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+    line-height: 1.45;
+    text-align: center;
+  }
+
+  .entryBlurb {
+    text-align: center;
   }
 }

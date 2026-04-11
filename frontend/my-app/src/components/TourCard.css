@@ -1,3 +1,27 @@
+.tourCardWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tourCardHeader {
+  padding: 0;
+}
+
+.tourCardHeaderTitle {
+  font-family: "Times New Roman", Times, serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+  margin: 0;
+  color: #1a1a1a;
+}
+
+.tourCardHeaderRule {
+  border: none;
+  border-top: 1px solid #d8ba7a;
+  margin: 12px 0 24px;
+}
+
 .tourCard {
   width: 100%;
   display: grid;

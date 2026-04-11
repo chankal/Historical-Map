@@ -12,25 +12,31 @@ export default function TourCard({
   const cardClassName = `tourCard ${className}`.trim();
 
   return (
-    <section className={cardClassName}>
-      <div className="tourLeft">
-        {left || (
-          <>
-            <h2 className="tourName">{title}</h2>
-            {description ? <p className="tourDesc">{description}</p> : null}
-          </>
-        )}
+    <div className="tourCardWrapper">
+      <div className="tourCardHeader">
+        <h1 className="tourCardHeaderTitle">3D Tours</h1>
+        <hr className="tourCardHeaderRule" />
       </div>
+      <section className={cardClassName}>
+        <div className="tourLeft">
+          {left || (
+            <>
+              <h2 className="tourName">{title}</h2>
+              {description ? <p className="tourDesc">{description}</p> : null}
+            </>
+          )}
+        </div>
 
-      <div className="tourRight">
-        {right ||
-          (imageSrc ? (
-            <img className="tourImage" src={imageSrc} alt={imageAlt} />
-          ) : (
-            <div className="tourPlaceholder">Image or Map Here</div>
-          ))}
-      </div>
-    </section>
+        <div className="tourRight">
+          {right ||
+            (imageSrc ? (
+              <img className="tourImage" src={imageSrc} alt={imageAlt} />
+            ) : (
+              <div className="tourPlaceholder">Image or Map Here</div>
+            ))}
+        </div>
+      </section>
+    </div>
   );
 }
 
