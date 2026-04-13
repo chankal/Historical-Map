@@ -8,6 +8,33 @@ import fallbackData from "../data/fallbackData.js";
 const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || null;
 
+let allEntriesCache = null;
+let allEntriesPromise = null;
+
+async function fetchAllEntriesOnce() {
+  if (allEntriesCache) {
+    return allEntriesCache;
+  }
+
+  if (!allEntriesPromise) {
+    allEntriesPromise = fetch(`${API_BASE}/all/`)
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+        const data = await res.json();
+        allEntriesCache = data;
+        return data;
+      })
+      .catch((err) => {
+        allEntriesPromise = null;
+        throw err;
+      });
+  }
+
+  return allEntriesPromise;
+}
+
 const LOREM_SPOTS = [
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -56,13 +83,12 @@ export default function EntryPage() {
         const res = await fetch(`${API_BASE}/entry/${slug}/`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        const allRes = await fetch(`${API_BASE}/all/`);
         let computedStopNumber = null;
         let computedPrevEntrySlug = null;
         let computedNextEntrySlug = null;
 
-        if (allRes.ok) {
-          const allData = await allRes.json();
+        try {
+          const allData = await fetchAllEntriesOnce();
           const getSlug = (e) =>
             e.slug ||
             e.name?.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") ||
@@ -79,6 +105,8 @@ export default function EntryPage() {
           if (matchIndex >= 0 && matchIndex < allData.length - 1) {
             computedNextEntrySlug = getSlug(allData[matchIndex + 1]);
           }
+        } catch (allErr) {
+          console.warn("Failed to load entry list for navigation:", allErr.message);
         }
 
         const stops = normalizeStopsFromApi(data);
