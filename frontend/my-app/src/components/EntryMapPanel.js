@@ -41,9 +41,13 @@ export default function EntryMapPanel({
   onPrevSpot,
   googleMapsApiKey,
   streetViewOptions,
+  headerActionLabel,
+  onHeaderActionClick,
+  onOrbClose,
 }) {
   const rootRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [orbOpen, setOrbOpen] = useState(false);
 
   const syncFullscreenState = useCallback(() => {
     const el = rootRef.current;
@@ -78,6 +82,14 @@ export default function EntryMapPanel({
 
   const hasMap = !!googleMapsApiKey && (!!latLng || !!streetViewOptions?.pano);
   const showIntraNav = totalStops > 1;
+  const headerButtonLabel =
+    headerActionLabel || (isFullscreen ? "Exit" : "Fullscreen");
+  const headerButtonAria =
+    headerActionLabel || (isFullscreen ? "Exit fullscreen" : "Enter fullscreen");
+  const headerButtonTitle =
+    headerActionLabel || (isFullscreen ? "Exit fullscreen (Esc)" : "Fullscreen map");
+  const handleHeaderButtonClick =
+    onHeaderActionClick || (isFullscreen ? exitFullscreen : enterFullscreen);
 
   const embedParams = new URLSearchParams();
   if (googleMapsApiKey) embedParams.set("key", googleMapsApiKey);
@@ -112,12 +124,12 @@ export default function EntryMapPanel({
         <button
           type="button"
           className="entryMapPanelFsBtn"
-          onClick={isFullscreen ? exitFullscreen : enterFullscreen}
-          aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-          title={isFullscreen ? "Exit fullscreen (Esc)" : "Fullscreen map"}
+          onClick={handleHeaderButtonClick}
+          aria-label={headerButtonAria}
+          title={headerButtonTitle}
         >
           <span className="entryMapPanelFsLabel">
-            {isFullscreen ? "Exit" : "Fullscreen"}
+            {headerButtonLabel}
           </span>
         </button>
       </div>
@@ -125,11 +137,25 @@ export default function EntryMapPanel({
   );
 
   const orbBlock = (
-    <div className="entryMapPanelOrbWrap">
-      <button type="button" className="entryMapPanelOrb" aria-label="About this location">
+    <div className={`entryMapPanelOrbWrap${orbOpen ? " entryMapPanelOrbWrap--open" : ""}`}>
+      <button
+        type="button"
+        className="entryMapPanelOrb"
+        aria-label="About this location"
+        aria-expanded={orbOpen}
+        onClick={() => setOrbOpen((o) => !o)}
+      >
         i
       </button>
       <div className="entryMapPanelTooltip" role="tooltip">
+        <button
+          type="button"
+          className="entryMapPanelTooltipClose"
+          aria-label="Close"
+          onClick={() => { setOrbOpen(false); if (onOrbClose) { onOrbClose(); } else { window.scrollTo({ top: 0, behavior: "smooth" }); } }}
+        >
+          &#x2715;
+        </button>
         {spotBlurb || "No description for this spot."}
       </div>
     </div>

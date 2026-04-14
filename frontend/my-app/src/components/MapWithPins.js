@@ -24,7 +24,16 @@ function loadLink(href) {
   document.head.appendChild(l);
 }
 
-export default function MapWithPins({ entries = [], selectedIndex = null }) {
+export default function MapWithPins({
+  entries = [],
+  selectedIndex = null,
+  onPinClick = null,
+  onPinHover = null,
+  onMapClick = null,
+  defaultZoom = 12,
+  fitBoundsBottomPadding = 50,
+  fitBoundsMaxZoom = null,
+}) {
   const [mapReady, setMapReady] = useState(false);
   const [geocodedStops, setGeocodedStops] = useState([]);
   const mapDivRef = useRef(null);
@@ -78,7 +87,7 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
 
     const map = L.map(mapDivRef.current, {
       center: geocodedStops.length > 0 ? [geocodedStops[0].lat, geocodedStops[0].lng] : [33.745, -84.39],
-      zoom: 12,
+      zoom: defaultZoom,
       zoomControl: true,
       dragging: true,
       scrollWheelZoom: true,
@@ -96,7 +105,19 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
     ).addTo(map);
 
     mapRef.current = map;
-  }, [mapReady, geocodedStops.length]);
+  }, [mapReady, geocodedStops, defaultZoom]);
+
+  useEffect(() => {
+    if (!mapRef.current || !onMapClick) return undefined;
+
+    mapRef.current.on("click", onMapClick);
+
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.off("click", onMapClick);
+      }
+    };
+  }, [onMapClick]);
 
   // Create/update markers when stops change
   useEffect(() => {
@@ -113,7 +134,7 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
         html: 
         `<div style="cursor: pointer;">
           <div class="map-pin-body">
-            <span class="map-pin-num">${i + 1}</span>
+            <span class="map-pin-num">${stop.index + 1}</span>
           </div>
         </div>`,
         iconSize: [40, 40],
@@ -124,16 +145,31 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
         mapRef.current
       );
 
-      // Add click handler to navigate to entry page
+      // Add click handler to navigate or let the parent show entry details.
       if (stop.entrySlug) {
-        marker.on("click", () => {
+        marker.on("mouseover", () => {
+          if (onPinHover) {
+            onPinHover(stop.index);
+          }
+        });
+
+        marker.on("click", (event) => {
+          if (window.L) {
+            window.L.DomEvent.stopPropagation(event);
+          }
+
+          if (onPinClick) {
+            onPinClick(stop.index);
+            return;
+          }
+
           navigate(`/entry/${stop.entrySlug}`);
         });
       }
 
       markersRef.current.push(marker);
     });
-  }, [geocodedStops, navigate]);
+  }, [geocodedStops, navigate, onPinClick, onPinHover]);
 
   // Handle zoom when entry is selected or deselected
   useEffect(() => {
@@ -143,7 +179,7 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
       // Zoom out to show all markers
       if (geocodedStops.length === 1) {
         // If only one marker, center on it with default zoom
-        mapRef.current.flyTo([geocodedStops[0].lat, geocodedStops[0].lng], 12, {
+        mapRef.current.flyTo([geocodedStops[0].lat, geocodedStops[0].lng], defaultZoom, {
           duration: 0.8,
           easeLinearity: 0.5,
         });
@@ -154,20 +190,23 @@ export default function MapWithPins({ entries = [], selectedIndex = null }) {
           geocodedStops.map((stop) => [stop.lat, stop.lng])
         );
         mapRef.current.flyToBounds(bounds, {
-          padding: [50, 50],
+          paddingTopLeft: [50, 50],
+          paddingBottomRight: [50, fitBoundsBottomPadding],
+          ...(fitBoundsMaxZoom !== null ? { maxZoom: fitBoundsMaxZoom } : {}),
           duration: 0.8,
           easeLinearity: 0.5,
         });
       }
-    } else if (geocodedStops[selectedIndex]) {
+    } else {
       // Zoom in to selected marker
-      const stop = geocodedStops[selectedIndex];
+      const stop = geocodedStops.find((entry) => entry.index === selectedIndex);
+      if (!stop) return;
       mapRef.current.flyTo([stop.lat, stop.lng], 17, {
         duration: 0.8,
         easeLinearity: 0.5,
       });
     }
-  }, [selectedIndex, geocodedStops]);
+  }, [selectedIndex, geocodedStops, defaultZoom, fitBoundsBottomPadding, fitBoundsMaxZoom]);
 
   return (
     <div className="map-with-pins-container">
