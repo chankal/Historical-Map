@@ -32,6 +32,7 @@ export default function MapWithPins({
   onMapClick = null,
   defaultZoom = 12,
   fitBoundsBottomPadding = 50,
+  fitBoundsMaxZoom = null,
 }) {
   const [mapReady, setMapReady] = useState(false);
   const [geocodedStops, setGeocodedStops] = useState([]);
@@ -191,6 +192,7 @@ export default function MapWithPins({
         mapRef.current.flyToBounds(bounds, {
           paddingTopLeft: [50, 50],
           paddingBottomRight: [50, fitBoundsBottomPadding],
+          ...(fitBoundsMaxZoom !== null ? { maxZoom: fitBoundsMaxZoom } : {}),
           duration: 0.8,
           easeLinearity: 0.5,
         });
@@ -204,7 +206,7 @@ export default function MapWithPins({
         easeLinearity: 0.5,
       });
     }
-  }, [selectedIndex, geocodedStops, defaultZoom, fitBoundsBottomPadding]);
+  }, [selectedIndex, geocodedStops, defaultZoom, fitBoundsBottomPadding, fitBoundsMaxZoom]);
 
   return (
     <div className="map-with-pins-container">

@@ -43,9 +43,11 @@ export default function EntryMapPanel({
   streetViewOptions,
   headerActionLabel,
   onHeaderActionClick,
+  onOrbClose,
 }) {
   const rootRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [orbOpen, setOrbOpen] = useState(false);
 
   const syncFullscreenState = useCallback(() => {
     const el = rootRef.current;
@@ -135,11 +137,25 @@ export default function EntryMapPanel({
   );
 
   const orbBlock = (
-    <div className="entryMapPanelOrbWrap">
-      <button type="button" className="entryMapPanelOrb" aria-label="About this location">
+    <div className={`entryMapPanelOrbWrap${orbOpen ? " entryMapPanelOrbWrap--open" : ""}`}>
+      <button
+        type="button"
+        className="entryMapPanelOrb"
+        aria-label="About this location"
+        aria-expanded={orbOpen}
+        onClick={() => setOrbOpen((o) => !o)}
+      >
         i
       </button>
       <div className="entryMapPanelTooltip" role="tooltip">
+        <button
+          type="button"
+          className="entryMapPanelTooltipClose"
+          aria-label="Close"
+          onClick={() => { setOrbOpen(false); if (onOrbClose) { onOrbClose(); } else { window.scrollTo({ top: 0, behavior: "smooth" }); } }}
+        >
+          &#x2715;
+        </button>
         {spotBlurb || "No description for this spot."}
       </div>
     </div>

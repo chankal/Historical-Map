@@ -35,7 +35,7 @@
 
 .entryTourCard .tourLeft {
   min-height: 0;
-  overflow-y: auto;
+  overflow-y: hidden;
   padding: 24px;
   background: #f7f7f7;
 }
@@ -50,7 +50,7 @@
 
 .entryLeftLayout {
   box-sizing: border-box;
-  min-height: calc(100% - 24px);
+  height: calc(100% - 48px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,6 +61,22 @@
   background: #fff;
   border-radius: 36px;
   box-shadow: 0 18px 42px rgba(0, 0, 0, 0.08);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #d33f67 transparent;
+}
+
+.entryLeftLayout::-webkit-scrollbar {
+  width: 6px;
+}
+
+.entryLeftLayout::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.entryLeftLayout::-webkit-scrollbar-thumb {
+  background: #d33f67;
+  border-radius: 999px;
 }
 
 .entryBox {
@@ -291,10 +307,15 @@
   }
 
   .entryLeftLayout {
-    min-height: 0;
+    height: auto;
+    overflow-y: visible;
     width: 100%;
     padding: 24px 18px 28px;
     border-radius: 28px;
+  }
+
+  .entryTourCard .tourLeft {
+    overflow-y: visible;
   }
 
   .entryName {

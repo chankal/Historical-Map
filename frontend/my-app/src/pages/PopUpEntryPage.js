@@ -63,7 +63,7 @@ export default function PopUpEntryPage() {
   const [error, setError] = useState("");
   const [usingFallback, setUsingFallback] = useState(false);
   const [activeStopIndex, setActiveStopIndex] = useState(0);
-  const [isInfoOpen, setIsInfoOpen] = useState(true);
+  const [isInfoOpen, setIsInfoOpen] = useState(() => window.innerWidth > 820);
 
   useEffect(() => {
     const fetchEntry = async () => {
@@ -72,7 +72,7 @@ export default function PopUpEntryPage() {
         setError("");
         setUsingFallback(false);
         setActiveStopIndex(0);
-        setIsInfoOpen(true);
+        setIsInfoOpen(window.innerWidth > 820);
 
         const res = await fetch(`${API_BASE}/entry/${slug}/`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -161,6 +161,7 @@ export default function PopUpEntryPage() {
         streetViewOptions={streetViewOptions}
         headerActionLabel="Exit"
         onHeaderActionClick={() => navigate(`/entry/${slug}`)}
+        onOrbClose={() => navigate(`/entry/${slug}`)}
       />
 
       <button
@@ -193,11 +194,6 @@ export default function PopUpEntryPage() {
             <section>
               <h2>Short Description</h2>
               <p>{entry.shortDescription}</p>
-            </section>
-
-            <section>
-              <h2>Blurb</h2>
-              <p>{entry.blurb}</p>
             </section>
 
             <section>

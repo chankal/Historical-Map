@@ -13,6 +13,20 @@ export default function AllEntries() {
   const [error] = useState("");
   const [selectedEntryIndex, setSelectedEntryIndex] = useState(null);
   const [usingFallback, setUsingFallback] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
+  const [isMobileMap, setIsMobileMap] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 760px)");
+    const updateMobileMap = () => setIsMobileMap(mediaQuery.matches);
+
+    updateMobileMap();
+    mediaQuery.addEventListener("change", updateMobileMap);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateMobileMap);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -79,16 +93,32 @@ export default function AllEntries() {
           onPinClick={setSelectedEntryIndex}
           onPinHover={setSelectedEntryIndex}
           onMapClick={() => setSelectedEntryIndex(null)}
-          defaultZoom={11}
+          defaultZoom={isMobileMap ? 9 : 9}
+          fitBoundsBottomPadding={isMobileMap ? 300 : 50}
+          fitBoundsMaxZoom={isMobileMap ? 9 : null}
         />
 
         <nav className="allEntriesTopActions" aria-label="All entries navigation">
-          <Link className="allEntriesTopButton" to="/">
-            Home
-          </Link>
-          <Link className="allEntriesTopButton" to="/map">
-            List View
-          </Link>
+          <button
+            type="button"
+            className="allEntriesMenuToggle"
+            aria-label={navOpen ? "Close all entries navigation menu" : "Open all entries navigation menu"}
+            aria-expanded={navOpen}
+            onClick={() => setNavOpen((isOpen) => !isOpen)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+
+          <div className={`allEntriesTopMenu ${navOpen ? "allEntriesTopMenuOpen" : ""}`}>
+            <Link className="allEntriesTopButton" to="/" onClick={() => setNavOpen(false)}>
+              Home
+            </Link>
+            <Link className="allEntriesTopButton" to="/map" onClick={() => setNavOpen(false)}>
+              Slide View
+            </Link>
+          </div>
         </nav>
 
         <aside className="allEntriesListPanel" aria-label="All entries">

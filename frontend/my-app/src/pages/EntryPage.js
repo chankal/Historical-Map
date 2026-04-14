@@ -330,7 +330,7 @@ export default function EntryPage() {
         address={directionsAddress}
         obituaryUrl={entry.obituary}
         image={entry.image}
-        returnTo="/map"
+        returnTo="/all-entries"
         right={
           <EntryMapPanel
             latLng={latLng}
@@ -345,6 +345,7 @@ export default function EntryPage() {
             streetViewOptions={streetViewOptions}
             headerActionLabel="Fullscreen"
             onHeaderActionClick={() => navigate(`/popup-entry/${slug}`)}
+            onOrbClose={() => navigate(`/entry/${slug}`)}
           />
         }
       />

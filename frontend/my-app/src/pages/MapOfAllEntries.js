@@ -39,6 +39,7 @@ export default function MapOfAllEntries() {
   const [usingFallback, setUsingFallback] = useState(false);
   const [selectedEntryIndex, setSelectedEntryIndex] = useState(null);
   const [cardStartIndex, setCardStartIndex] = useState(0);
+  const [navOpen, setNavOpen] = useState(false);
 
   const carouselCards = entries.length
     ? Array.from({ length: entries.length }, (_, offset) => {
@@ -89,12 +90,26 @@ export default function MapOfAllEntries() {
   return (
     <div className="mapAllPage">
       <nav className="mapAllTopActions" aria-label="Map page navigation">
-        <Link className="mapAllTopButton" to="/">
-          Home
-        </Link>
-        <Link className="mapAllTopButton" to="/all-entries">
-          List View
-        </Link>
+        <button
+          type="button"
+          className="mapAllMenuToggle"
+          aria-label={navOpen ? "Close map navigation menu" : "Open map navigation menu"}
+          aria-expanded={navOpen}
+          onClick={() => setNavOpen((isOpen) => !isOpen)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+
+        <div className={`mapAllTopMenu ${navOpen ? "mapAllTopMenuOpen" : ""}`}>
+          <Link className="mapAllTopButton" to="/" onClick={() => setNavOpen(false)}>
+            Home
+          </Link>
+          <Link className="mapAllTopButton" to="/all-entries" onClick={() => setNavOpen(false)}>
+            List View
+          </Link>
+        </div>
       </nav>
 
       {usingFallback && (

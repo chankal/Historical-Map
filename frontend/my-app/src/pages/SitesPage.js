@@ -21,7 +21,7 @@ export default function SitesPage() {
               </p>
               <Link
                 className="getStartedButton"
-                to="/map"
+                to="/all-entries"
               >
                 Browse All Entries
               </Link>
