@@ -1,16 +1,31 @@
 .sitesPage {
-  min-height: 100vh;
-  background: #f3f3f3;
+  height: 100vh;
+  height: 100svh;
+  background: #000;
   font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
 }
 
 .sitesContent {
-  width: min(1200px, 96vw);  /* match AllEntries */
-  margin: 0 auto 40px;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.sitesContent .tourCardWrapper {
+  height: 100%;
+}
+
+.sitesContent .tourCardHeader {
+  display: none;
 }
 
 .sitesTourCard {
-  grid-template-columns: minmax(320px, 430px) 1fr;
+  display: block;
+  position: relative;
+  height: 100%;
+  border: 0;
+  background: #000;
 }
 
 .sitesToursHeaderBlock {
@@ -18,13 +33,43 @@
 } 
 
 .sitesTourCard .tourLeft {
-  min-height: 620px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: min(560px, calc(100vw - 32px));
+  min-height: 0;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 32px 32px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.42);
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.24);
+  transform: translate(-50%, -50%);
 }
 
 .sitesTourCard .tourRight {
-  min-height: 620px;
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+}
+
+.sitesTourCard .tourVideo {
+  min-height: 0;
+  height: 100%;
+}
+
+.sitesTourCard .tourName {
+  margin-bottom: 20px;
+}
+
+.sitesTourCard .tourDesc {
+  max-width: 32ch;
+  margin: 0 auto;
 }
 
 .tourSpacer {
@@ -83,12 +128,15 @@
 
 @media (max-width: 900px) {
   .sitesTourCard {
-    grid-template-columns: 1fr;
+    display: block;
   }
 
   .sitesTourCard .tourLeft {
     align-items: center;
     text-align: center;
+    top: 50%;
+    width: min(520px, calc(100vw - 24px));
+    padding: 22px 18px 26px;
   }
 
   .sitesTourCard .tourName,
@@ -100,13 +148,16 @@
   .sitesTourCard .tourRight,
   .youtubeEmbedSection,
   .youtubeEmbedFrame {
-    min-height: 260px;
+    min-height: 0;
+  }
+
+  .sitesTourCard .tourRight {
+    min-height: 100%;
   }
 }
 
 @media (max-width: 640px) {
-  .sitesContent,
-  .sitesToursHeaderBlock {
-    width: min(1200px, 94vw);
+  .sitesTourCard .tourLeft {
+    width: calc(100vw - 24px);
   }
 }

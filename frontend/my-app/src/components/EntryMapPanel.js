@@ -41,6 +41,8 @@ export default function EntryMapPanel({
   onPrevSpot,
   googleMapsApiKey,
   streetViewOptions,
+  headerActionLabel,
+  onHeaderActionClick,
 }) {
   const rootRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -78,6 +80,14 @@ export default function EntryMapPanel({
 
   const hasMap = !!googleMapsApiKey && (!!latLng || !!streetViewOptions?.pano);
   const showIntraNav = totalStops > 1;
+  const headerButtonLabel =
+    headerActionLabel || (isFullscreen ? "Exit" : "Fullscreen");
+  const headerButtonAria =
+    headerActionLabel || (isFullscreen ? "Exit fullscreen" : "Enter fullscreen");
+  const headerButtonTitle =
+    headerActionLabel || (isFullscreen ? "Exit fullscreen (Esc)" : "Fullscreen map");
+  const handleHeaderButtonClick =
+    onHeaderActionClick || (isFullscreen ? exitFullscreen : enterFullscreen);
 
   const embedParams = new URLSearchParams();
   if (googleMapsApiKey) embedParams.set("key", googleMapsApiKey);
@@ -112,12 +122,12 @@ export default function EntryMapPanel({
         <button
           type="button"
           className="entryMapPanelFsBtn"
-          onClick={isFullscreen ? exitFullscreen : enterFullscreen}
-          aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-          title={isFullscreen ? "Exit fullscreen (Esc)" : "Fullscreen map"}
+          onClick={handleHeaderButtonClick}
+          aria-label={headerButtonAria}
+          title={headerButtonTitle}
         >
           <span className="entryMapPanelFsLabel">
-            {isFullscreen ? "Exit" : "Fullscreen"}
+            {headerButtonLabel}
           </span>
         </button>
       </div>
