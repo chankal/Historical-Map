@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import TourCard from "../components/TourCard";
 import MapWithPins from "../components/MapWithPins";
 import busStopIcon from "../images/bus-stop.png";
 import fallbackData from "../data/fallbackData.js";
@@ -43,6 +42,20 @@ export default function AllEntries() {
   const [error] = useState("");
   const [selectedEntryIndex, setSelectedEntryIndex] = useState(null);
   const [usingFallback, setUsingFallback] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
+  const [isMobileMap, setIsMobileMap] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 760px)");
+    const updateMobileMap = () => setIsMobileMap(mediaQuery.matches);
+
+    updateMobileMap();
+    mediaQuery.addEventListener("change", updateMobileMap);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateMobileMap);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -96,99 +109,107 @@ export default function AllEntries() {
   return (
     <div className="allEntriesPage">
       {usingFallback && (
-        <div style={{
-          background: "#e65c00",
-          color: "#fff",
-          textAlign: "center",
-          padding: "6px 16px",
-          fontSize: "0.82rem",
-          fontFamily: '"Times New Roman", Times, serif',
-          fontWeight: "lighter",
-          letterSpacing: "0.01em",
-        }}>
+        <div className="allEntriesFallbackBanner">
           Live data is currently unavailable. Please contact an admin if this persists.
         </div>
       )}
+
       <main className="allEntriesContent">
-        <TourCard
-          className="allEntriesCard"
-          left={
-            <div className="allEntriesLeft">
-              <Link className="returnToTours" to="/tours">
-                &lt; Return to Tours
-              </Link>
-
-              <section className="tourInfoBox">
-                <div className="tourHeaderRow">
-                  <span className="tourHeaderLine" aria-hidden="true" />
-                  <h2 className="tourInfoTitle">Atlanta History Tour</h2>
-                  <span className="tourHeaderLine" aria-hidden="true" />
-                </div>
-                
-                <div className="tourActionRow">
-                  <div className="tourStops">
-                    <img src={busStopIcon} alt="Bus stop icon" />
-                    <span>{entries.length} stops</span>
-                  </div>
-
-                  <Link
-                    className="tourStartButton"
-                    to={entries.length > 0 ? `/entry/${entries[0].slug}` : "/entry"}
-                  >
-                    Get Started
-                  </Link>
-                </div>
-              </section>
-
-              <section className="entryList">
-                {loading && <p>Loading entries...</p>}
-                {error && <p>{error}</p>}
-                {!loading &&
-                  !error &&
-                  entries.map((entry, index) => (
-                    <Link
-                      to={`/entry/${entry.slug}`}
-                      key={entry.id}
-                      style={{ textDecoration: "none", color: "inherit" }}
-                    >
-                      <article
-                        className="allEntriesEntryBox"
-                        onMouseEnter={() => setSelectedEntryIndex(index)}
-                        onMouseLeave={() => setSelectedEntryIndex(null)}
-                        style={{
-                          cursor: "pointer",
-                          borderColor: selectedEntryIndex === index ? "#D43C67" : "#dfdfdf",
-                          transition: "border-color 0.2s",
-                        }}
-                      >
-                        <div className="allEntriesThumbWrap" aria-hidden="true">
-                          <span className="entryIndexBadge">{index + 1}</span>
-                          <div
-                            className="allEntriesEntryThumb"
-                            style={{
-                              backgroundImage: entry.image ? `url(${entry.image})` : "none",
-                              backgroundSize: "cover",
-                              backgroundPosition: "center",
-                            }}
-                          />
-                        </div>
-                        <div className="allEntriesEntryText">
-                          <h3 className="allEntriesEntryName">{entry.name}</h3>
-                          <p className="allEntriesEntryBlurb">{entry.blurb}</p>
-                        </div>
-                      </article>
-                    </Link>
-                  ))}
-              </section>
-            </div>
-          }
-          right={
-            <MapWithPins
-              entries={entries}
-              selectedIndex={selectedEntryIndex}
-            />
-          }
+        <MapWithPins
+          entries={entries}
+          selectedIndex={selectedEntryIndex}
+          onPinClick={setSelectedEntryIndex}
+          onPinHover={setSelectedEntryIndex}
+          onMapClick={() => setSelectedEntryIndex(null)}
+          defaultZoom={isMobileMap ? 9 : 9}
+          fitBoundsBottomPadding={isMobileMap ? 300 : 50}
+          fitBoundsMaxZoom={isMobileMap ? 9 : null}
         />
+
+        <nav className="allEntriesTopActions" aria-label="All entries navigation">
+          <button
+            type="button"
+            className="allEntriesMenuToggle"
+            aria-label={navOpen ? "Close all entries navigation menu" : "Open all entries navigation menu"}
+            aria-expanded={navOpen}
+            onClick={() => setNavOpen((isOpen) => !isOpen)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+
+          <div className={`allEntriesTopMenu ${navOpen ? "allEntriesTopMenuOpen" : ""}`}>
+            <Link className="allEntriesTopButton" to="/" onClick={() => setNavOpen(false)}>
+              Home
+            </Link>
+            <Link className="allEntriesTopButton" to="/map" onClick={() => setNavOpen(false)}>
+              Slide View
+            </Link>
+          </div>
+        </nav>
+
+        <aside className="allEntriesListPanel" aria-label="All entries">
+          <section className="allEntriesTourSummary">
+            <div className="allEntriesTourHeaderRow">
+              <span className="allEntriesTourHeaderLine" aria-hidden="true" />
+              <h2 className="allEntriesTourTitle">Atlanta History Tour</h2>
+              <span className="allEntriesTourHeaderLine" aria-hidden="true" />
+            </div>
+
+            <div className="allEntriesTourActionRow">
+              <div className="allEntriesTourStops">
+                <img src={busStopIcon} alt="" aria-hidden="true" />
+                <span>{entries.length} stops</span>
+              </div>
+
+              <Link
+                className="allEntriesTourStartButton"
+                to={entries.length > 0 ? `/entry/${entries[0].slug}` : "/entry"}
+              >
+                Get Started
+              </Link>
+            </div>
+          </section>
+
+          <section className="entryList">
+            {loading && <p className="entryListStatus">Loading entries...</p>}
+            {error && <p className="entryListStatus">{error}</p>}
+            {!loading &&
+              !error &&
+              entries.map((entry, index) => (
+                <Link
+                  to={`/entry/${entry.slug}`}
+                  key={entry.id}
+                  className="allEntriesEntryLink"
+                  onMouseEnter={() => setSelectedEntryIndex(index)}
+                  onMouseLeave={() => setSelectedEntryIndex(null)}
+                  onFocus={() => setSelectedEntryIndex(index)}
+                  onBlur={() => setSelectedEntryIndex(null)}
+                >
+                  <article
+                    className={`allEntriesEntryBox ${
+                      selectedEntryIndex === index ? "allEntriesEntryBoxSelected" : ""
+                    }`}
+                  >
+                    <div className="allEntriesThumbWrap" aria-hidden="true">
+                      <span className="entryIndexBadge">{index + 1}</span>
+                      <div
+                        className="allEntriesEntryThumb"
+                        style={{
+                          backgroundImage: entry.image ? `url(${entry.image})` : "none",
+                        }}
+                      />
+                    </div>
+                    <div className="allEntriesEntryText">
+                      <h3 className="allEntriesEntryName">{entry.name}</h3>
+                      <p className="allEntriesEntryBlurb">{entry.blurb}</p>
+                    </div>
+                  </article>
+                </Link>
+              ))}
+          </section>
+        </aside>
       </main>
     </div>
   );

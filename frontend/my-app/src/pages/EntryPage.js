@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import EntryCard from "../components/EntryCard";
 import EntryMapPanel from "../components/EntryMapPanel";
 import TourCard from "../components/TourCard";
@@ -65,6 +65,7 @@ function normalizeStopsFromApi(data, extra = {}) {
 
 export default function EntryPage() {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const [entry, setEntry] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -342,6 +343,9 @@ export default function EntryPage() {
             onPrevSpot={handlePrevIntraStop}
             googleMapsApiKey={GOOGLE_MAPS_API_KEY}
             streetViewOptions={streetViewOptions}
+            headerActionLabel="Fullscreen"
+            onHeaderActionClick={() => navigate(`/popup-entry/${slug}`)}
+            onOrbClose={() => navigate(`/entry/${slug}`)}
           />
         }
       />

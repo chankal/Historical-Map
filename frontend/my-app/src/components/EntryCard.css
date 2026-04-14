@@ -1,12 +1,15 @@
 .entryPage {
-  min-height: 100vh;
-  background: #f3f3f3;
+  height: 100vh;
+  height: 100svh;
+  background: #fff;
   font-family: "Helvetica Neue", Arial, sans-serif;
+  overflow: hidden;
 }
 
 .entryContent {
-  width: min(1200px, 96vw);
-  margin: 0 auto 28px;
+  width: 100%;
+  height: 100%;
+  margin: 0;
 }
 
 .entryToursHeaderBlock {
@@ -14,25 +17,66 @@
 }
 
 .entryTourCard {
-  grid-template-columns: minmax(300px, 460px) 1fr;
-  border: 1px solid #c9c9c9;
-  background: #fdfdfd;
+  grid-template-columns: minmax(340px, 38vw) 1fr;
+  border: 0;
+  background: #fff;
   align-items: stretch;
-  min-height: min(92vh, 980px);
+  height: 100%;
+  min-height: 0;
+}
+
+.entryContent .tourCardWrapper {
+  height: 100%;
+}
+
+.entryContent .tourCardHeader {
+  display: none;
+}
+
+.entryTourCard .tourLeft {
+  min-height: 0;
+  overflow-y: hidden;
+  padding: 24px;
+  background: #f7f7f7;
 }
 
 .entryTourCard .tourRight {
   display: flex;
   flex-direction: column;
   align-self: stretch;
-  min-height: min(72vh, 820px);
+  min-height: 0;
+  background: #111;
 }
 
 .entryLeftLayout {
-  min-height: 650px;
+  box-sizing: border-box;
+  height: calc(100% - 48px);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  align-items: center;
+  gap: 16px;
+  width: min(100%, 520px);
+  margin: 0 auto;
+  padding: 28px 28px 34px;
+  background: #fff;
+  border-radius: 36px;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.08);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #d33f67 transparent;
+}
+
+.entryLeftLayout::-webkit-scrollbar {
+  width: 6px;
+}
+
+.entryLeftLayout::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.entryLeftLayout::-webkit-scrollbar-thumb {
+  background: #d33f67;
+  border-radius: 999px;
 }
 
 .entryBox {
@@ -43,6 +87,7 @@
 }
 
 .entryBack {
+  align-self: flex-start;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -59,9 +104,12 @@
 
 .entryIdentity {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 14px;
-  padding: 2px 0 0;
+  gap: 12px;
+  width: 100%;
+  padding: 4px 0 0;
+  text-align: center;
 }
 
 .entryAvatarWrap {
@@ -69,11 +117,12 @@
 }
 
 .entryAvatar {
-  width: 68px;
-  height: 68px;
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
   background: #d7d7d7;
   border: 1px solid #9f9f9f;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
 }
 
 .entryStopBadge {
@@ -94,17 +143,21 @@
 
 .entryName {
   margin: 0 0 6px;
-  font-size: 2rem;
+  font-size: clamp(2rem, 3vw, 2.65rem);
   font-family: "Times New Roman", Times, serif;
   font-weight: 500;
+  line-height: 1.04;
 }
 
 .entryBlurb {
   margin: 0;
-  font-size: 0.95rem;
+  color: #2b2b2b;
+  font-size: 1.05rem;
+  line-height: 1.35;
 }
 
 .entryActionRow {
+  width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
@@ -130,15 +183,18 @@
 }
 
 .entryLongDescription {
-  padding: 2px 0 0;
-  line-height: 1.35;
+  width: min(100%, 42ch);
+  padding: 4px 0 0;
+  line-height: 1.48;
   min-height: 250px;
-  font-size: 1rem;
-  max-width: 44ch;
+  font-size: 1.02rem;
+  max-width: none;
+  text-align: center;
   white-space: pre-line;
 }
 
 .entryNavRow {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -178,7 +234,7 @@
   border: 2px solid #d33f67;
   background: none;
   color: #1d1d1d;
-  border-radius: 10px;
+  border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -219,6 +275,25 @@
 @media (max-width: 900px) {
   .entryTourCard {
     grid-template-columns: 1fr;
+    grid-template-rows: minmax(360px, 52vh) minmax(360px, 1fr);
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .entryPage {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  .entryTourCard .tourLeft {
+    overflow: visible;
+    order: 2;
+    padding: 18px;
+  }
+
+  .entryTourCard .tourRight {
+    order: 1;
   }
 
   .entryRightEmpty {
@@ -229,6 +304,18 @@
 
   .entryActionRow {
     grid-template-columns: 1fr;
+  }
+
+  .entryLeftLayout {
+    height: auto;
+    overflow-y: visible;
+    width: 100%;
+    padding: 24px 18px 28px;
+    border-radius: 28px;
+  }
+
+  .entryTourCard .tourLeft {
+    overflow-y: visible;
   }
 
   .entryName {

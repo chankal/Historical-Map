@@ -12,6 +12,8 @@ import AllEntries from "./pages/AllEntries";
 import UploadEntry from "./pages/UploadEntry";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import MapOfAllEntries from "./pages/MapOfAllEntries";
+import PopUpEntryPage from "./pages/PopUpEntryPage";
 import { GoogleMapsAPIProvider} from "./contexts/GoogleMapsAPIContext";
 
 
@@ -28,6 +30,8 @@ function App() {
           <Route path="/upload" element={<UploadEntry />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/map" element={<MapOfAllEntries />} />
+          <Route path="/popup-entry/:slug" element={<PopUpEntryPage />} />
         </Routes>
       </Router>
     </GoogleMapsAPIProvider>
