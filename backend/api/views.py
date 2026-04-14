@@ -24,7 +24,7 @@ def _check_admin_token(request):
 
 # ViewSet for CRUD operations
 class HistoricalEntryViewSet(viewsets.ModelViewSet):
-    queryset = HistoricalEntry.objects.all()
+    queryset = HistoricalEntry.objects.order_by('id')
     serializer_class = HistoricalEntrySerializer
 
     def _require_admin(self, request):
@@ -60,7 +60,7 @@ class HistoricalEntryViewSet(viewsets.ModelViewSet):
 # Simple API view to get all entries
 @api_view(['GET'])
 def get_all_entries(request):
-    entries = HistoricalEntry.objects.all()
+    entries = HistoricalEntry.objects.order_by('id')
     serializer = HistoricalEntrySerializer(entries, many=True, context={'request': request})
     return Response(serializer.data)
 
@@ -80,10 +80,16 @@ def get_entry(request, pk):
 @api_view(['GET'])
 def get_entry_by_slug(request, slug):
     slug_normalized = slugify(slug) or slug.lower().strip()
-    for entry in HistoricalEntry.objects.all():
-        if slugify(entry.name) == slug_normalized:
-            serializer = HistoricalEntrySerializer(entry, context={'request': request})
-            return Response(serializer.data)
+    entry = HistoricalEntry.objects.filter(slug=slug_normalized).first()
+    if entry is None:
+        # Backward-compatible fallback for older rows that may not have had slug populated.
+        for candidate in HistoricalEntry.objects.order_by('id'):
+            if slugify(candidate.name) == slug_normalized:
+                entry = candidate
+                break
+    if entry is not None:
+        serializer = HistoricalEntrySerializer(entry, context={'request': request})
+        return Response(serializer.data)
     return Response({'error': 'Entry not found'}, status=404)
 
 

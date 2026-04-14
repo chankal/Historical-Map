@@ -141,7 +141,7 @@ class HistoricalEntrySerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'slug', 'details', 'stops', 'image', 'image_upload']
 
     def get_slug(self, obj):
-        return slugify(obj.name) or str(obj.id)
+        return obj.slug or slugify(obj.name) or str(obj.id)
 
     def validate_stops(self, value):
         if value is None or value == '':
