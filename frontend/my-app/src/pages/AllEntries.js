@@ -8,6 +8,35 @@ import "./AllEntries.css";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
 
+const RETRY_DELAY_MS = [800, 1800];
+
+async function fetchWithRetry(url, options = {}, retries = RETRY_DELAY_MS) {
+  let lastError;
+
+  for (let attempt = 0; attempt <= retries.length; attempt += 1) {
+    try {
+      const res = await fetch(url, options);
+      if (res.ok) return res;
+
+      // Render cold starts can briefly return 5xx before the app is awake.
+      if (res.status >= 500 && attempt < retries.length) {
+        await new Promise((resolve) => setTimeout(resolve, retries[attempt]));
+        continue;
+      }
+
+      throw new Error(`HTTP ${res.status}`);
+    } catch (err) {
+      lastError = err;
+      if (attempt < retries.length) {
+        await new Promise((resolve) => setTimeout(resolve, retries[attempt]));
+        continue;
+      }
+    }
+  }
+
+  throw lastError || new Error("Request failed");
+}
+
 export default function AllEntries() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,8 +48,7 @@ export default function AllEntries() {
     const fetchEntries = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`${API_BASE}/all/`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const res = await fetchWithRetry(`${API_BASE}/all/`);
         const data = await res.json();
 
         const mapped = data.map((e) => ({

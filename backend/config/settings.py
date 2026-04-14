@@ -37,6 +37,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'southview-map-api.onrender.com',  # production
+    '.onrender.com',
     'localhost',
     '127.0.0.1',
 ]
@@ -142,11 +143,19 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# CORS settings - Allow React frontend to access Django API
+# CORS settings - Allow React frontend to access Django API.
+_cors_env = os.getenv('CORS_ALLOWED_ORIGINS', '')
+_cors_env_origins = [o.strip() for o in _cors_env.split(',') if o.strip()]
+
 CORS_ALLOWED_ORIGINS = [
-    "https://southview-map-app.onrender.com",  # real production api
+    "https://southview-map-app.onrender.com",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+] + _cors_env_origins
+
+# Also allow Render preview/static subdomains if they change.
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.onrender\.com$",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
