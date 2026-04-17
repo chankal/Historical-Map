@@ -13,6 +13,7 @@ export default function EntryCard({
   address = null,
   obituaryUrl = null,
   image = null,
+  additionalInfo = "",
   right,
 }) {
   const handleGetDirections = () => {
@@ -48,75 +49,82 @@ export default function EntryCard({
         <TourCard
           className="entryTourCard"
           left={
-            <div className="entryLeftLayout">
+            <>
               <Link className="entryBox entryBack" to={returnTo}>
                 <span className="entryBackIcon" aria-hidden="true">
                   &#8249;
                 </span>
-                <span>Return to Stops</span>
+                <span>Stops</span>
               </Link>
 
-              <div className="entryNavRow">
-                {prevEntrySlug ? (
-                  <Link className="entryBox entryNavBtn" to={`/entry/${prevEntrySlug}`}>
-                    &lt; Prev
-                  </Link>
-                ) : (
-                  <button className="entryBox entryNavBtn" type="button" disabled>
-                    &lt; Prev
+              <div className="entryLeftPanelStack">
+              <div className="entryLeftLayout">
+                <div className="entryNavRow">
+                  {prevEntrySlug ? (
+                    <Link className="entryBox entryNavBtn" to={`/entry/${prevEntrySlug}`}>
+                      &lt; Prev
+                    </Link>
+                  ) : (
+                    <button className="entryBox entryNavBtn" type="button" disabled>
+                      &lt; Prev
+                    </button>
+                  )}
+                  {nextEntrySlug ? (
+                    <Link className="entryBox entryNavBtn" to={`/entry/${nextEntrySlug}`}>
+                      Next &gt;
+                    </Link>
+                  ) : (
+                    <button className="entryBox entryNavBtn" type="button" disabled>
+                      Next &gt;
+                    </button>
+                  )}
+                </div>
+
+                <section className="entryBox entryIdentity">
+                  <div className="entryAvatarWrap" aria-hidden="true">
+                    <div className="entryStopBadge">{stopNumber ?? ""}</div>
+                    <div
+                      className="entryAvatar"
+                      style={{
+                        backgroundImage: image ? `url(${image})` : "none",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <h2 className="entryName">{name}</h2>
+                    <p className="entryBlurb">{blurb}</p>
+                  </div>
+                </section>
+
+                <div className="entryActionRow">
+                  <button
+                    className="entryBox entryPager"
+                    onClick={handleGetDirections}
+                  >
+                    Get Directions
                   </button>
-                )}
-                {nextEntrySlug ? (
-                  <Link className="entryBox entryNavBtn" to={`/entry/${nextEntrySlug}`}>
-                    Next &gt;
-                  </Link>
-                ) : (
-                  <button className="entryBox entryNavBtn" type="button" disabled>
-                    Next &gt;
+                  <button
+                    className="entryBox entryPager"
+                    onClick={handleMemoriesClick}
+                    type="button"
+                    disabled={!obituaryUrl}
+                  >
+                    View &amp; Submit Memories
                   </button>
-                )}
+                </div>
+
+                <section className="entryBox entryLongDescription">
+                  {longDescription}
+                </section>
               </div>
 
-              <section className="entryBox entryIdentity">
-                <div className="entryAvatarWrap" aria-hidden="true">
-                  <div className="entryStopBadge">{stopNumber ?? ""}</div>
-                  <div
-                    className="entryAvatar"
-                    style={{
-                      backgroundImage: image ? `url(${image})` : "none",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  />
-                </div>
-                <div>
-                  <h2 className="entryName">{name}</h2>
-                  <p className="entryBlurb">{blurb}</p>
-                </div>
+              <section className="entryAdditionalInfoBox" aria-label="Additional entry information">
+                {additionalInfo || "Additional details will appear here."}
               </section>
-
-              <div className="entryActionRow">
-                <button
-                  className="entryBox entryPager"
-                  onClick={handleGetDirections}
-                >
-                  Get Directions
-                </button>
-                <button
-                  className="entryBox entryPager"
-                  onClick={handleMemoriesClick}
-                  type="button"
-                  disabled={!obituaryUrl}
-                >
-                  View &amp; Submit Memories
-                </button>
-              </div>
-
-              <section className="entryBox entryLongDescription">
-                {longDescription}
-              </section>
-
             </div>
+            </>
           }
           right={right || <div className="entryRightEmpty" />}
         />

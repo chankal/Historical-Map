@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import EntryMapPanel from "../components/EntryMapPanel";
 import fallbackData from "../data/fallbackData.js";
+import profileIcon from "../images/profile-icon.svg";
 import "./PopUpEntryPage.css";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
@@ -170,7 +171,7 @@ export default function PopUpEntryPage() {
         aria-label="Show entry information"
         onClick={() => setIsInfoOpen(true)}
       >
-        i
+        <img className="popUpEntryProfileIcon" src={profileIcon} alt="" aria-hidden="true" />
       </button>
 
       {isInfoOpen && (
@@ -192,7 +193,7 @@ export default function PopUpEntryPage() {
             <h1>{entry.name}</h1>
 
             <section>
-              <h2>Short Description</h2>
+              <h2>Blurb</h2>
               <p>{entry.shortDescription}</p>
             </section>
 

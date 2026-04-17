@@ -34,10 +34,12 @@
 }
 
 .entryTourCard .tourLeft {
+  position: relative;
   min-height: 0;
   overflow-y: hidden;
-  padding: 24px;
+  padding: 20px;
   background: #f7f7f7;
+  justify-content: center;
 }
 
 .entryTourCard .tourRight {
@@ -48,15 +50,27 @@
   background: #111;
 }
 
+.entryLeftPanelStack {
+  box-sizing: border-box;
+  height: calc(100% - 72px);
+  width: min(100%, 520px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transform: translateY(0px);
+}
+
 .entryLeftLayout {
   box-sizing: border-box;
-  height: calc(100% - 48px);
+  flex: 1 1 auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  width: min(100%, 520px);
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   padding: 28px 28px 34px;
   background: #fff;
   border-radius: 36px;
@@ -87,19 +101,50 @@
 }
 
 .entryBack {
-  align-self: flex-start;
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 7px;
   text-decoration: none;
-  padding: 2px 0 0;
-  color: #666;
-  font-size: 1rem;
+  padding: 3px 11px 3px 3px;
+  border: 2px solid #d33f67;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #d33f67;
+  font-family: "Times New Roman", Times, serif;
+  text-transform: uppercase;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
 }
 
 .entryBackIcon {
-  font-size: 1.25rem;
-  transform: translateY(-1px);
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: #d33f67;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.entryBack:hover .entryBackIcon,
+.entryBack:focus-visible .entryBackIcon {
+  background: #fff;
+  color: #d33f67;
+}
+
+.entryBack:hover,
+.entryBack:focus-visible {
+  background: #d33f67;
+  color: #fff;
 }
 
 .entryIdentity {
@@ -157,9 +202,9 @@
 }
 
 .entryActionRow {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  width: auto;
+  display: flex;
+  justify-content: center;
   gap: 14px;
   margin-top: 4px;
 }
@@ -183,14 +228,29 @@
 }
 
 .entryLongDescription {
-  width: min(100%, 42ch);
+  width: 100%;
   padding: 4px 0 0;
   line-height: 1.48;
-  min-height: 250px;
+  min-height: 170px;
   font-size: 1.02rem;
   max-width: none;
-  text-align: center;
+  text-align: left;
   white-space: pre-line;
+}
+
+.entryAdditionalInfoBox {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 24px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+  color: #565656;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  text-align: left;
 }
 
 .entryNavRow {
@@ -238,9 +298,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 4px 12px;
+  min-width: 190px;
+  min-height: 32px;
+  padding: 7px 18px;
   text-transform: uppercase;
-  font-size: 0.67rem;
+  font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   cursor: pointer;
@@ -272,24 +334,85 @@
   min-height: 0;
 }
 
+.entryPage .entryMapPanelHeader {
+  justify-content: center;
+  align-items: flex-start;
+  padding: 12px 110px 30px;
+}
+
+.entryPage .entryMapPanelHeaderText {
+  align-items: center;
+  text-align: center;
+  max-width: min(620px, calc(100vw - 260px));
+  margin: 0 auto;
+}
+
+.entryPage .entryMapPanelHeaderTitle {
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 500;
+  font-size: clamp(1.15rem, 1.8vw, 1.55rem);
+  line-height: 1.05;
+}
+
+.entryPage .entryMapPanelHeaderSub {
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 400;
+  font-size: 0.82rem;
+  line-height: 1.25;
+}
+
+.entryPage .entryMapPanelHeaderActions {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+}
+
+.entryPage .entryMapPanelHeaderBadge,
+.entryPage .entryMapPanelFsBtn {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.entryPage .entryMapPanelNavBtn {
+  width: 62px;
+  height: 62px;
+  border-width: 2px;
+  font-size: 3rem;
+  padding-bottom: 6px;
+}
+
 @media (max-width: 900px) {
   .entryTourCard {
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(360px, 52vh) minmax(360px, 1fr);
-    height: auto;
-    min-height: 100vh;
+    grid-template-rows: minmax(320px, 52svh) minmax(0, 48svh);
+    height: 100svh;
+    min-height: 100svh;
   }
 
   .entryPage {
-    height: auto;
-    min-height: 100vh;
-    overflow: visible;
+    height: 100svh;
+    min-height: 100svh;
+    overflow: hidden;
   }
 
   .entryTourCard .tourLeft {
-    overflow: visible;
+    min-height: 0;
+    overflow-y: auto;
     order: 2;
     padding: 18px;
+    justify-content: flex-start;
+  }
+
+  .entryBack {
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    align-self: auto;
+    flex: 0 0 auto;
+    margin: 0;
+    box-shadow: none;
   }
 
   .entryTourCard .tourRight {
@@ -303,11 +426,22 @@
   }
 
   .entryActionRow {
-    grid-template-columns: 1fr;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .entryLeftPanelStack {
+    height: auto;
+    min-height: 0;
+    width: 100%;
+    gap: 14px;
+    transform: none;
   }
 
   .entryLeftLayout {
-    height: auto;
+    flex: 0 0 auto;
+    min-height: 0;
     overflow-y: visible;
     width: 100%;
     padding: 24px 18px 28px;
@@ -315,7 +449,13 @@
   }
 
   .entryTourCard .tourLeft {
-    overflow-y: visible;
+    overflow-y: auto;
+  }
+
+  .entryNavRow {
+    position: static;
+    padding: 0 0 10px;
+    background: #fff;
   }
 
   .entryName {
@@ -328,10 +468,40 @@
     max-width: none;
     margin: 0 auto;
     line-height: 1.45;
-    text-align: center;
+    text-align: left;
   }
 
   .entryBlurb {
     text-align: center;
+  }
+
+  .entryAdditionalInfoBox {
+    flex: 0 0 auto;
+  }
+
+  .entryPage .entryMapPanelHeader {
+    padding: 10px 76px 28px;
+  }
+
+  .entryPage .entryMapPanelHeaderText {
+    align-items: flex-start;
+    text-align: left;
+    max-width: min(520px, calc(100vw - 160px));
+    margin: 0;
+  }
+
+  .entryPage .entryMapPanelHeaderTitle {
+    font-size: 1.08rem;
+  }
+
+  .entryPage .entryMapPanelHeaderSub {
+    font-size: 0.74rem;
+  }
+
+  .entryPage .entryMapPanelNavBtn {
+    width: 52px;
+    height: 52px;
+    font-size: 2.45rem;
+    padding-bottom: 5px;
   }
 }

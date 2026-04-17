@@ -121,9 +121,9 @@ export default function AllEntries() {
           onPinClick={setSelectedEntryIndex}
           onPinHover={setSelectedEntryIndex}
           onMapClick={() => setSelectedEntryIndex(null)}
-          defaultZoom={isMobileMap ? 9 : 9}
+          defaultZoom={isMobileMap ? 13 : 13}
           fitBoundsBottomPadding={isMobileMap ? 300 : 50}
-          fitBoundsMaxZoom={isMobileMap ? 9 : null}
+          fitBoundsMaxZoom={13}
         />
 
         <nav className="allEntriesTopActions" aria-label="All entries navigation">
