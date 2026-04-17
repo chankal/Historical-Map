@@ -21,6 +21,7 @@ const EMPTY_FORM = {
   blurb: "",
   description: "",
   obituary: "",
+  attribution: "",
   stops: [{ ...EMPTY_STOP }],
 };
 
@@ -149,6 +150,7 @@ export default function AdminDashboard() {
       blurb: entry.details?.blurb || "",
       description: entry.details?.description || "",
       obituary: entry.details?.obituary || "",
+      attribution: entry.details?.attribution || "",
       stops,
     };
     setFormData(nextForm);
@@ -397,6 +399,9 @@ export default function AdminDashboard() {
           description: formData.description,
           address: primaryAddress,
           obituary: formData.obituary,
+          ...(formData.attribution.trim()
+            ? { attribution: formData.attribution.trim() }
+            : {}),
         })
       );
       body.append("stops", JSON.stringify(stopsPayload.length ? stopsPayload : formData.stops));
@@ -664,18 +669,6 @@ export default function AdminDashboard() {
               </div>
 
               <div className="adminFormGroup">
-                <label htmlFor="obituary">Obituary Link</label>
-                <input
-                  id="obituary"
-                  type="url"
-                  name="obituary"
-                  value={formData.obituary}
-                  onChange={handleFormChange}
-                  placeholder="Link to obituary"
-                />
-              </div>
-
-              <div className="adminFormGroup">
                 <label htmlFor="image_upload">
                   Image {modal.mode === "edit" && imagePreview && "(replace)"}
                 </label>
@@ -690,6 +683,33 @@ export default function AdminDashboard() {
                     <img src={imagePreview} alt="Preview" />
                   </div>
                 )}
+              </div>
+
+              <div className="adminFormGroup">
+                <label htmlFor="attribution">Additional Details</label>
+                <textarea
+                  id="attribution"
+                  name="attribution"
+                  value={formData.attribution}
+                  onChange={handleFormChange}
+                  rows={3}
+                  placeholder="Image credit, source, photographer, or other attribution"
+                />
+                <p className="adminFieldHint">
+                  Use this for image credit or attribution. Leave it blank if no credit is needed.
+                </p>
+              </div>
+
+              <div className="adminFormGroup">
+                <label htmlFor="obituary">Obituary Link</label>
+                <input
+                  id="obituary"
+                  type="url"
+                  name="obituary"
+                  value={formData.obituary}
+                  onChange={handleFormChange}
+                  placeholder="Link to obituary"
+                />
               </div>
 
               {formError && <p className="adminFormError">{formError}</p>}

@@ -318,6 +318,13 @@
   resize: vertical;
 }
 
+.adminFieldHint {
+  margin: -1px 0 0;
+  color: #666;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 .adminFormGroup input:focus,
 .adminFormGroup textarea:focus {
   outline: none;

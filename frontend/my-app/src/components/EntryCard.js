@@ -16,6 +16,9 @@ export default function EntryCard({
   additionalInfo = "",
   right,
 }) {
+  const hasAdditionalInfo =
+    typeof additionalInfo === "string" && additionalInfo.trim().length > 0;
+
   const handleGetDirections = () => {
     if (!address) {
       alert("No address available for this location");
@@ -120,9 +123,14 @@ export default function EntryCard({
                 </section>
               </div>
 
-              <section className="entryAdditionalInfoBox" aria-label="Additional entry information">
-                {additionalInfo || "Additional details will appear here."}
-              </section>
+              {hasAdditionalInfo && (
+                <section
+                  className="entryAdditionalInfoBox"
+                  aria-label="Image attribution"
+                >
+                  {additionalInfo}
+                </section>
+              )}
             </div>
             </>
           }

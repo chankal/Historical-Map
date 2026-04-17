@@ -119,11 +119,7 @@ export default function EntryPage() {
             data.details?.description || "No description available.",
           address: data.details?.address || null,
           obituary: data.details?.obituary || null,
-          additionalInfo:
-            data.details?.additional_info ||
-            data.details?.additionalInfo ||
-            data.details?.additional_text ||
-            "",
+          additionalInfo: data.details?.attribution || "",
           image: data.image || null,
           stops,
         });
@@ -151,11 +147,7 @@ export default function EntryPage() {
               fallback.details?.description || "No description available.",
             address: fallback.details?.address || null,
             obituary: fallback.details?.obituary || null,
-            additionalInfo:
-              fallback.details?.additional_info ||
-              fallback.details?.additionalInfo ||
-              fallback.details?.additional_text ||
-              "",
+            additionalInfo: fallback.details?.attribution || "",
             image: fallback.image || null,
             stops,
           });
