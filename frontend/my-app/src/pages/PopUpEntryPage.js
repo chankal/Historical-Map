@@ -65,6 +65,7 @@ export default function PopUpEntryPage() {
   const [usingFallback, setUsingFallback] = useState(false);
   const [activeStopIndex, setActiveStopIndex] = useState(0);
   const [isInfoOpen, setIsInfoOpen] = useState(() => window.innerWidth > 820);
+  const [closeOrbSignal, setCloseOrbSignal] = useState(0);
 
   useEffect(() => {
     const fetchEntry = async () => {
@@ -163,13 +164,22 @@ export default function PopUpEntryPage() {
         headerActionLabel="Exit"
         onHeaderActionClick={() => navigate(`/entry/${slug}`)}
         onOrbClose={() => navigate(`/entry/${slug}`)}
+        onOrbToggle={(isOpen) => {
+          if (isOpen) {
+            setIsInfoOpen(false);
+          }
+        }}
+        forceCloseOrbSignal={closeOrbSignal}
       />
 
       <button
         type="button"
         className="popUpEntryInfoButton"
         aria-label="Show entry information"
-        onClick={() => setIsInfoOpen(true)}
+        onClick={() => {
+          setIsInfoOpen(true);
+          setCloseOrbSignal((v) => v + 1);
+        }}
       >
         <img className="popUpEntryProfileIcon" src={profileIcon} alt="" aria-hidden="true" />
       </button>

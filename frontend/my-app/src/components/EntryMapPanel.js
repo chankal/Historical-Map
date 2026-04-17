@@ -44,6 +44,8 @@ export default function EntryMapPanel({
   headerActionLabel,
   onHeaderActionClick,
   onOrbClose,
+  onOrbToggle,
+  forceCloseOrbSignal = 0,
 }) {
   const rootRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -80,6 +82,10 @@ export default function EntryMapPanel({
     }
   }, []);
 
+  useEffect(() => {
+    setOrbOpen(false);
+  }, [forceCloseOrbSignal]);
+
   const hasMap = !!googleMapsApiKey && (!!latLng || !!streetViewOptions?.pano);
   const showIntraNav = totalStops > 1;
   const headerButtonLabel =
@@ -90,6 +96,24 @@ export default function EntryMapPanel({
     headerActionLabel || (isFullscreen ? "Exit fullscreen (Esc)" : "Fullscreen map");
   const handleHeaderButtonClick =
     onHeaderActionClick || (isFullscreen ? exitFullscreen : enterFullscreen);
+  const closeOrb = useCallback(() => {
+    setOrbOpen(false);
+    if (onOrbToggle) onOrbToggle(false);
+  }, [onOrbToggle]);
+  const handleOrbToggle = useCallback(() => {
+    setOrbOpen((o) => {
+      const next = !o;
+      if (onOrbToggle) onOrbToggle(next);
+      return next;
+    });
+  }, [onOrbToggle]);
+  const runTouchAction = useCallback((e, action) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (typeof action === "function") {
+      action();
+    }
+  }, []);
 
   const embedParams = new URLSearchParams();
   if (googleMapsApiKey) embedParams.set("key", googleMapsApiKey);
@@ -143,7 +167,8 @@ export default function EntryMapPanel({
         className="entryMapPanelOrb"
         aria-label="About this location"
         aria-expanded={orbOpen}
-        onClick={() => setOrbOpen((o) => !o)}
+        onClick={handleOrbToggle}
+        onTouchStart={(e) => runTouchAction(e, handleOrbToggle)}
       >
         i
       </button>
@@ -152,7 +177,22 @@ export default function EntryMapPanel({
           type="button"
           className="entryMapPanelTooltipClose"
           aria-label="Close"
-          onClick={() => { setOrbOpen(false); if (onOrbClose) { onOrbClose(); } else { window.scrollTo({ top: 0, behavior: "smooth" }); } }}
+          onClick={() => {
+            closeOrb();
+            if (onOrbClose) {
+              onOrbClose();
+            } else {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
+          onTouchStart={(e) => runTouchAction(e, () => {
+            closeOrb();
+            if (onOrbClose) {
+              onOrbClose();
+            } else {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          })}
         >
           &#x2715;
         </button>
@@ -168,6 +208,7 @@ export default function EntryMapPanel({
           type="button"
           className="entryMapPanelNavBtn"
           onClick={onPrevSpot}
+          onTouchStart={(e) => runTouchAction(e, onPrevSpot)}
           disabled={activeIndex <= 0}
           aria-label="Previous spot"
         >
@@ -178,6 +219,7 @@ export default function EntryMapPanel({
           type="button"
           className="entryMapPanelNavBtn"
           onClick={onNextSpot}
+          onTouchStart={(e) => runTouchAction(e, onNextSpot)}
           disabled={activeIndex >= totalStops - 1}
           aria-label="Next spot"
         >
@@ -203,6 +245,7 @@ export default function EntryMapPanel({
                   type="button"
                   className="entryMapPanelNavBtn"
                   onClick={onPrevSpot}
+                  onTouchStart={(e) => runTouchAction(e, onPrevSpot)}
                   disabled={activeIndex <= 0}
                   aria-label="Previous spot"
                 >
@@ -215,6 +258,7 @@ export default function EntryMapPanel({
                   type="button"
                   className="entryMapPanelNavBtn"
                   onClick={onNextSpot}
+                  onTouchStart={(e) => runTouchAction(e, onNextSpot)}
                   disabled={activeIndex >= totalStops - 1}
                   aria-label="Next spot"
                 >

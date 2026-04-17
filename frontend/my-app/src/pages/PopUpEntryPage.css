@@ -13,6 +13,22 @@
   min-height: 0;
 }
 
+.popUpEntryPage .entryMapPanelFullscreenRoot {
+  flex: 1;
+}
+
+.popUpEntryPage .entryMapPanelFrame {
+  flex: 1;
+}
+
+.popUpEntryPage .entryMapPanelIframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+}
+
 .popUpEntryPage .entryMapPanelHeader {
   justify-content: center;
   align-items: flex-start;
@@ -107,6 +123,8 @@
   place-items: center;
   padding: 0;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.24);
+  pointer-events: auto;
+  touch-action: manipulation;
 }
 
 .popUpEntryInfoButton:hover {
@@ -250,7 +268,43 @@
   line-height: 1.5;
 }
 
+@media (max-width: 900px) {
+  .popUpEntryPage .entryMapPanelFullscreenRoot {
+    flex: 1 !important;
+  }
+
+  .popUpEntryPage .entryMapPanelFrame {
+    min-height: 0 !important;
+    height: 100% !important;
+  }
+
+  .popUpEntryPage .entryMapPanelIframe {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: auto !important;
+  }
+}
+
 @media (max-width: 640px) {
+  .popUpEntryPage .entryMapPanelFullscreenRoot {
+    flex: 1 !important;
+  }
+
+  .popUpEntryPage .entryMapPanelFrame {
+    min-height: 0 !important;
+    height: 100% !important;
+  }
+
+  .popUpEntryPage .entryMapPanelIframe {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: auto !important;
+  }
+
   .popUpEntryPage .entryMapPanelHeader {
     padding: 10px 70px 28px;
   }
