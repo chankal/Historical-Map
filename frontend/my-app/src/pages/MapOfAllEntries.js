@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import MapWithPins from "../components/MapWithPins";
 import fallbackData from "../data/fallbackData.js";
 import "./MapOfAllEntries.css";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
+const CAROUSEL_AUTO_SCROLL_PX_PER_MS = 0.045;
 
 function toSlug(entry) {
   return entry.slug || entry.name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
@@ -34,12 +35,36 @@ function mapFallbackEntry(entry) {
   };
 }
 
+function getCarouselLoopWidth(track) {
+  return track.scrollWidth / 2;
+}
+
+function wrapCarouselScroll(track, nextScrollLeft) {
+  const loopWidth = getCarouselLoopWidth(track);
+
+  if (loopWidth <= 0) {
+    track.scrollLeft = nextScrollLeft;
+    return;
+  }
+
+  let wrappedScrollLeft = nextScrollLeft % loopWidth;
+
+  if (wrappedScrollLeft < 0) {
+    wrappedScrollLeft += loopWidth;
+  }
+
+  track.scrollLeft = wrappedScrollLeft;
+}
+
 export default function MapOfAllEntries() {
   const [entries, setEntries] = useState([]);
   const [usingFallback, setUsingFallback] = useState(false);
   const [selectedEntryIndex, setSelectedEntryIndex] = useState(null);
   const [cardStartIndex, setCardStartIndex] = useState(0);
   const [navOpen, setNavOpen] = useState(false);
+  const cardTrackRef = useRef(null);
+  const isDraggingRef = useRef(false);
+  const dragLastXRef = useRef(0);
 
   const carouselCards = entries.length
     ? Array.from({ length: entries.length }, (_, offset) => {
@@ -66,6 +91,59 @@ export default function MapOfAllEntries() {
     setSelectedEntryIndex(entryIndex);
     setCardStartIndex(entryIndex);
   };
+
+  useEffect(() => {
+    const track = cardTrackRef.current;
+    if (!track || selectedEntryIndex !== null || loopedCarouselCards.length === 0) {
+      return undefined;
+    }
+
+    let frameId;
+    let lastTime = performance.now();
+
+    const animate = (time) => {
+      const elapsed = time - lastTime;
+      lastTime = time;
+
+      wrapCarouselScroll(
+        track,
+        track.scrollLeft + elapsed * CAROUSEL_AUTO_SCROLL_PX_PER_MS
+      );
+
+      frameId = window.requestAnimationFrame(animate);
+    };
+
+    frameId = window.requestAnimationFrame(animate);
+
+    const handleMouseDown = (e) => {
+      isDraggingRef.current = true;
+      dragLastXRef.current = e.clientX;
+      track.style.cursor = "grabbing";
+    };
+
+    const handleMouseMove = (e) => {
+      if (!isDraggingRef.current) return;
+      const dx = e.clientX - dragLastXRef.current;
+      dragLastXRef.current = e.clientX;
+      wrapCarouselScroll(track, track.scrollLeft - dx);
+    };
+
+    const stopDrag = () => {
+      isDraggingRef.current = false;
+      track.style.cursor = "grab";
+    };
+
+    track.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", stopDrag);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      track.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", stopDrag);
+    };
+  }, [loopedCarouselCards.length, selectedEntryIndex]);
 
   useEffect(() => {
     const fetchEntries = async () => {
@@ -169,7 +247,10 @@ export default function MapOfAllEntries() {
               &lt;
             </button>
 
-            <div className="mapAllCardTrack">
+            <div
+              ref={cardTrackRef}
+              className="mapAllCardTrack"
+            >
               <div className="mapAllCardRail">
                 {loopedCarouselCards.map(({ entry, entryIndex }, visibleIndex) => (
                   <article

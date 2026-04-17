@@ -50,20 +50,31 @@
   background: #111;
 }
 
-.entryLeftLayout {
+.entryLeftPanelStack {
   box-sizing: border-box;
   height: calc(100% - 72px);
+  width: min(100%, 520px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transform: translateY(0px);
+}
+
+.entryLeftLayout {
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  width: min(100%, 520px);
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   padding: 28px 28px 34px;
   background: #fff;
   border-radius: 36px;
   box-shadow: 0 18px 42px rgba(0, 0, 0, 0.08);
-  transform: translateY(0px);
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #d33f67 transparent;
@@ -220,11 +231,26 @@
   width: 100%;
   padding: 4px 0 0;
   line-height: 1.48;
-  min-height: 250px;
+  min-height: 170px;
   font-size: 1.02rem;
   max-width: none;
   text-align: left;
   white-space: pre-line;
+}
+
+.entryAdditionalInfoBox {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 24px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+  color: #565656;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  text-align: left;
 }
 
 .entryNavRow {
@@ -322,11 +348,15 @@
 }
 
 .entryPage .entryMapPanelHeaderTitle {
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 500;
   font-size: clamp(1.15rem, 1.8vw, 1.55rem);
   line-height: 1.05;
 }
 
 .entryPage .entryMapPanelHeaderSub {
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 400;
   font-size: 0.82rem;
   line-height: 1.25;
 }
@@ -337,31 +367,51 @@
   right: 14px;
 }
 
+.entryPage .entryMapPanelHeaderBadge,
+.entryPage .entryMapPanelFsBtn {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.entryPage .entryMapPanelNavBtn {
+  width: 62px;
+  height: 62px;
+  border-width: 2px;
+  font-size: 3rem;
+  padding-bottom: 6px;
+}
+
 @media (max-width: 900px) {
   .entryTourCard {
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(360px, 52vh) minmax(360px, 1fr);
-    height: auto;
-    min-height: 100vh;
+    grid-template-rows: minmax(320px, 52svh) minmax(0, 48svh);
+    height: 100svh;
+    min-height: 100svh;
   }
 
   .entryPage {
-    height: auto;
-    min-height: 100vh;
-    overflow: visible;
+    height: 100svh;
+    min-height: 100svh;
+    overflow: hidden;
   }
 
   .entryTourCard .tourLeft {
-    overflow: visible;
+    min-height: 0;
+    overflow-y: auto;
     order: 2;
     padding: 18px;
     justify-content: flex-start;
   }
 
   .entryBack {
-    position: static;
-    align-self: flex-start;
-    margin: 0 0 14px;
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    align-self: auto;
+    flex: 0 0 auto;
+    margin: 0;
     box-shadow: none;
   }
 
@@ -381,17 +431,31 @@
     align-items: center;
   }
 
-  .entryLeftLayout {
+  .entryLeftPanelStack {
     height: auto;
+    min-height: 0;
+    width: 100%;
+    gap: 14px;
+    transform: none;
+  }
+
+  .entryLeftLayout {
+    flex: 0 0 auto;
+    min-height: 0;
     overflow-y: visible;
     width: 100%;
     padding: 24px 18px 28px;
     border-radius: 28px;
-    transform: none;
   }
 
   .entryTourCard .tourLeft {
-    overflow-y: visible;
+    overflow-y: auto;
+  }
+
+  .entryNavRow {
+    position: static;
+    padding: 0 0 10px;
+    background: #fff;
   }
 
   .entryName {
@@ -411,12 +475,19 @@
     text-align: center;
   }
 
+  .entryAdditionalInfoBox {
+    flex: 0 0 auto;
+  }
+
   .entryPage .entryMapPanelHeader {
     padding: 10px 76px 28px;
   }
 
   .entryPage .entryMapPanelHeaderText {
+    align-items: flex-start;
+    text-align: left;
     max-width: min(520px, calc(100vw - 160px));
+    margin: 0;
   }
 
   .entryPage .entryMapPanelHeaderTitle {
@@ -425,5 +496,12 @@
 
   .entryPage .entryMapPanelHeaderSub {
     font-size: 0.74rem;
+  }
+
+  .entryPage .entryMapPanelNavBtn {
+    width: 52px;
+    height: 52px;
+    font-size: 2.45rem;
+    padding-bottom: 5px;
   }
 }

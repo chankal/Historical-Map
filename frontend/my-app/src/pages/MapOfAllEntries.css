@@ -63,7 +63,7 @@
   padding: 6px 22px;
   border: 2px solid #d33f67;
   border-radius: 999px;
-  background: none;
+  background: #fff;
   color: #d33f67;
   text-decoration: none;
   font-family: "Times New Roman", Times, serif;
@@ -112,7 +112,15 @@
 
 .mapAllCardTrack {
   min-width: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
+}
+
+.mapAllCardTrack::-webkit-scrollbar {
+  display: none;
 }
 
 .mapAllCardRail {
@@ -120,7 +128,7 @@
   align-items: stretch;
   gap: var(--mapAllCardGap);
   width: max-content;
-  animation: mapAllCarouselMove 42s linear infinite;
+  padding: 4px 0;
 }
 
 .mapAllCardNav {
@@ -152,22 +160,6 @@
   overflow: hidden;
   backdrop-filter: blur(10px);
   transition: transform 0.25s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-@keyframes mapAllCarouselMove {
-  from {
-    transform: translateX(calc(-50% - var(--mapAllCardGap) / 2));
-  }
-
-  to {
-    transform: translateX(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mapAllCardRail {
-    animation: none;
-  }
 }
 
 .mapAllPopupCard:hover {
