@@ -48,14 +48,15 @@ export default function EntryCard({
         <TourCard
           className="entryTourCard"
           left={
-            <div className="entryLeftLayout">
+            <>
               <Link className="entryBox entryBack" to={returnTo}>
                 <span className="entryBackIcon" aria-hidden="true">
                   &#8249;
                 </span>
-                <span>Return to Stops</span>
+                <span>Stops</span>
               </Link>
 
+              <div className="entryLeftLayout">
               <div className="entryNavRow">
                 {prevEntrySlug ? (
                   <Link className="entryBox entryNavBtn" to={`/entry/${prevEntrySlug}`}>
@@ -116,7 +117,8 @@ export default function EntryCard({
                 {longDescription}
               </section>
 
-            </div>
+              </div>
+            </>
           }
           right={right || <div className="entryRightEmpty" />}
         />

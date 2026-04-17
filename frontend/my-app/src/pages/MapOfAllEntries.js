@@ -123,7 +123,6 @@ export default function MapOfAllEntries() {
           entries={entries}
           selectedIndex={selectedEntryIndex}
           onPinClick={handlePinClick}
-          onPinHover={handlePinClick}
           onMapClick={() => setSelectedEntryIndex(null)}
           defaultZoom={11}
           fitBoundsBottomPadding={430}
@@ -164,8 +163,8 @@ export default function MapOfAllEntries() {
             <button
               type="button"
               className="mapAllCardNav mapAllCardNavLeft"
-              aria-label="Show previous entries"
-              onClick={() => moveCards(-1)}
+              aria-label="Move cards left"
+              onClick={() => moveCards(1)}
             >
               &lt;
             </button>
@@ -205,8 +204,8 @@ export default function MapOfAllEntries() {
             <button
               type="button"
               className="mapAllCardNav mapAllCardNavRight"
-              aria-label="Show next entries"
-              onClick={() => moveCards(1)}
+              aria-label="Move cards right"
+              onClick={() => moveCards(-1)}
             >
               &gt;
             </button>

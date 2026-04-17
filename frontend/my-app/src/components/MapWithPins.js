@@ -28,7 +28,6 @@ export default function MapWithPins({
   entries = [],
   selectedIndex = null,
   onPinClick = null,
-  onPinHover = null,
   onMapClick = null,
   defaultZoom = 12,
   fitBoundsBottomPadding = 50,
@@ -147,12 +146,6 @@ export default function MapWithPins({
 
       // Add click handler to navigate or let the parent show entry details.
       if (stop.entrySlug) {
-        marker.on("mouseover", () => {
-          if (onPinHover) {
-            onPinHover(stop.index);
-          }
-        });
-
         marker.on("click", (event) => {
           if (window.L) {
             window.L.DomEvent.stopPropagation(event);
@@ -169,7 +162,7 @@ export default function MapWithPins({
 
       markersRef.current.push(marker);
     });
-  }, [geocodedStops, navigate, onPinClick, onPinHover]);
+  }, [geocodedStops, navigate, onPinClick]);
 
   // Handle zoom when entry is selected or deselected
   useEffect(() => {
